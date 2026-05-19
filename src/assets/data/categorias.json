@@ -1,0 +1,20 @@
+[
+  {
+    "id": "menino",
+    "label": "Menino",
+    "icone": "male-outline",
+    "cor": "#2563eb"
+  },
+  {
+    "id": "menina",
+    "label": "Menina",
+    "icone": "female-outline",
+    "cor": "#ec4899"
+  },
+  {
+    "id": "bebe",
+    "label": "Bebé",
+    "icone": "heart-outline",
+    "cor": "#f59e0b"
+  }
+]
