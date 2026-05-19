@@ -1,0 +1,14 @@
+[
+  { "id": "tshirt", "label": "T-Shirt" },
+  { "id": "camisola", "label": "Camisola" },
+  { "id": "casaco", "label": "Casaco" },
+  { "id": "calcas", "label": "Calças" },
+  { "id": "calcoes", "label": "Calções" },
+  { "id": "vestido", "label": "Vestido" },
+  { "id": "saia", "label": "Saia" },
+  { "id": "body", "label": "Body" },
+  { "id": "pijama", "label": "Pijama" },
+  { "id": "conjunto", "label": "Conjunto" },
+  { "id": "calcado", "label": "Calçado" },
+  { "id": "acessorio", "label": "Acessório" }
+]
