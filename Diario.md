@@ -48,3 +48,27 @@ Importei cada página no array imports do módulo correspondente (em vez de decl
 **Decisões:**
 
 O trabalho foi feito diretamente no branch main; para seguir boas práticas de equipa, as alterações foram movidas para um branch dedicado (sprint/estrutura-modulos) antes de fazer push e pull request.
+
+## Sessão 3 – 19 de maio de 2026
+**Responsável:** Rodrigo Malheiro (33103)
+**Objetivo:** Implementação de um Service para consumo dos ficheiros JSON e apresentação dos produtos no catálogo.
+**Atividades:**
+
+Implementei o Service do catálogo com métodos para obter produtos, categorias, tipos e faixas etárias a partir dos ficheiros JSON;
+Implementei o método para obter um produto por ID;
+Implementei o método para filtrar produtos por categoria;
+Implementei o método para obter os produtos em destaque;
+Injetei o Service na página do catálogo;
+Atualizei o HTML da página do catálogo para apresentar a lista de produtos com imagem, nome, categoria, faixa etária e preço.
+
+**Problemas:**
+
+A página do catálogo é um standalone component, pelo que o HttpClientModule tinha de ser importado diretamente no componente.
+
+**Solução:**
+
+Adição do HttpClientModule ao array de imports do decorador @Component da página do catálogo.
+
+**Decisões:**
+
+O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a convenção de nomes do projeto.

@@ -1,13 +1,20 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>catalogo</ion-title>
+    <ion-title>Catálogo</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">catalogo</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let produto of produtos">
+      <ion-thumbnail slot="start">
+        <img [src]="produto.imagem" [alt]="produto.nome" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ produto.nome }}</h2>
+        <p>{{ produto.categoria }} · {{ produto.faixaEtaria }} anos</p>
+        <p><strong>{{ produto.preco | currency:'EUR' }}</strong></p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
