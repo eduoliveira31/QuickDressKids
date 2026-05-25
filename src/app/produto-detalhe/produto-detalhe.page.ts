@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { Catalogo } from '../services/catalogo'; 
+import { Favoritos } from '../services/favoritos'; // <-- Importámos o teu serviço
 
 @Component({
   selector: 'app-produto-detalhe',
@@ -13,23 +14,32 @@ import { Catalogo } from '../services/catalogo';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class ProdutoDetalhePage implements OnInit {
-  // Variável para guardar o produto encontrado
   produto: any;
+  isFavorito: boolean = false; // Começa por assumir que não é favorito
 
   constructor(
     private route: ActivatedRoute,
-    private catalogoService: Catalogo // O teu serviço que lê os JSON
+    private catalogoService: Catalogo,
+    private favoritosService: Favoritos // <-- Injetámos o serviço aqui
   ) { }
 
   ngOnInit() {
-    // 1. Lê o ID do URL e converte para número
     const idParam = this.route.snapshot.paramMap.get('id');
     const produtoId = Number(idParam);
 
-    // 2. Pede todos os produtos ao Service e filtra apenas o que queremos
-    this.catalogoService.getProdutos().subscribe((produtos: any[]) => {
+    this.catalogoService.getProdutos().subscribe(async (produtos: any[]) => {
       this.produto = produtos.find(p => p.id === produtoId);
-      console.log('Produto encontrado:', this.produto);
+      
+      // Assim que encontra o produto, vai perguntar à Base de Dados se tem um coração!
+      if (this.produto) {
+        this.isFavorito = await this.favoritosService.isFavorito(this.produto.id);
+      }
     });
+  }
+
+  // Função que é ativada quando clicas no coração
+  async toggleCoracao() {
+    await this.favoritosService.toggleFavorito(this.produto.id);
+    this.isFavorito = !this.isFavorito; // Muda o estado do ícone
   }
 }

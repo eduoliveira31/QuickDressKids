@@ -3,12 +3,18 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/catalogo" text="Voltar"></ion-back-button>
     </ion-buttons>
+    
     <ion-title>{{ produto?.nome || 'Detalhes' }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleCoracao()" *ngIf="produto">
+        <ion-icon slot="icon-only" [name]="isFavorito ? 'heart' : 'heart-outline'" [color]="isFavorito ? 'danger' : 'medium'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  
   <div *ngIf="produto">
     <img [src]="produto.imagem" [alt]="produto.nome" 
          style="width: 100%; border-radius: 12px; object-fit: cover; max-height: 400px;" 
@@ -37,5 +43,4 @@
     <ion-spinner name="crescent"></ion-spinner>
     <p>A carregar produto...</p>
   </div>
-
 </ion-content>
