@@ -72,3 +72,32 @@ Adição do HttpClientModule ao array de imports do decorador @Component da pág
 **Decisões:**
 
 O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a convenção de nomes do projeto.
+
+## Sessão 4 – 25 de maio de 2026
+**Responsável:** Eduardo Oliveira (33137)
+**Objetivo:** Implementação e conclusão das funcionalidades centrais da Sprint 2 (Interface Visual, Navegação, Detalhes, Filtros Dinâmicos e Persistência de Favoritos).
+
+**Atividades realizadas:**
+- **Refatoração Visual:** Evolução da interface do catálogo (`catalogo.page.html`) de uma lista linear simples para um layout moderno em grelha responsiva (`ion-grid`, `ion-row`, `ion-col`) estruturada com cartões interativos (`ion-card`).
+- **Navegação Dinâmica (Router):** Configuração do `app-routing.module.ts` para suportar rotas com parâmetros dinâmicos (`produto-detalhe/:id`) e amarração da diretiva `[routerLink]` nos botões do catálogo.
+- **Interceção de Parâmetros:** Integração do serviço `ActivatedRoute` no controlador de detalhes para capturar o ID do produto diretamente a partir do URL do navegador.
+- **Consumo de Detalhes:** Subscrição assíncrona do serviço `Catalogo` combinada com o método `.find()` em JavaScript para isolar e exibir a informação individualizada do artigo correspondente.
+- **Sistema de Filtros:** Implementação de uma barra de segmentos interativa (`ion-segment`) no topo do catálogo, permitindo a filtragem imediata em tempo de execução através do método `.filter()`.
+- **Persistência de Dados Locais:** Instalação e configuração do motor `@ionic/storage-angular` no módulo principal (`app.module.ts`).
+- **Gestão de Favoritos:** Criação da lógica de persistência no ficheiro `favoritos.ts` e criação do botão de coração (`heart` / `heart-outline`) reativo na página de detalhes, garantindo o salvamento permanente das preferências do utilizador.
+
+**Problemas:**
+- Erro crítico `NG8001` no template de catálogo: a diretiva `routerLink` não era reconhecida pela aplicação.
+- Erro de arquitetura híbrida: a página `produto-detalhe` foi gerada como componente standalone, quebrando a compilação ao ser incorretamente adicionada ao array de `declarations` do seu módulo.
+- Erros em cascata no template de detalhes indicando que elementos core (como `ion-header` e `ion-content`) eram desconhecidos para o Angular.
+- Erro silencioso de ecrã em branco na aplicação após a introdução inicial do módulo de armazenamento.
+
+**Soluções:**
+- Importação manual do `RouterModule` na propriedade `imports` do decorador `@Component` dentro de `catalogo.page.ts`.
+- Remoção da página do bloco `declarations` e recolocação no array `imports` dentro de `produto-detalhe.module.ts`.
+- Injeção explícita do `IonicModule` na lista de `imports` do próprio metadado do componente standalone em `produto-detalhe.page.ts`.
+- Substituição e saneamento completo do código do `app.module.ts`, retificando o posicionamento das vírgulas e adicionando corretamente o `HttpClientModule` e o `IonicStorageModule.forRoot()`.
+
+**Decisões:**
+- Manter o padrão de *Standalone Components* introduzido nativamente pelo ecossistema moderno do Angular e Ionic para as novas páginas, ajustando manualmente os ficheiros de suporte necessários.
+- Guardar de forma otimizada apenas a coleção de IDs numéricos dos produtos favoritos no Ionic Storage para economizar memória e acelerar o processamento local.
