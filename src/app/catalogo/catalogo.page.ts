@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -10,7 +11,7 @@ import { Catalogo } from '../services/catalogo';
   templateUrl: './catalogo.page.html',
   styleUrls: ['./catalogo.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule]
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, RouterModule] 
 })
 export class CatalogoPage implements OnInit {
 
