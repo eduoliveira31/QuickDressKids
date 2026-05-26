@@ -2,7 +2,7 @@
 // Cor principal: Azul (#2563eb), Secundária: Rosa (#ec4899)
 
 :root {
-  /** primary - Azul **/
+  /** primary - Azul principal da marca **/
   --ion-color-primary: #2563eb;
   --ion-color-primary-rgb: 37, 99, 235;
   --ion-color-primary-contrast: #ffffff;
@@ -74,6 +74,34 @@
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 
+  // ─── Cores personalizadas QuickDressKids ───────────────────────────
+
+  /** menino - Azul **/
+  --ion-color-menino: #2563eb;
+  --ion-color-menino-rgb: 37, 99, 235;
+  --ion-color-menino-contrast: #ffffff;
+  --ion-color-menino-contrast-rgb: 255, 255, 255;
+  --ion-color-menino-shade: #1d4ed8;
+  --ion-color-menino-tint: #3b82f6;
+
+  /** menina - Rosa **/
+  --ion-color-menina: #ec4899;
+  --ion-color-menina-rgb: 236, 72, 153;
+  --ion-color-menina-contrast: #ffffff;
+  --ion-color-menina-contrast-rgb: 255, 255, 255;
+  --ion-color-menina-shade: #db2777;
+  --ion-color-menina-tint: #f472b6;
+
+  /** bebe - Amarelo suave **/
+  --ion-color-bebe: #f59e0b;
+  --ion-color-bebe-rgb: 245, 158, 11;
+  --ion-color-bebe-contrast: #ffffff;
+  --ion-color-bebe-contrast-rgb: 255, 255, 255;
+  --ion-color-bebe-shade: #d97706;
+  --ion-color-bebe-tint: #fbbf24;
+
+  // ─── Globais ───────────────────────────────────────────────────────
+
   // Fundo geral
   --ion-background-color: #f8fafc;
   --ion-text-color: #030213;
@@ -81,6 +109,37 @@
   // Font
   --ion-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 }
+
+// ─── Classes Ionic para cores personalizadas ──────────────────────────
+
+.ion-color-menino {
+  --ion-color-base: var(--ion-color-menino);
+  --ion-color-base-rgb: var(--ion-color-menino-rgb);
+  --ion-color-contrast: var(--ion-color-menino-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-menino-contrast-rgb);
+  --ion-color-shade: var(--ion-color-menino-shade);
+  --ion-color-tint: var(--ion-color-menino-tint);
+}
+
+.ion-color-menina {
+  --ion-color-base: var(--ion-color-menina);
+  --ion-color-base-rgb: var(--ion-color-menina-rgb);
+  --ion-color-contrast: var(--ion-color-menina-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-menina-contrast-rgb);
+  --ion-color-shade: var(--ion-color-menina-shade);
+  --ion-color-tint: var(--ion-color-menina-tint);
+}
+
+.ion-color-bebe {
+  --ion-color-base: var(--ion-color-bebe);
+  --ion-color-base-rgb: var(--ion-color-bebe-rgb);
+  --ion-color-contrast: var(--ion-color-bebe-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-bebe-contrast-rgb);
+  --ion-color-shade: var(--ion-color-bebe-shade);
+  --ion-color-tint: var(--ion-color-bebe-tint);
+}
+
+// ─── Dark mode ────────────────────────────────────────────────────────
 
 @media (prefers-color-scheme: dark) {
   body {
