@@ -1,13 +1,10 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>carrinho</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">carrinho</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+<!-- Carrinho vazio -->
+<div *ngIf="itens.length === 0" class="carrinho-vazio">
+  <ion-icon name="cart-outline"></ion-icon>
+  <h2>O carrinho está vazio</h2>
+  <p>Adiciona produtos do catálogo</p>
+  <ion-button routerLink="/tabs/catalogo" fill="outline" color="primary">
+    <ion-icon name="shirt-outline" slot="start"></ion-icon>
+    Ver Catálogo
+  </ion-button>
+</div>

@@ -15,12 +15,12 @@ export class CatalogoPage implements OnInit {
   constructor(private catalogoService: Catalogo) {}
 
   ngOnInit() {
-    this.catalogoService.getProdutos().subscribe((data: any) => {
-      this.produtosOriginais = data;
-      this.produtosFiltrados = data;
-    });
-  }
-
+  this.catalogoService.getProdutos().subscribe((data: any) => {
+    this.produtosOriginais = data;
+    this.produtosFiltrados = data;
+    console.log('Produtos carregados:', data);
+  });
+}
   filtrarCategoria(event: any) {
     const categoriaSelecionada = event.detail.value;
 

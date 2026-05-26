@@ -1,42 +1,79 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/catalogo" text="Voltar"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/catalogo" text="Voltar"></ion-back-button>
     </ion-buttons>
-    
     <ion-title>{{ produto?.nome || 'Detalhes' }}</ion-title>
-
     <ion-buttons slot="end">
       <ion-button (click)="toggleCoracao()" *ngIf="produto">
-        <ion-icon slot="icon-only" [name]="isFavorito ? 'heart' : 'heart-outline'" [color]="isFavorito ? 'danger' : 'medium'"></ion-icon>
+        <ion-icon slot="icon-only"
+          [name]="isFavorito ? 'heart' : 'heart-outline'"
+          [color]="isFavorito ? 'danger' : 'medium'">
+        </ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
   <div *ngIf="produto">
-    <img [src]="produto.imagem" [alt]="produto.nome" 
-         style="width: 100%; border-radius: 12px; object-fit: cover; max-height: 400px;" 
+
+    <img [src]="produto.imagem" [alt]="produto.nome"
+         style="width: 100%; object-fit: cover; max-height: 320px;"
          onerror="this.src='https://ionicframework.com/docs/img/demos/card-media.png'" />
 
-    <h1 class="ion-margin-top">{{ produto.nome }}</h1>
-    <ion-text color="medium">
-      <p>{{ produto.categoria | titlecase }}</p>
-    </ion-text>
+    <div class="ion-padding">
 
-    <ion-text color="primary">
-      <h1 style="font-weight: bold; font-size: 2rem;">{{ produto.preco | currency:'EUR' }}</h1>
-    </ion-text>
+      <h1 style="margin-bottom: 4px;">{{ produto.nome }}</h1>
+      <ion-text color="medium"><p>{{ produto.categoria | titlecase }}</p></ion-text>
+      <ion-text color="primary">
+        <h2 style="font-weight: bold;">{{ produto.preco | currency:'EUR' }}</h2>
+      </ion-text>
 
-    <p *ngIf="produto.descricao" class="ion-margin-top" style="line-height: 1.6;">
-      {{ produto.descricao }}
-    </p>
+      <p *ngIf="produto.descricao" style="line-height: 1.6; margin-bottom: 16px;">
+        {{ produto.descricao }}
+      </p>
 
-    <ion-button expand="block" size="large" class="ion-margin-top" color="dark">
-      <ion-icon name="cart" slot="start"></ion-icon>
-      Adicionar ao Carrinho
-    </ion-button>
+      <!-- Seleção de tamanho -->
+      <p><strong>Tamanho</strong></p>
+      <div class="opcoes-row">
+        <ion-chip
+          *ngFor="let t of produto.tamanhos"
+          [color]="tamanhoSelecionado === t ? 'primary' : 'medium'"
+          [outline]="tamanhoSelecionado !== t"
+          (click)="tamanhoSelecionado = t">
+          {{ t }}
+        </ion-chip>
+      </div>
+
+      <!-- Seleção de cor -->
+      <p style="margin-top: 12px;"><strong>Cor</strong></p>
+      <div class="opcoes-row">
+        <ion-chip
+          *ngFor="let c of produto.cores"
+          [color]="corSelecionada === c ? 'primary' : 'medium'"
+          [outline]="corSelecionada !== c"
+          (click)="corSelecionada = c">
+          {{ c }}
+        </ion-chip>
+      </div>
+
+      <!-- Composição -->
+      <ion-item lines="none" style="margin-top: 16px;" *ngIf="produto.composicao">
+        <ion-icon name="shirt-outline" slot="start" color="medium"></ion-icon>
+        <ion-label color="medium">
+          <p>{{ produto.composicao }}</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- Botão adicionar -->
+      <ion-button expand="block" size="large" class="ion-margin-top" color="primary"
+        (click)="adicionarAoCarrinho()">
+        <ion-icon name="cart-outline" slot="start"></ion-icon>
+        Adicionar ao Carrinho
+      </ion-button>
+
+    </div>
   </div>
 
   <div *ngIf="!produto" class="ion-text-center ion-padding ion-margin-top">
