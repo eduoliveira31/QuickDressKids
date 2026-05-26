@@ -1,90 +1,10 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Carrinho</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="limparCarrinho()" *ngIf="itens.length > 0">
-        <ion-icon name="trash-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-  <!-- Lista de itens -->
-  <ion-list *ngIf="itens.length > 0">
-    <ion-item *ngFor="let item of itens; let i = index">
-      <ion-thumbnail slot="start">
-        <img [src]="item.imagem" [alt]="item.nome" />
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ item.nome }}</h2>
-        <p>Tamanho: {{ item.tamanho }} · Cor: {{ item.cor }}</p>
-        <p><strong>{{ item.preco | currency:'EUR':'symbol':'1.2-2' }}</strong></p>
-      </ion-label>
-      <div slot="end" class="quantidade-controls">
-        <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, -1)">
-          <ion-icon name="remove-circle-outline"></ion-icon>
-        </ion-button>
-        <span>{{ item.quantidade }}</span>
-        <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, 1)">
-          <ion-icon name="add-circle-outline"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-item>
-  </ion-list>
-
-  <!-- Barra de progresso para portes grátis -->
-  <div class="progresso-porte" *ngIf="itens.length > 0 && porte > 0">
-    <p>Faltam <strong>{{ faltaParteGratis | currency:'EUR':'symbol':'1.2-2' }}</strong> para portes grátis</p>
-    <ion-progress-bar
-      [value]="subtotal / limitePorteGratis"
-      color="primary">
-    </ion-progress-bar>
-  </div>
-
-  <div class="progresso-porte" *ngIf="itens.length > 0 && porte === 0">
-    <p style="color: var(--ion-color-success)">✓ Tens portes grátis nesta encomenda!</p>
-  </div>
-
-  <!-- Resumo de custos -->
-  <ion-card *ngIf="itens.length > 0" class="resumo-card">
-    <ion-card-content>
-      <div class="linha-custo">
-        <span>Subtotal</span>
-        <span>{{ subtotal | currency:'EUR':'symbol':'1.2-2' }}</span>
-      </div>
-      <div class="linha-custo">
-        <span>Portes de envio</span>
-        <span *ngIf="porte > 0">{{ porte | currency:'EUR':'symbol':'1.2-2' }}</span>
-        <span *ngIf="porte === 0" class="gratis">Grátis</span>
-      </div>
-      <hr />
-      <div class="linha-custo total">
-        <span>Total</span>
-        <span>{{ total | currency:'EUR':'symbol':'1.2-2' }}</span>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Carrinho vazio -->
-  <div *ngIf="itens.length === 0" class="carrinho-vazio">
-    <ion-icon name="cart-outline"></ion-icon>
-    <h2>O carrinho está vazio</h2>
-    <p>Adiciona produtos do catálogo</p>
-    <ion-button routerLink="/tabs/catalogo" fill="outline" color="primary">
-      Ver Catálogo
-    </ion-button>
-  </div>
-
-</ion-content>
-
-<!-- Footer com botão de reserva -->
-<ion-footer *ngIf="itens.length > 0">
-  <ion-toolbar>
-    <ion-button expand="block" color="primary" class="btn-reserva">
-      <ion-icon name="storefront-outline" slot="start"></ion-icon>
-      Reservar em Loja
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>
+<!-- Carrinho vazio -->
+<div *ngIf="itens.length === 0" class="carrinho-vazio">
+  <ion-icon name="cart-outline"></ion-icon>
+  <h2>O carrinho está vazio</h2>
+  <p>Adiciona produtos do catálogo</p>
+  <ion-button routerLink="/tabs/catalogo" fill="outline" color="primary">
+    <ion-icon name="shirt-outline" slot="start"></ion-icon>
+    Ver Catálogo
+  </ion-button>
+</div>
