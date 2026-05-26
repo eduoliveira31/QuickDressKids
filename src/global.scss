@@ -35,3 +35,50 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+// ─── Estilos globais QuickDressKids ─────────────────────────────────
+
+ion-toolbar {
+  --background: #4a9b6f;
+  --color: #ffffff;
+}
+
+ion-tab-bar {
+  --background: #ffffff;
+  --border: 1px solid #d8e8dc;
+  box-shadow: 0 -2px 8px rgba(74, 155, 111, 0.1);
+}
+
+ion-tab-button {
+  --color: #7a9e87;
+  --color-selected: #4a9b6f;
+}
+
+ion-segment {
+  --background: #d8e8dc;
+  border-radius: 10px;
+}
+
+ion-segment-button {
+  --color: #3a7d59;
+  --color-checked: #ffffff;
+  --background-checked: #4a9b6f;
+  --indicator-color: transparent;
+  border-radius: 8px;
+}
+
+ion-card {
+  --background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(74, 155, 111, 0.12);
+  border: 1px solid #e8f4ec;
+}
+
+ion-button {
+  --border-radius: 10px;
+}
+
+ion-chip {
+  --background: #e8f4ec;
+  --color: #3a7d59;
+}
