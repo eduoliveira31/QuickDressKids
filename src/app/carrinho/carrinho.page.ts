@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
+import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
 
 @Component({
   selector: 'app-carrinho',
@@ -14,8 +15,12 @@ import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 export class CarrinhoPage implements OnInit {
 
   itens: ItemCarrinho[] = [];
+  readonly limitePorteGratis = PORTE_GRATIS_A_PARTIR_DE;
 
-  constructor(private carrinhoService: CarrinhoService) {}
+  constructor(
+    private carrinhoService: CarrinhoService,
+    private custosService: CustosService
+  ) {}
 
   ngOnInit() {
     this.carrinhoService.itens$.subscribe(itens => {
@@ -32,19 +37,23 @@ export class CarrinhoPage implements OnInit {
     this.carrinhoService.alterarQuantidade(index, novaQtd);
   }
 
+  limparCarrinho() {
+    this.carrinhoService.limparCarrinho();
+  }
+
   get subtotal(): number {
-    return this.carrinhoService.getSubtotal();
+    return this.custosService.getSubtotal();
   }
 
   get porte(): number {
-    return this.carrinhoService.getPorte();
+    return this.custosService.getPorte();
   }
 
   get total(): number {
-    return this.carrinhoService.getTotal();
+    return this.custosService.getTotal();
   }
 
-  limparCarrinho() {
-    this.carrinhoService.limparCarrinho();
+  get faltaParteGratis(): number {
+    return this.custosService.getFaltaParteGratis();
   }
 }

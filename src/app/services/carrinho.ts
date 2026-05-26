@@ -23,6 +23,10 @@ export class CarrinhoService {
     return this.itensSubject.getValue();
   }
 
+  getTotalItens(): number {
+    return this.getItens().reduce((total, item) => total + item.quantidade, 0);
+  }
+
   adicionarItem(item: Omit<ItemCarrinho, 'quantidade'>, quantidade: number = 1): void {
     const itens = this.getItens();
     const existente = itens.find(
@@ -50,23 +54,6 @@ export class CarrinhoService {
     const itens = this.getItens();
     itens[index].quantidade = quantidade;
     this.itensSubject.next([...itens]);
-  }
-
-  getSubtotal(): number {
-    return this.getItens().reduce((total, item) => total + item.preco * item.quantidade, 0);
-  }
-
-  getPorte(): number {
-    const subtotal = this.getSubtotal();
-    return subtotal >= 50 ? 0 : 3.99;
-  }
-
-  getTotal(): number {
-    return this.getSubtotal() + this.getPorte();
-  }
-
-  getTotalItens(): number {
-    return this.getItens().reduce((total, item) => total + item.quantidade, 0);
   }
 
   limparCarrinho(): void {

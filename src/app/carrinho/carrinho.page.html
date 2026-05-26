@@ -34,6 +34,19 @@
     </ion-item>
   </ion-list>
 
+  <!-- Barra de progresso para portes grátis -->
+  <div class="progresso-porte" *ngIf="itens.length > 0 && porte > 0">
+    <p>Faltam <strong>{{ faltaParteGratis | currency:'EUR':'symbol':'1.2-2' }}</strong> para portes grátis</p>
+    <ion-progress-bar
+      [value]="subtotal / limitePorteGratis"
+      color="primary">
+    </ion-progress-bar>
+  </div>
+
+  <div class="progresso-porte" *ngIf="itens.length > 0 && porte === 0">
+    <p style="color: var(--ion-color-success)">✓ Tens portes grátis nesta encomenda!</p>
+  </div>
+
   <!-- Resumo de custos -->
   <ion-card *ngIf="itens.length > 0" class="resumo-card">
     <ion-card-content>
@@ -46,10 +59,6 @@
         <span *ngIf="porte > 0">{{ porte | currency:'EUR':'symbol':'1.2-2' }}</span>
         <span *ngIf="porte === 0" class="gratis">Grátis</span>
       </div>
-      <p class="info-porte" *ngIf="porte > 0">
-        <ion-icon name="information-circle-outline"></ion-icon>
-        Portes grátis em compras acima de 50,00 €
-      </p>
       <hr />
       <div class="linha-custo total">
         <span>Total</span>
