@@ -1,83 +1,126 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/catalogo" text="Voltar"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ produto?.nome || 'Detalhes' }}</ion-title>
+    <ion-title>{{ produto?.nome || 'A carregar...' }}</ion-title>
+    
     <ion-buttons slot="end">
-      <ion-button (click)="toggleCoracao()" *ngIf="produto">
-        <ion-icon slot="icon-only"
-          [name]="isFavorito ? 'heart' : 'heart-outline'"
-          [color]="isFavorito ? 'danger' : 'medium'">
-        </ion-icon>
+      <ion-button routerLink="/tabs/carrinho">
+        <ion-icon name="cart-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div *ngIf="produto">
+<ion-content [fullscreen]="true" class="ion-padding" color="light">
+  
+  <div *ngIf="produto; else carregando">
+    
+    <ion-card class="ion-no-margin" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+      <img [src]="produto.imagem || ''" [alt]="produto.nome" style="width: 100%; height: 320px; object-fit: cover;" />
+      
+      <ion-card-content>
+        <h1 style="font-weight: bold; color: #333; font-size: 1.4rem; margin-bottom: 5px;">{{ produto.nome }}</h1>
+        <h2 color="primary" style="font-size: 1.6rem; font-weight: bold; margin-top: 0;">{{ produto.preco | currency:'EUR' }}</h2>
+        <p style="color: #666; margin-top: 10px; font-size: 0.95rem;">
+          {{ produto.descricao }}
+        </p>
+      </ion-card-content>
+    </ion-card>
 
-    <img [src]="produto.imagem" [alt]="produto.nome"
-         style="width: 100%; object-fit: cover; max-height: 320px;"
-         onerror="this.src='https://ionicframework.com/docs/img/demos/card-media.png'" />
-
-    <div class="ion-padding">
-
-      <h1 style="margin-bottom: 4px;">{{ produto.nome }}</h1>
-      <ion-text color="medium"><p>{{ produto.categoria | titlecase }}</p></ion-text>
-      <ion-text color="primary">
-        <h2 style="font-weight: bold;">{{ produto.preco | currency:'EUR' }}</h2>
-      </ion-text>
-
-      <p *ngIf="produto.descricao" style="line-height: 1.6; margin-bottom: 16px;">
-        {{ produto.descricao }}
-      </p>
-
-      <!-- Seleção de tamanho -->
-      <p><strong>Tamanho</strong></p>
-      <div class="opcoes-row">
-        <ion-chip
-          *ngFor="let t of produto.tamanhos"
-          [color]="tamanhoSelecionado === t ? 'primary' : 'medium'"
-          [outline]="tamanhoSelecionado !== t"
-          (click)="tamanhoSelecionado = t">
-          {{ t }}
-        </ion-chip>
-      </div>
-
-      <!-- Seleção de cor -->
-      <p style="margin-top: 12px;"><strong>Cor</strong></p>
-      <div class="opcoes-row">
-        <ion-chip
-          *ngFor="let c of produto.cores"
-          [color]="corSelecionada === c ? 'primary' : 'medium'"
-          [outline]="corSelecionada !== c"
-          (click)="corSelecionada = c">
-          {{ c }}
-        </ion-chip>
-      </div>
-
-      <!-- Composição -->
-      <ion-item lines="none" style="margin-top: 16px;" *ngIf="produto.composicao">
-        <ion-icon name="shirt-outline" slot="start" color="medium"></ion-icon>
-        <ion-label color="medium">
-          <p>{{ produto.composicao }}</p>
-        </ion-label>
+    <ion-list inset="true" class="ion-margin-top" style="border-radius: 12px;">
+      
+      <ion-item lines="full">
+        <ion-icon name="color-palette-outline" slot="start" color="medium"></ion-icon>
+        <ion-select [(ngModel)]="corSelecionada" label="Cor" label-placement="floating" interface="action-sheet" style="width: 100%;">
+          <ion-select-option *ngFor="let cor of produto.cores" [value]="cor">{{ cor }}</ion-select-option>
+        </ion-select>
       </ion-item>
 
-      <!-- Botão adicionar -->
-      <ion-button expand="block" size="large" class="ion-margin-top" color="primary"
-        (click)="adicionarAoCarrinho()">
-        <ion-icon name="cart-outline" slot="start"></ion-icon>
-        Adicionar ao Carrinho
-      </ion-button>
+      <ion-item lines="full">
+        <ion-icon name="resize-outline" slot="start" color="medium"></ion-icon>
+        <ion-select [(ngModel)]="tamanhoSelecionado" label="Tamanho" label-placement="floating" interface="action-sheet" style="width: 100%;">
+          <ion-select-option *ngFor="let tamanho of produto.tamanhos" [value]="tamanho">{{ tamanho }}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
+      <ion-item lines="none">
+        <ion-icon name="layers-outline" slot="start" color="medium"></ion-icon>
+        <ion-label>Quantidade</ion-label>
+        <div slot="end" style="display: flex; align-items: center; background: #f0f0f0; border-radius: 20px; padding: 2px;">
+          <ion-button fill="clear" color="dark" (click)="diminuirQuantidade()">
+            <ion-icon name="remove"></ion-icon>
+          </ion-button>
+          
+          <span style="font-weight: bold; margin: 0 10px; font-size: 1.2rem; color: #111;">{{ quantidade }}</span>
+          
+          <ion-button fill="clear" color="dark" (click)="aumentarQuantidade()">
+            <ion-icon name="add"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" color="success" size="large" class="ion-margin-top" style="margin-top: 25px; margin-bottom: 25px;" (click)="adicionarAoCarrinho()">
+      <ion-icon name="cart" slot="start"></ion-icon>
+      Adicionar ao Carrinho
+    </ion-button>
+
+    <ion-segment [(ngModel)]="abaAtiva" style="margin-top: 15px;">
+      <ion-segment-button value="composicao">
+        <ion-label>Composição</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="medidas">
+        <ion-label>Tabela de Medidas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <div *ngIf="abaAtiva === 'composicao'" class="ion-padding" style="background: #ffffff; border-radius: 0 0 12px 12px; color: #555; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+      <p style="margin: 0;"><strong>Material:</strong> 85% Algodão, 15% Poliéster. 5% Elastano.</p>
+      <p style="margin-top: 5px; margin-bottom: 0;">Lavar à máquina a 30°C. Não usar lixívia.</p>
     </div>
+
+    <div *ngIf="abaAtiva === 'medidas'" class="ion-padding" style="background: #ffffff; border-radius: 0 0 12px 12px; color: #555; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+      <p style="margin: 0;"><strong>Tamanho S:</strong> 40cm comprimento x 30cm largura</p>
+      <p style="margin-top: 5px; margin-bottom: 0;"><strong>Tamanho M:</strong> 45cm comprimento x 32cm largura</p>
+      <p style="margin-top: 5px; margin-bottom: 0;"><strong>Tamanho L:</strong> 50cm comprimento x 35cm largura</p>
+    </div>
+
+    <h3 style="font-weight: bold; margin-top: 35px; margin-bottom: 10px; color: #333; margin-left: 5px;">Disponibilidade em Lojas</h3>
+    
+    <ion-item color="warning" lines="none" style="border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+      <ion-icon name="location-outline" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap" style="font-size: 0.85rem;">
+        Permissão de localização negada.
+      </ion-label>
+    </ion-item>
+
+    <ion-list inset="true" class="ion-no-margin" style="border-radius: 12px; margin-bottom: 10px;">
+      <ion-item lines="none">
+        <ion-icon name="storefront-outline" slot="start" color="medium"></ion-icon>
+        <ion-select [(ngModel)]="lojaSelecionada" (ionChange)="verificarStock($event)" label="Verificar stock na Loja" label-placement="floating" interface="action-sheet" style="width: 100%;">
+          <ion-select-option value="braga">Loja Braga Parque</ion-select-option>
+          <ion-select-option value="lisboa">Loja Lisboa Colombo</ion-select-option>
+          <ion-select-option value="coimbra">Loja Coimbra Dolce Vita</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-item *ngIf="mensagemStock" lines="none" style="border-radius: 12px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);" [color]="corStock === 'success' ? 'light' : 'danger'">
+      <ion-icon [name]="corStock === 'success' ? 'checkmark-circle' : 'close-circle'" slot="start" [color]="corStock === 'success' ? 'success' : 'light'"></ion-icon>
+      <ion-label class="ion-text-wrap" [style.color]="corStock === 'success' ? '#2dd36f' : 'white'">
+        <strong>{{ mensagemStock }}</strong>
+      </ion-label>
+    </ion-item>
+
   </div>
 
-  <div *ngIf="!produto" class="ion-text-center ion-padding ion-margin-top">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>A carregar produto...</p>
-  </div>
-</ion-content>
+  <ng-template #carregando>
+    <div class="ion-text-center" style="margin-top: 100px;">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p style="color: gray; margin-top: 15px;">A procurar produto...</p>
+    </div>
+  </ng-template>
+
+</ion-content>git add .
