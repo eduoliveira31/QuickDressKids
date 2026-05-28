@@ -101,3 +101,33 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 **Decisões:**
 - Manter o padrão de *Standalone Components* introduzido nativamente pelo ecossistema moderno do Angular e Ionic para as novas páginas, ajustando manualmente os ficheiros de suporte necessários.
 - Guardar de forma otimizada apenas a coleção de IDs numéricos dos produtos favoritos no Ionic Storage para economizar memória e acelerar o processamento local.
+
+## Sessão 5 – 26 de maio de 2026
+**Responsável:** Rodrigo Fernandes Malheiro [cite: 56, 154]
+**Objetivo:** Implementação e otimização da lógica do carrinho de compras com simulação de custos e início do Sprint 3 para a redesign visual completa baseada no Figma em tons verde pastel.
+
+**Atividades realizadas:**
+**Implementação da Lógica do Carrinho:** Criação e integração do `CarrinhoService` com recurso a um `BehaviorSubject` reativo para gerir o estado global dos itens adicionados (controlando ID, nome, preço, tamanho, cor e quantidade).
+**Ligação da Página de Detalhes:** Vinculação do botão "Adicionar ao Carrinho" na página de detalhes do produto (`produto-detalhe.page.ts`), passando a validar as opções de tamanho e cor selecionadas através de chips dinâmicos (`ion-chip`) e emitindo notificações com `ToastController`.
+**Construção da Interface do Carrinho:** Desenvolvimento da estrutura visual em `carrinho.page.html` para exibição de miniaturas de produtos, detalhes dos atributos, controlo manual de incrementação/decrementação de quantidades e esvaziamento total do carrinho.
+**Arquitetura de Serviços Dedicados (Otimização):** Refatoração da lógica de custos através da criação de um novo serviço independente (`CustosService`), isolando o cálculo do subtotal, validação do limiar de portes grátis (estipulado nos €50) e apuramento do valor total da encomenda.
+**Indicadores de Progresso de Envio:** Incorporação de um componente `ion-progress-bar` dinâmico na página do carrinho para ilustrar visualmente ao utilizador o valor em falta para obter a isenção dos portes de envio.
+**Padronização com Ícones Oficiais:** Atualização dos elementos de navegação global (`tabs.page.html`) e dos seletores de categoria do catálogo (`catalogo.page.html`) recorrendo exclusivamente a glifos nativos da biblioteca *Ionicons*.
+**Configuração de Cores Globais:** Estruturação avançada do ficheiro `variables.scss` para criar mapeamentos personalizados da marca, incluindo classes CSS injetáveis (`.ion-color-menino`, `.ion-color-menina`, `.ion-color-bebe`) e definições explícitas de tipografia e palete de cores.
+**Desenvolvimento da Redesign Verde Pastel:** Substituição da identidade visual antiga para adotar tons pastel baseados em verde menta e sálvia (`#4a9b6f`, `#a8d5b5`), ajustando os estilos globais de cartões, botões e barras de ferramentas (`global.scss`) para simular o protótipo.
+
+**Problemas:**
+**Eliminação Acidental de Template:** Perda total de conteúdo da página de catálogo (exibindo ecrã em branco e sem renderizar produtos) após uma substituição indevida que manteve unicamente o componente `<ion-segment>` e apagou a grelha de cartões.
+**Problema de Inicialização de Filtros:** Falha na renderização assíncrona da lista devido ao estado inicial vazio da propriedade `produtosFiltrados` antes do disparo do evento `(ionChange)` no arranque da aplicação.
+**Sobreposição Indesejada do Modo Escuro:** Descaracterização estética da palete verde pastel provocada pela diretiva de sistema `@media (prefers-color-scheme: dark)`, que forçava um fundo escuro em contraste com os cartões e desajustava o visual limpo pretendido.
+**Divergência Estrutural com o Protótipo:** Constatação de que a disposição nativa por abas inferiores (*Tab Bar*) e barras padrão do Ionic impossibilitava a correspondência exata a 100% com o layout profissional desenhado no Figma.
+
+**Soluções:**
+**Limpeza e Colagem Integral:** Execução de um comando global de seleção e remoção (`Ctrl+A`), seguido da reinserção completa do ficheiro estruturado com as cerca de 70 linhas de código previstas.
+**Restauro Completo do Template:** Reconstituição integral do ficheiro `catalogo.page.html`, integrando a barra de cabeçalho, os segmentos com ícones atualizados e a grelha responsiva `ion-grid`.
+**Depuração via Consola do Navegador:** Injeção de pontos de controlo com `console.log` no método `ngOnInit` para aferir o correto carregamento dos 15 produtos a partir do serviço JSON e garantir a atribuição imediata do array nativo.
+**Desativação de Estilos Dark Mode:** Remoção integral do bloco condicional de media query de cores escuras no final do ficheiro `variables.scss`, forçando o ecossistema a renderizar o fundo suave (`#f0f7f2`) e os elementos opacos de forma estável.
+**Planeamento do Sprint 3 (Figma):** Formulação e abertura de uma nova meta de desenvolvimento para reestruturar completamente a navegação da aplicação através de uma barra horizontal superior, painel lateral esquerdo de filtros e ocultação definitiva da barra inferior.
+
+**Decisões:**
+**Segregação de Responsabilidades (Princípio SOLID):** Divisão estrita da lógica de negócio do ecossistema do carrinho, delegando a gestão estrita da coleção de itens ao `CarrinhoService` e todos os cálculos matemáticos e financeiros ao `CustosService`.
