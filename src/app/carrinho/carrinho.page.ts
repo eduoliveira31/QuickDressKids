@@ -1,121 +1,95 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { AlertController, IonicSafeString } from '@ionic/angular';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
+import { Router } from '@angular/router';
+import { ReservasService } from '../services/reservas';
 
-/**
- * Página do Carrinho de Compras.
- *
- * Apresenta os artigos que o utilizador adicionou ao carrinho,
- * permite alterar quantidades, remover artigos e mostra o resumo
- * de custos com simulação de porte de envio.
- */
 @Component({
   selector: 'app-carrinho',
   templateUrl: './carrinho.page.html',
   styleUrls: ['./carrinho.page.scss'],
-  standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  standalone: false
 })
 export class CarrinhoPage implements OnInit {
 
-  /**
-   * Lista reativa de artigos presentes no carrinho.
-   * Atualizada automaticamente quando o CarrinhoService emite mudanças.
-   */
   itens: ItemCarrinho[] = [];
-
-  /**
-   * Valor a partir do qual o porte de envio é gratuito (50€).
-   * Usado no template para calcular a barra de progresso de envio gratuito.
-   * É readonly porque nunca deve ser alterado pela página.
-   */
   readonly limitePorteGratis = PORTE_GRATIS_A_PARTIR_DE;
 
-  /**
-   * @param carrinhoService - Service que gere o estado do carrinho
-   * @param custosService   - Service que calcula subtotal, porte e total
-   */
   constructor(
     private carrinhoService: CarrinhoService,
-    private custosService: CustosService
+    private custosService: CustosService,
+    private alertController: AlertController,
+    private router: Router,                      
+    private reservasService: ReservasService     
   ) {}
 
-  // ─── CICLO DE VIDA ──────────────────────────────────────────────────────────
-
-  /**
-   * Subscreve o Observable do carrinho para manter a lista local sincronizada.
-   * Chamado automaticamente pelo Angular após a criação do componente.
-   */
   ngOnInit() {
     this.carrinhoService.itens$.subscribe(itens => {
       this.itens = itens;
     });
   }
 
-  // ─── AÇÕES ──────────────────────────────────────────────────────────────────
-
-  /**
-   * Remove um artigo do carrinho pelo seu índice na lista.
-   * @param index - Posição do artigo a remover
-   */
   removerItem(index: number) {
     this.carrinhoService.removerItem(index);
   }
 
-  /**
-   * Altera a quantidade de um artigo somando um delta (+1 ou -1).
-   * Se a nova quantidade chegar a 0, o CarrinhoService remove o artigo.
-   *
-   * @param index - Posição do artigo a alterar
-   * @param delta - Valor a somar à quantidade atual (+1 incrementa, -1 decrementa)
-   */
   alterarQuantidade(index: number, delta: number) {
     const novaQtd = this.itens[index].quantidade + delta;
     this.carrinhoService.alterarQuantidade(index, novaQtd);
   }
 
-  /**
-   * Esvazia completamente o carrinho, removendo todos os artigos.
-   */
   limparCarrinho() {
     this.carrinhoService.limparCarrinho();
   }
 
-  // ─── GETTERS DE CUSTOS ──────────────────────────────────────────────────────
+  get subtotal(): number { return this.custosService.getSubtotal(); }
+  get porte(): number { return this.custosService.getPorte(); }
+  get total(): number { return this.custosService.getTotal(); }
+  get faltaParteGratis(): number { return this.custosService.getFaltaParteGratis(); }
 
-  /**
-   * Subtotal da compra: soma de (preço × quantidade) de todos os artigos.
-   * @returns Subtotal em euros
-   */
-  get subtotal(): number {
-    return this.custosService.getSubtotal();
-  }
+  async criarReserva() {
+    const numeroReserva = Math.floor(Math.random() * 900000000) + 100000000;
+    const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
 
-  /**
-   * Custo de envio: 0€ se o subtotal atingir o limiar, caso contrário 3,99€.
-   * @returns Custo de envio em euros
-   */
-  get porte(): number {
-    return this.custosService.getPorte();
-  }
+    const dataAtual = new Date();
+    const dataCriacao = dataAtual.toLocaleDateString('pt-PT') + ' às ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+    
+    const dataAmanha = new Date(dataAtual.getTime() + 24 * 60 * 60 * 1000);
+    const dataValidade = dataAmanha.toLocaleDateString('pt-PT') + ' às ' + dataAmanha.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
-  /**
-   * Total final da compra (subtotal + porte de envio).
-   * @returns Total em euros
-   */
-  get total(): number {
-    return this.custosService.getTotal();
-  }
+    this.reservasService.adicionarReserva({
+      numero: numeroReserva,
+      dataCriacao: dataCriacao,
+      dataValidade: dataValidade,
+      total: this.total,
+      qtdArtigos: qtdTotal,
+      loja: 'Loja Lisboa Colombo - Lisboa',
+      itens: [...this.itens] 
+    });
 
-  /**
-   * Valor em falta para atingir o limiar de porte gratuito.
-   * Retorna 0 se o envio já for gratuito.
-   * @returns Valor em falta em euros
-   */
-  get faltaParteGratis(): number {
-    return this.custosService.getFaltaParteGratis();
+    const mensagemSegura = new IonicSafeString(`
+      <div class="ion-text-center">
+        <p>A sua reserva <strong>#${numeroReserva}</strong> está confirmada.</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Reserva_QDK_${numeroReserva}" 
+             alt="QR Code" style="margin-top: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+      </div>
+    `);
+
+    const alert = await this.alertController.create({
+      header: 'Reserva Criada!',
+      message: mensagemSegura,
+      buttons: [
+        {
+          text: 'Ver Minhas Reservas',
+          handler: () => {
+            this.limparCarrinho();
+            this.router.navigate(['/reservas']);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

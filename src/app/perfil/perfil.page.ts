@@ -1,28 +1,52 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
-/**
- * Página de Perfil do utilizador.
- *
- * Apresenta os dados da conta e as preferências do utilizador.
- * Futuramente integrará autenticação e persistência de dados no Storage.
- */
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
-  standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  standalone: false
 })
 export class PerfilPage implements OnInit {
+  
+  utilizador = {
+    nome: 'Carla',
+    email: 'carla@email.com',
+    foto: 'https://ionicframework.com/docs/img/demos/avatar.svg'
+  };
 
-  constructor() {}
+  constructor(
+    private toastController: ToastController,
+    private router: Router // <-- Injetamos o Router para conseguir navegar
+  ) {}
 
-  /**
-   * Inicializa a página.
-   * Ponto de entrada para carregamento de dados do utilizador (ex: Storage, API).
-   */
   ngOnInit() {}
+
+  async abrirOpcao(nomeOpcao: string) {
+    if (nomeOpcao === 'Reservas Ativas') {
+      // Se a opção for as Reservas, navega diretamente para a nova página!
+      this.router.navigate(['/reservas']);
+    } else {
+      // Para as outras opções, mantém o feedback de construção
+      const toast = await this.toastController.create({
+        message: `A abrir ${nomeOpcao}... (Página em construção)`,
+        duration: 2000,
+        position: 'bottom',
+        color: 'dark'
+      });
+      await toast.present();
+    }
+  }
+
+  async terminarSessao() {
+    const toast = await this.toastController.create({
+      message: 'Sessão terminada com sucesso!',
+      duration: 2000,
+      position: 'bottom',
+      color: 'success',
+      icon: 'checkmark-circle'
+    });
+    await toast.present();
+  }
 }

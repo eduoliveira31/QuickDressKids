@@ -1,17 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Catalogo } from '../services/catalogo';
-import { Favoritos } from '../services/favoritos';
 import { CarrinhoService } from '../services/carrinho';
 import { ToastController } from '@ionic/angular';
 
-/**
- * Página de detalhe de um produto.
- *
- * Recebe o ID do produto como parâmetro de rota (:id),
- * carrega os dados do produto, permite selecionar tamanho e cor,
- * adicionar ao carrinho e marcar como favorito.
- */
 @Component({
   selector: 'app-produto-detalhe',
   templateUrl: './produto-detalhe.page.html',
@@ -19,109 +11,92 @@ import { ToastController } from '@ionic/angular';
   standalone: false
 })
 export class ProdutoDetalhePage implements OnInit {
-
-  /** Dados completos do produto carregado (indefinido até o pedido HTTP terminar) */
+  
   produto: any;
-
-  /** Indica se o produto atual está marcado como favorito pelo utilizador */
-  isFavorito: boolean = false;
-
-  /** Tamanho selecionado pelo utilizador (ex: 'S', 'M', 'L') */
-  tamanhoSelecionado: string = '';
-
-  /** Cor selecionada pelo utilizador (ex: 'Azul', 'Rosa') */
   corSelecionada: string = '';
+  tamanhoSelecionado: string = '';
+  quantidade: number = 1;
 
-  /**
-   * @param route            - Permite aceder aos parâmetros da rota atual (id do produto)
-   * @param catalogoService  - Fornece os dados do catálogo via JSON
-   * @param favoritosService - Gere a lista de favoritos persistida no Storage
-   * @param carrinhoService  - Gere o estado do carrinho
-   * @param toastCtrl        - Cria notificações temporárias (toasts) no ecrã
-   */
+  // NOVAS VARIÁVEIS PARA AS ABAS E LOJAS
+  abaAtiva: string = 'composicao'; // Define a aba de Composição como padrão
+  lojaSelecionada: string = '';
+  mensagemStock: string = '';
+  corStock: string = 'medium';
+
   constructor(
     private route: ActivatedRoute,
-    private catalogoService: Catalogo,
-    private favoritosService: Favoritos,
+    private catalogo: Catalogo,
     private carrinhoService: CarrinhoService,
-    private toastCtrl: ToastController
+    private toastController: ToastController
   ) {}
 
-  // ─── CICLO DE VIDA ──────────────────────────────────────────────────────────
-
-  /**
-   * Lê o parâmetro :id da rota, carrega o produto correspondente
-   * e verifica se já é favorito.
-   * Pré-seleciona o primeiro tamanho e cor disponíveis.
-   */
   ngOnInit() {
-    // Lê o parâmetro :id da URL e converte para número
-    const idParam = this.route.snapshot.paramMap.get('id');
-    const produtoId = Number(idParam);
-
-    this.catalogoService.getProdutos().subscribe(async (produtos: any[]) => {
-      // Encontra o produto pelo ID
-      this.produto = produtos.find(p => p.id === produtoId);
-
-      if (this.produto) {
-        // Verifica se o produto já está nos favoritos
-        this.isFavorito = await this.favoritosService.isFavorito(this.produto.id);
-
-        // Pré-seleciona o primeiro tamanho e cor disponíveis
-        this.tamanhoSelecionado = this.produto.tamanhos?.[0] || '';
-        this.corSelecionada = this.produto.cores?.[0] || '';
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      const fetched = this.catalogo.getProdutoById(Number(id));
+      
+      if (fetched && typeof fetched.subscribe === 'function') {
+        fetched.subscribe((dados: any) => this.prepararProduto(dados));
+      } else {
+        this.prepararProduto(fetched);
       }
-    });
+    }
   }
 
-  // ─── AÇÕES ──────────────────────────────────────────────────────────────────
-
-  /**
-   * Alterna o estado de favorito do produto atual.
-   * Chama o FavoritosService para adicionar ou remover dos favoritos
-   * e atualiza o ícone de coração no ecrã.
-   */
-  async toggleCoracao() {
-    await this.favoritosService.toggleFavorito(this.produto.id);
-    this.isFavorito = !this.isFavorito;
+  prepararProduto(dados: any) {
+    this.produto = dados;
+    if (this.produto) {
+      if (this.produto.cores && this.produto.cores.length > 0) {
+        this.corSelecionada = this.produto.cores[0];
+      }
+      if (this.produto.tamanhos && this.produto.tamanhos.length > 0) {
+        this.tamanhoSelecionado = this.produto.tamanhos[0];
+      }
+    }
   }
 
-  /**
-   * Adiciona o produto ao carrinho com o tamanho e cor selecionados.
-   *
-   * Validação: se o utilizador não tiver selecionado tamanho ou cor,
-   * apresenta um toast de aviso e não prossegue.
-   * Em caso de sucesso, apresenta um toast de confirmação.
-   */
+  aumentarQuantidade() { this.quantidade++; }
+  
+  diminuirQuantidade() {
+    if (this.quantidade > 1) {
+      this.quantidade--;
+    }
+  }
+
   async adicionarAoCarrinho() {
-    // Valida se o utilizador selecionou tamanho e cor
-    if (!this.tamanhoSelecionado || !this.corSelecionada) {
-      const toast = await this.toastCtrl.create({
-        message: 'Seleciona um tamanho e uma cor.',
+    if (this.produto) {
+      const pacoteProduto: any = {
+        id: this.produto.id,
+        nome: this.produto.nome,
+        preco: this.produto.preco,
+        imagem: this.produto.imagem,
+        cor: this.corSelecionada,
+        tamanho: this.tamanhoSelecionado
+      };
+
+      this.carrinhoService.adicionarItem(pacoteProduto, this.quantidade);
+
+      const toast = await this.toastController.create({
+        message: `${this.quantidade}x ${this.produto.nome} adicionado(s) ao carrinho!`,
         duration: 2000,
-        color: 'warning'
+        position: 'bottom',
+        color: 'success',
+        icon: 'checkmark-circle'
       });
       await toast.present();
-      return;
     }
+  }
 
-    // Adiciona o produto ao carrinho com os atributos selecionados
-    this.carrinhoService.adicionarItem({
-      id: this.produto.id,
-      nome: this.produto.nome,
-      preco: this.produto.preco,
-      imagem: this.produto.imagem,
-      tamanho: this.tamanhoSelecionado,
-      cor: this.corSelecionada
-    });
-
-    // Notifica o utilizador com um toast de sucesso
-    const toast = await this.toastCtrl.create({
-      message: `${this.produto.nome} adicionado ao carrinho!`,
-      duration: 2000,
-      color: 'success',
-      position: 'bottom'
-    });
-    await toast.present();
+  // NOVA FUNÇÃO: VERIFICAR STOCK
+  verificarStock(event: any) {
+    const loja = event.detail.value;
+    
+    if (loja === 'lisboa') {
+      this.mensagemStock = 'Artigo indisponível nesta loja.';
+      this.corStock = 'danger'; // Fica vermelho
+    } else if (loja === 'braga' || loja === 'coimbra') {
+      this.mensagemStock = 'Em stock! Disponível para reserva.';
+      this.corStock = 'success'; // Fica verde
+    }
   }
 }

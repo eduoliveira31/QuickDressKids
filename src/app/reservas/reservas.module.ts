@@ -1,17 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
-import { PerfilPageRoutingModule } from './perfil-routing.module';
-import { PerfilPage } from './perfil.page';
+
+import { ReservasPageRoutingModule } from './reservas-routing.module';
+
+import { ReservasPage } from './reservas.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PerfilPageRoutingModule
+    ReservasPageRoutingModule
   ],
-  declarations: [PerfilPage] // <-- Página declarada corretamente
+  declarations: [ReservasPage]
 })
-export class PerfilPageModule {}
+export class ReservasPageModule {}

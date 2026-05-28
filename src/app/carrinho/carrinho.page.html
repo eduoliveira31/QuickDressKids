@@ -1,10 +1,86 @@
-<!-- Carrinho vazio -->
-<div *ngIf="itens.length === 0" class="carrinho-vazio">
-  <ion-icon name="cart-outline"></ion-icon>
-  <h2>O carrinho está vazio</h2>
-  <p>Adiciona produtos do catálogo</p>
-  <ion-button routerLink="/tabs/catalogo" fill="outline" color="primary">
-    <ion-icon name="shirt-outline" slot="start"></ion-icon>
-    Ver Catálogo
-  </ion-button>
-</div>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>O Meu Carrinho</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  
+  <div *ngIf="itens.length === 0" class="ion-text-center" style="margin-top: 50px;">
+    <ion-icon name="cart-outline" style="font-size: 80px; color: #ccc;"></ion-icon>
+    <h2 style="color: #666;">O carrinho está vazio</h2>
+    <p style="color: #999;">Adiciona os teus produtos favoritos do catálogo</p>
+    
+    <ion-button [routerLink]="['/tabs/catalogo']" fill="outline" color="primary" class="ion-margin-top">
+      <ion-icon name="shirt-outline" slot="start"></ion-icon>
+      Ir para o Catálogo
+    </ion-button>
+  </div>
+
+  <div *ngIf="itens.length > 0">
+    
+    <ion-list>
+      <ion-item *ngFor="let item of itens; let i = index">
+        <ion-thumbnail slot="start">
+          <img [src]="item.imagem" [alt]="item.nome" />
+        </ion-thumbnail>
+        
+        <ion-label>
+          <h2>{{ item.nome }}</h2>
+          <p>Tam: <strong>{{ item.tamanho }}</strong> | Cor: <strong>{{ item.cor }}</strong></p>
+          <h3 color="primary">{{ item.preco | currency:'EUR' }}</h3>
+        </ion-label>
+
+        <div slot="end" style="display: flex; align-items: center; gap: 8px;">
+          <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, -1)">
+            <ion-icon name="remove-circle-outline"></ion-icon>
+          </ion-button>
+          
+          <span style="font-weight: bold; font-size: 16px;">{{ item.quantidade }}</span>
+          
+          <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, 1)">
+            <ion-icon name="add-circle-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <ion-card class="ion-margin-top" color="light">
+      <ion-card-content>
+        <ion-item lines="none" color="light">
+          <ion-label>Subtotal</ion-label>
+          <ion-note slot="end">{{ subtotal | currency:'EUR' }}</ion-note>
+        </ion-item>
+        
+        <ion-item lines="none" color="light">
+          <ion-label>Portes de Envio</ion-label>
+          <ion-note slot="end" [color]="porte === 0 ? 'success' : 'medium'">
+            {{ porte === 0 ? 'Grátis' : (porte | currency:'EUR') }}
+          </ion-note>
+        </ion-item>
+        
+        <p *ngIf="porte > 0" style="text-align: right; font-size: 12px; color: #888;">
+          Faltam {{ faltaParteGratis | currency:'EUR' }} para portes grátis!
+        </p>
+
+        <ion-item lines="none" color="light" style="margin-top: 10px;">
+          <ion-label style="font-size: 1.2rem; font-weight: bold;">TOTAL</ion-label>
+          <ion-note slot="end" color="primary" style="font-size: 1.3rem; font-weight: bold;">
+            {{ total | currency:'EUR' }}
+          </ion-note>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" size="large" color="success" class="ion-margin-top" (click)="criarReserva()">
+      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+      Criar Reserva
+    </ion-button>
+    
+    <ion-button expand="block" fill="clear" color="danger" class="ion-margin-top" (click)="limparCarrinho()">
+      <ion-icon name="trash-outline" slot="start"></ion-icon>
+      Esvaziar Carrinho
+    </ion-button>
+    
+  </div>
+</ion-content>

@@ -24,7 +24,11 @@ const routes: Routes = [
       import('./produto-detalhe/produto-detalhe.module').then(
         m => m.ProdutoDetalhePageModule
       )
+  },  {
+    path: 'reservas',
+    loadChildren: () => import('./reservas/reservas.module').then( m => m.ReservasPageModule)
   }
+
 ];
 
 /**
