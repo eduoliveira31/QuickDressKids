@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <!-- Botão para voltar para trás -->
+      <ion-back-button defaultHref="/tabs/perfil" text="Voltar"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Minha Conta</ion-title>
+  </ion-toolbar>
+  
+  <!-- Abas de navegação (Ativas vs Histórico) -->
+  <ion-toolbar color="light">
+    <ion-segment value="ativas">
+      <ion-segment-button value="ativas">
+        <ion-label>Reservas Ativas (1)</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="historico">
+        <ion-label>Histórico (0)</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" color="light">
+  
+  <!-- Cartão da Reserva Confirmada -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title style="font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+        <ion-icon name="checkmark-circle" color="success"></ion-icon>
+        Reserva #R17758303812
+        <ion-badge color="success" style="margin-left: auto;">Confirmada</ion-badge>
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p style="color: #333; font-weight: bold;">Loja Lisboa Colombo - Lisboa</p>
+      <p style="color: gray;">10/04/2026 às 15:13</p>
+      
+      <ion-item lines="none" class="ion-no-padding ion-margin-top">
+        <ion-label color="medium">1 artigo</ion-label>
+        <ion-note slot="end" color="dark" style="font-weight: bold; font-size: 1.3rem;">32.50€</ion-note>
+      </ion-item>
+
+      <ion-button expand="block" fill="outline" color="primary" class="ion-margin-top">
+        <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+        Ver QR Code
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

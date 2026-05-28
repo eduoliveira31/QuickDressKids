@@ -72,8 +72,9 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-button expand="block" size="large" color="success" class="ion-margin-top">
-      Finalizar Encomenda
+    <ion-button expand="block" size="large" color="success" class="ion-margin-top" (click)="criarReserva()">
+      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+      Criar Reserva
     </ion-button>
     
     <ion-button expand="block" fill="clear" color="danger" class="ion-margin-top" (click)="limparCarrinho()">
