@@ -152,3 +152,38 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 - Comentários escritos em português para manter consistência com o resto da documentação do projeto
 - Utilização do padrão JSDoc em vez de comentários simples, permitindo que o VS Code mostre a documentação ao passar o rato sobre os métodos
 - Separação visual dos blocos de métodos com divisórias (// ─── LEITURA ───) para facilitar a navegação no código
+
+## Sessão 7 – 28 de maio de 2026
+**Responsável:** Eduardo Oliveira (33137)
+
+**Objetivo:** Implementação do sistema de gestão dinâmica de reservas, melhoria da interface (UI/UX) das tabs e persistência definitiva dos dados recorrendo ao Ionic Storage, cumprindo requisitos avançados da Sprint 3.
+
+**Atividades realizadas:**
+- **Sistema e Serviço de Reservas:** Criação do serviço `ReservasService` (`src/app/services/reservas.ts`) para gestão do estado e ciclo de vida das reservas. Implementação de lógica para categorização de estado entre reservas 'ativas' e 'concluídas'.
+- **Gestão de Datas e Validade:** Implementação de cálculo automático para gerar a data de criação e a data de validade (24 horas após a criação) para exibição nos cartões de reserva.
+- **Redesign Fiel ao Figma (Minha Conta):** Reestruturação total do HTML da página `reservas.page.html` (`src/app/reservas/reservas.page.html`) com a implementação de um design premium para os cartões (fundo branco, bordas arredondadas, tipografia e espaçamentos otimizados), alinhado com o protótipo `Img 23`. Adição da visualização individualizada dos itens (incluindo fotografia da peça de roupa, cor, tamanho e quantidade).
+- **QR Codes Dinâmicos e Modal:** Modificação da lógica de encerramento da compra no carrinho (`criarReserva()`) para gerar números aleatórios únicos por reserva (`#R...`). Criação de um Modal Deslizante (Bottom Sheet a 75% da altura) com fundo branco forçado para apresentar o QR Code construído com a API pública *QRServer*, garantindo a leitura por leitores óticos e o correto funcionamento em *Dark Mode*.
+- **Ações e Histórico:** Lógica implementada nos botões dos cartões das reservas ativas: 
+    * Botão "Marcar Concluída" que altera o status da reserva e a move automaticamente para o separador Histórico.
+    * Botão "Cancelar" com implementação do `AlertController` para dupla validação/confirmação antes da eliminação permanente do registo.
+- **Persistência de Reservas (Ionic Storage):** Integração final do módulo `@ionic/storage-angular` no serviço de reservas. Configuração dos métodos assíncronos (`async/await`) no serviço e na página do controlador para garantir a leitura e gravação no sistema de ficheiros do dispositivo, tornando as reservas imunes ao fecho da app ou refreshes (F5).
+- **Correção da Leitura do JSON (Catálogo):** Adição e injeção do `HttpClientModule` no ficheiro root `app.module.ts` para permitir que o serviço aceda aos produtos locais e resolver o erro que deixava o ecrã em branco na rota inicial.
+- **Melhorias de UI na Barra de Navegação:** Refatoração do `tabs.page.html` substituindo atributos incorretos por `tab="..."` para corrigir a ativação dos estados (highlighting). Criação de CSS avançado (`tabs.page.scss`) para gerar transições suaves e fundos estilo *bolha colorida semi-transparente* na aba ativa.
+
+**Problemas:**
+- A página do Carrinho dava erro de compilação por tentar importar o ficheiro gerado do serviço de reservas usando a extensão `.ts` no caminho e sem indicar o sufixo correto que a CLI do Angular exigia, apresentando o erro genérico de módulo não encontrado.
+- Os botões "Marcar Concluída" e "Cancelar" do cartão de reservas não tinham funcionalidades associadas (comportamento de 'fachada').
+- O sistema de reservas original dependia exclusivamente de variáveis gravadas na RAM, provocando perda irremediável de dados a cada atualização da página.
+- Catálogo não carregava, registando um erro estrutural severo de consola (`NG0201: No provider found for HttpClient`) que bloqueava o Angular.
+- A navegação pelas tabs não preenchia o ícone da página ativa nem demonstrava fundos coloridos, gerando uma má perceção de contexto e localização por parte do utilizador.
+
+**Soluções:**
+- Limpeza dos *imports* mal declarados na página do carrinho e nas reservas, suprimindo extensões forçadas e ajustando as vias de diretório.
+- Refatoração da arquitetura lógica do controlador para suportar gestão de estados (ativa/concluída).
+- Refatoração total do serviço com injeção do objeto assíncrono do Storage, com chamadas subsequentes e obrigatórias de `this.guardarNoDisco()` para garantir integridade.
+- Intervenção cirúrgica nos `imports` principais do `app.module.ts` para injetar o `HttpClientModule` nativo, devolvendo estabilidade à árvore de componentes.
+- Correção do mapeamento de rotas trocando o standard routerLink pela propriedade interna `tab` e integração de regras customizadas no `SCSS` das *Tabs*.
+
+**Decisões:**
+- Estruturar os painéis de reserva recorrendo à estratégia *Model-View-ViewModel (MVVM)*, centralizando todo o poder de estado, alteração, consulta e deleção no nível do serviço em detrimento da página.
+- Optar por agrupar subcommits e gerir as ramificações garantindo que as implementações vitais (Storage e HttpClient) fossem agrupadas logicamente como *Features* para a `develop`, simplificando as entregas de *Pull Requests*.
