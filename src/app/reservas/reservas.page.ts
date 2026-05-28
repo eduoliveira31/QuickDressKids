@@ -9,9 +9,24 @@ import { ReservasService, Reserva } from '../services/reservas';
 })
 export class ReservasPage implements OnInit {
   
-  constructor() {}
+  reservas: Reserva[] = [];
+  reservaSelecionada: Reserva | null = null;
+  modalAberto = false;
+
+  constructor(private reservasService: ReservasService) {}
   
   ngOnInit() {}
 
-  // Já não precisamos de funções para abrir o alerta! Tudo vai ser gerido no HTML.
+  ionViewWillEnter() {
+    this.reservas = this.reservasService.getReservas();
+  }
+
+  abrirQR(reserva: Reserva) {
+    this.reservaSelecionada = reserva;
+    this.modalAberto = true;
+  }
+
+  fecharQR() {
+    this.modalAberto = false;
+  }
 }

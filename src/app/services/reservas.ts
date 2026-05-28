@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 
-// Definimos como é uma Reserva
 export interface Reserva {
   numero: number;
-  data: string;
+  dataCriacao: string;
+  dataValidade: string;
   total: number;
   qtdArtigos: number;
   loja: string;
+  itens: any[]; // Guarda a foto, cor e tamanho do produto
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservasService {
-  private reservas: Reserva[] = []; // A nossa lista em memória
+  private reservas: Reserva[] = [];
 
   constructor() {}
 
   adicionarReserva(reserva: Reserva) {
-    // unshift coloca a reserva mais recente no topo da lista!
     this.reservas.unshift(reserva); 
   }
 

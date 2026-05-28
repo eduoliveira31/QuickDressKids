@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, IonicSafeString } from '@ionic/angular';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
-import { Router } from '@angular/router'; // <-- Router adicionado!
+import { Router } from '@angular/router';
 import { ReservasService } from '../services/reservas';
 
 @Component({
@@ -20,8 +20,8 @@ export class CarrinhoPage implements OnInit {
     private carrinhoService: CarrinhoService,
     private custosService: CustosService,
     private alertController: AlertController,
-    private router: Router,                      // <-- Injetado corretamente
-    private reservasService: ReservasService     // <-- Injetado corretamente
+    private router: Router,                      
+    private reservasService: ReservasService     
   ) {}
 
   ngOnInit() {
@@ -49,16 +49,23 @@ export class CarrinhoPage implements OnInit {
   get faltaParteGratis(): number { return this.custosService.getFaltaParteGratis(); }
 
   async criarReserva() {
-    const numeroReserva = Math.floor(Math.random() * 90000) + 10000;
+    const numeroReserva = Math.floor(Math.random() * 900000000) + 100000000;
     const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
 
-    // Guarda a reserva na nossa memória central
+    const dataAtual = new Date();
+    const dataCriacao = dataAtual.toLocaleDateString('pt-PT') + ' às ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+    
+    const dataAmanha = new Date(dataAtual.getTime() + 24 * 60 * 60 * 1000);
+    const dataValidade = dataAmanha.toLocaleDateString('pt-PT') + ' às ' + dataAmanha.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+
     this.reservasService.adicionarReserva({
       numero: numeroReserva,
-      data: new Date().toLocaleString('pt-PT'),
+      dataCriacao: dataCriacao,
+      dataValidade: dataValidade,
       total: this.total,
       qtdArtigos: qtdTotal,
-      loja: 'Loja Lisboa Colombo - Lisboa'
+      loja: 'Loja Lisboa Colombo - Lisboa',
+      itens: [...this.itens] 
     });
 
     const mensagemSegura = new IonicSafeString(`
