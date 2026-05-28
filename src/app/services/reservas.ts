@@ -7,7 +7,8 @@ export interface Reserva {
   total: number;
   qtdArtigos: number;
   loja: string;
-  itens: any[]; // Guarda a foto, cor e tamanho do produto
+  itens: any[]; 
+  status?: 'ativa' | 'concluida'; // <-- Novo: Para sabermos onde mostrar o cartão
 }
 
 @Injectable({
@@ -19,10 +20,24 @@ export class ReservasService {
   constructor() {}
 
   adicionarReserva(reserva: Reserva) {
+    reserva.status = 'ativa'; // Quando crias, vai logo para as "Ativas"
     this.reservas.unshift(reserva); 
   }
 
   getReservas() {
     return this.reservas;
+  }
+
+  // NOVA FUNÇÃO: Passar para o histórico
+  marcarComoConcluida(numero: number) {
+    const reserva = this.reservas.find(r => r.numero === numero);
+    if (reserva) {
+      reserva.status = 'concluida';
+    }
+  }
+
+  // NOVA FUNÇÃO: Apagar a reserva
+  cancelarReserva(numero: number) {
+    this.reservas = this.reservas.filter(r => r.numero !== numero);
   }
 }
