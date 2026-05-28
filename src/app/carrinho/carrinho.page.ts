@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular'; // <-- Importamos o AlertController
+import { AlertController, IonicSafeString } from '@ionic/angular';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
+import { Router } from '@angular/router'; // <-- Router adicionado!
+import { ReservasService } from '../services/reservas';
 
 @Component({
   selector: 'app-carrinho',
@@ -17,7 +19,9 @@ export class CarrinhoPage implements OnInit {
   constructor(
     private carrinhoService: CarrinhoService,
     private custosService: CustosService,
-    private alertController: AlertController // <-- Injetamos aqui
+    private alertController: AlertController,
+    private router: Router,                      // <-- Injetado corretamente
+    private reservasService: ReservasService     // <-- Injetado corretamente
   ) {}
 
   ngOnInit() {
@@ -44,30 +48,36 @@ export class CarrinhoPage implements OnInit {
   get total(): number { return this.custosService.getTotal(); }
   get faltaParteGratis(): number { return this.custosService.getFaltaParteGratis(); }
 
-  // NOVA FUNÇÃO PARA CRIAR A RESERVA E MOSTRAR O QR CODE
   async criarReserva() {
-    // Geramos um número de reserva aleatório
     const numeroReserva = Math.floor(Math.random() * 90000) + 10000;
+    const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
+
+    // Guarda a reserva na nossa memória central
+    this.reservasService.adicionarReserva({
+      numero: numeroReserva,
+      data: new Date().toLocaleString('pt-PT'),
+      total: this.total,
+      qtdArtigos: qtdTotal,
+      loja: 'Loja Lisboa Colombo - Lisboa'
+    });
+
+    const mensagemSegura = new IonicSafeString(`
+      <div class="ion-text-center">
+        <p>A sua reserva <strong>#${numeroReserva}</strong> está confirmada.</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Reserva_QDK_${numeroReserva}" 
+             alt="QR Code" style="margin-top: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+      </div>
+    `);
 
     const alert = await this.alertController.create({
       header: 'Reserva Criada!',
-      subHeader: `Validade: 24 horas`,
-      // Usamos uma API gratuita e direta para gerar o QR Code com o número da reserva!
-      message: `
-        <div class="ion-text-center">
-          <p>A sua reserva <strong>#${numeroReserva}</strong> está confirmada.</p>
-          <p style="font-size: 12px; color: gray;">Mostre este código na loja:</p>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Reserva_QDK_${numeroReserva}" 
-               alt="QR Code" 
-               style="margin-top: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-        </div>
-      `,
+      message: mensagemSegura,
       buttons: [
         {
-          text: 'Concluir',
+          text: 'Ver Minhas Reservas',
           handler: () => {
-            // Quando o utilizador clica em concluir, limpamos o carrinho
             this.limparCarrinho();
+            this.router.navigate(['/reservas']);
           }
         }
       ]

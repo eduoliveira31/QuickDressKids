@@ -1,13 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <!-- Botão para voltar para trás -->
       <ion-back-button defaultHref="/tabs/perfil" text="Voltar"></ion-back-button>
     </ion-buttons>
     <ion-title>Minha Conta</ion-title>
   </ion-toolbar>
   
-  <!-- Abas de navegação (Ativas vs Histórico) -->
   <ion-toolbar color="light">
     <ion-segment value="ativas">
       <ion-segment-button value="ativas">
@@ -22,7 +20,6 @@
 
 <ion-content [fullscreen]="true" class="ion-padding" color="light">
   
-  <!-- Cartão da Reserva Confirmada -->
   <ion-card>
     <ion-card-header>
       <ion-card-title style="font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
@@ -41,11 +38,35 @@
         <ion-note slot="end" color="dark" style="font-weight: bold; font-size: 1.3rem;">32.50€</ion-note>
       </ion-item>
 
-      <ion-button expand="block" fill="outline" color="primary" class="ion-margin-top">
+      <ion-button id="abrir-modal-qr" expand="block" fill="outline" color="primary" class="ion-margin-top">
         <ion-icon name="qr-code-outline" slot="start"></ion-icon>
         Ver QR Code
       </ion-button>
     </ion-card-content>
   </ion-card>
+
+  <ion-modal #qrModal trigger="abrir-modal-qr" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.75, 1]">
+    <ng-template>
+      <ion-content class="ion-padding ion-text-center" style="--background: #ffffff;">
+        
+        <div style="margin-top: 15px;">
+          <h2 style="font-weight: bold; color: #111;">Reserva #R17758303812</h2>
+          <p style="color: #555; font-size: 14px; margin-top: 5px;">Apresente este código no balcão da loja</p>
+          
+          <div style="background: white; padding: 15px; display: inline-block; border-radius: 12px; margin-top: 15px; border: 2px dashed #ccc;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Reserva_QDK_17758303812" 
+                 alt="QR Code" 
+                 style="width: 200px; height: 200px;" />
+          </div>
+        </div>
+
+        <ion-button expand="block" color="danger" fill="outline" style="margin-top: 25px; margin-bottom: 15px;" (click)="qrModal.dismiss()">
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          Fechar
+        </ion-button>
+
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
 </ion-content>
