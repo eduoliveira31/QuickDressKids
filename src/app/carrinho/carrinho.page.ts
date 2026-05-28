@@ -5,19 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
 
-/**
- * Página do Carrinho de Compras.
- *
- * Apresenta os artigos que o utilizador adicionou ao carrinho,
- * permite alterar quantidades, remover artigos e mostra o resumo
- * de custos com simulação de porte de envio.
- */
 @Component({
   selector: 'app-carrinho',
   templateUrl: './carrinho.page.html',
   styleUrls: ['./carrinho.page.scss'],
-  standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  standalone: false // <-- SÓ TENS DE ADICIONAR ESTA LINHA AQUI!
 })
 export class CarrinhoPage implements OnInit {
 
