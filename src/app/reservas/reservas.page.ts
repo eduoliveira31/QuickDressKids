@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular'; // <-- Necessário para a confirmação de Cancelar
+import { AlertController } from '@ionic/angular';
 import { ReservasService, Reserva } from '../services/reservas';
 
 @Component({
@@ -13,13 +13,13 @@ export class ReservasPage implements OnInit {
   reservasAtivas: Reserva[] = [];
   historico: Reserva[] = [];
   
-  abaAtiva: string = 'ativas'; // Diz qual é a aba aberta
+  abaAtiva: string = 'ativas'; 
   reservaSelecionada: Reserva | null = null;
   modalAberto = false;
 
   constructor(
     private reservasService: ReservasService,
-    private alertController: AlertController // Injetado
+    private alertController: AlertController 
   ) {}
   
   ngOnInit() {}
@@ -28,8 +28,9 @@ export class ReservasPage implements OnInit {
     this.carregarListas();
   }
 
-  carregarListas() {
-    const todas = this.reservasService.getReservas();
+  // AGORA USA AWAIT PARA ESPERAR PELO DISCO RÍGIDO
+  async carregarListas() {
+    const todas = await this.reservasService.getReservas();
     this.reservasAtivas = todas.filter(r => r.status === 'ativa');
     this.historico = todas.filter(r => r.status === 'concluida');
   }
@@ -43,14 +44,12 @@ export class ReservasPage implements OnInit {
     this.modalAberto = false;
   }
 
-  // LIGAÇÃO AO BOTÃO DE CONCLUIR
-  marcarConcluida(reserva: Reserva) {
+  async marcarConcluida(reserva: Reserva) {
     this.reservasService.marcarComoConcluida(reserva.numero);
-    this.carregarListas(); // Atualiza os números nas abas na hora!
-    this.abaAtiva = 'historico'; // Salta automaticamente para a aba do histórico
+    await this.carregarListas(); // Espera que a lista atualize
+    this.abaAtiva = 'historico';
   }
 
-  // LIGAÇÃO AO BOTÃO DE CANCELAR
   async cancelarReserva(reserva: Reserva) {
     const alert = await this.alertController.create({
       header: 'Cancelar Reserva',
@@ -60,9 +59,9 @@ export class ReservasPage implements OnInit {
         { 
           text: 'Sim, Cancelar', 
           role: 'destructive',
-          handler: () => {
+          handler: async () => {
             this.reservasService.cancelarReserva(reserva.numero);
-            this.carregarListas();
+            await this.carregarListas(); // Espera que a lista atualize
           }
         }
       ]
