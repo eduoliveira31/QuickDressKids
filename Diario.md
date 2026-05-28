@@ -131,3 +131,24 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 
 **Decisões:**
 **Segregação de Responsabilidades (Princípio SOLID):** Divisão estrita da lógica de negócio do ecossistema do carrinho, delegando a gestão estrita da coleção de itens ao `CarrinhoService` e todos os cálculos matemáticos e financeiros ao `CustosService`.
+
+## Sessão 6 – 28 de maio de 2026
+**Responsável:** Rodrigo Fernandes Malheiro
+**Objetivo:** Comentar devidamente todo o código TypeScript da aplicação, cumprindo o requisito obrigatório do enunciado (classes, métodos e variáveis).
+**Atividades realizadas:**
+
+- Adição de comentários JSDoc (/** */) a todas as interfaces, documentando cada campo individualmente
+- Comentário das classes de todos os services (CarrinhoService, CustosService, Catalogo, Favoritos, Produtos), descrevendo a responsabilidade de cada um
+- Documentação de todos os métodos com @param e @returns, incluindo descrição do comportamento e casos especiais (ex: remoção automática quando quantidade chega a 0)
+- Comentário das variáveis e constantes (PORTE_GRATIS_A_PARTIR_DE, VALOR_PORTE, itensSubject, basePath, etc.)
+- Adição de comentários inline nos blocos lógicos menos óbvios (if/else, subscrições de Observables, pré-seleção de tamanho e cor)
+- Documentação dos módulos AppModule e AppRoutingModule, explicando o papel de cada import
+- Commit realizado: docs: comentar classes, métodos e variáveis de todos os ficheiros TypeScript
+
+**Problemas:** Nenhum.
+**Soluções:** N/A
+**Decisões:**
+
+- Comentários escritos em português para manter consistência com o resto da documentação do projeto
+- Utilização do padrão JSDoc em vez de comentários simples, permitindo que o VS Code mostre a documentação ao passar o rato sobre os métodos
+- Separação visual dos blocos de métodos com divisórias (// ─── LEITURA ───) para facilitar a navegação no código
