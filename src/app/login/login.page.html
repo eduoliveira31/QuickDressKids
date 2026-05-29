@@ -1,0 +1,30 @@
+<ion-content [fullscreen]="true" class="login-page">
+  <div class="login-shell">
+    <ion-card class="login-card">
+      <ion-card-header>
+        <ion-card-title>Entrar</ion-card-title>
+        <ion-card-subtitle>Escolhe o tipo de sessão que queres iniciar.</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-button expand="block" color="primary" (click)="login('user')">
+          Entrar como utilizador
+        </ion-button>
+        <ion-button expand="block" fill="outline" color="medium" (click)="login('admin')">
+          Entrar como administrador
+        </ion-button>
+
+        <div *ngIf="currentRole" class="session-info">
+          <p>Sessão atual: <strong>{{ currentRole === 'admin' ? 'Administrador' : 'Utilizador' }}</strong></p>
+          <ion-button fill="clear" color="danger" size="small" (click)="logout()">
+            Terminar sessão
+          </ion-button>
+        </div>
+
+        <p class="hint">
+          Nota: esta app não tem autenticação real por backend. A sessão é simulada localmente.
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

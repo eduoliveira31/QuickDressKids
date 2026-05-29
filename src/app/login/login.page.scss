@@ -1,0 +1,59 @@
+.login-page {
+  --background: #eef4fb;
+}
+
+.login-shell {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.login-card {
+  width: min(100%, 420px);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.1);
+}
+
+.login-card ion-card-header {
+  padding: 28px 24px 0;
+}
+
+.login-card ion-card-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.login-card ion-card-subtitle {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.login-card ion-card-content {
+  display: grid;
+  gap: 14px;
+  padding: 20px 24px 28px;
+}
+
+.session-info {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #eff6ff;
+  color: #0f172a;
+}
+
+.session-info p {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+}
+
+.hint {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
