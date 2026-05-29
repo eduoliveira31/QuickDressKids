@@ -187,3 +187,53 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 **Decisões:**
 - Estruturar os painéis de reserva recorrendo à estratégia *Model-View-ViewModel (MVVM)*, centralizando todo o poder de estado, alteração, consulta e deleção no nível do serviço em detrimento da página.
 - Optar por agrupar subcommits e gerir as ramificações garantindo que as implementações vitais (Storage e HttpClient) fossem agrupadas logicamente como *Features* para a `develop`, simplificando as entregas de *Pull Requests*.
+
+## Sessão 8 – 29 de maio de 2026
+**Responsável:** Rodrigo Fernandes Malheiro   
+**Objetivo:** Redesenho completo da interface do catálogo alinhado com o Figma, implementação de um sistema de autenticação local via JSON e padronização dos dados de produtos.  
+
+**Atividades realizadas:**
+- Redesign do Catálogo (Figma): Reestruturação visual e funcional da página de catálogo (catalogo.page.html e .scss) para replicar o protótipo. Implementação de uma grelha de 3 colunas para exibição dos produtos com imagens integradas, tags de identificação e preços posicionados na base do card.  
+- Customização do Painel de Filtros: Otimização do menu lateral de filtros (Categoria, Faixa Etária, Tipo de Produto e Cor). - - - - Configuração de tipografia sem serifa (sans-serif), estilização dos textos e dos elementos internos em negrito e na cor preta, além da inclusão de bordas arredondadas nos cartões.  
+- Estilização Avançada com Web Components: Utilização do seletor ::part do Ionic no ficheiro catalogo.page.scss para contornar limitações de encapsulamento. Forçou-se a exibição dos textos internos dos selects em preto e estilizou-se o botão "Limpar Filtros" com uma moldura vermelha semitransparente e bordas definidas.  
+- Padronização Genérica do Inventário: Revisão e modificação completa do ficheiro local src/assets/data/produtos.json. -Removeram-se nomenclaturas específicas de cores presentes nos títulos das peças de vestuário, substituindo-as por descrições genéricas focadas na tipologia do produto e público-alvo.  
+- Sistema de Autenticação Simulado: Criação e estruturação de uma base de dados local de utilizadores em src/assets/data/utilizadores.json. Implementação da lógica de validação de credenciais no AuthService com recurso exclusivo a diretivas [(ngModel)] no formulário da página de login, garantindo o redirecionamento automático para a página de perfil após o sucesso da sessão.  
+- Gestão de Versões e Commits: Organização e execução sequencial de commits isolados no Git para cada bloco de tarefas concluído na sessão (otimização do carrinho com services dedicados, correção do layout do catálogo e atualização do catálogo de produtos em formato JSON).  
+
+**Problemas:**
+- Incompatibilidade de interatividade e quebra de fluxo nos componentes de filtragem após a aplicação de propriedades nativas de inversão de direção (flex-direction: row-reverse) diretamente nas pseudo-elements do Ionic.  
+- Omissão de dados textuais e placeholders invisíveis nos menus dropdown do catálogo causados pela ausência de herança de cor explícita nas variáveis utilitárias do componente ion-select.  
+- Erro de compilação na diretiva estrutural de repetição do Angular (*ngFor) no ficheiro catalogo.page.html devido a uma incorreção na sintaxe descritiva.  
+
+**Soluções:**
+- Refatoração do ficheiro catalogo.page.scss com a remoção dos blocos de posicionamento que bloqueavam a execução do clique, devolvendo a funcionalidade nativa estável às caixas de seleção.  
+- Injeção das propriedades ::part(placeholder) e ::part(text) com a marcação !important para anular os estilos padrão e garantir o contraste visual do texto em preto puro.  Correção ortográfica e sintática imediata no template HTML de let produto de ... para let produto of ..., restabelecendo o ciclo de renderização correto dos produtos na tela.  
+
+**Decisões:**
+- Manter as setas de seleção dos filtros na sua posição original padrão à direita devido às restrições técnicas e instabilidades encontradas na manipulação direta da estrutura interna do componente do Ionic.  
+- Substituir a integração de APIs externas de autenticação por uma simulação local controlada via JSON devido a falhas de autorização na API anterior, otimizando o fluxo de testes e garantindo total conformidade pedagógica com os requisitos de entrega do projeto.
+
+## Sessão 9 – 29 de maio de 2026
+**Responsável:** Luis Miguel (Grupo 10)  
+**Objetivo:** Reestruturação visual de contraste do tema, implementação de regras de checkout seguras, controlo de stock por loja única e correção das regras de fidelização.
+
+**Atividades realizadas:**
+- **Reestruturação Visual de Contraste:** Redesenho e alteração de todos os cabeçalhos (`ion-toolbar` e `.navbar`) e da barra de navegação inferior (`ion-tab-bar`) para um azul bebé mais carregado e vibrante (`#4b8ae0`), garantindo conformidade de acessibilidade e excelente contraste com texto e ícones brancos (`#ffffff`).
+- **Enquadramento de Sessão Obrigatória:** Integração de regras de segurança no carrinho que bloqueiam a criação de reservas para visitantes não autenticados, apresentando diálogos interativos do `AlertController` para encaminhamento direto para a página de Login.
+- **Validação de Stock e Loja Única de Levantamento:** Desenvolvimento de uma robusta lógica de checkout onde todos os produtos de uma encomenda têm de ser associados à mesma loja de levantamento. Caso o utilizador tente selecionar uma loja divergente da que já está ativa no carrinho, a aplicação exibe uma janela de resolução interativa para esvaziar o carrinho ou reverter. Adicionalmente, impede a reserva de artigos sem stock (ex: na loja de Lisboa).
+- **Correção da Campanha "Leve 3, Pague 2"**: Otimização do `CustosService` para deduzir automaticamente o valor do artigo de menor valor em grupos de 3 artigos da categoria "bebé" adicionados ao carrinho, exibindo o desconto de forma explícita e transparente na fatura do ecrã de checkout.
+- **Compilação e Estabilização:** Ajuste de encapsulamento de estilos e imports do Angular para garantir que todo o projeto compila com absoluto sucesso, sem quaisquer erros ou falhas de tempo de execução.
+
+**Problemas:**
+- Inconsistência na aplicação do desconto "Leve 3, Pague 2" devido à ausência do campo de categoria nos dados passados ao carrinho.
+- Erros de contraste com azul bebé muito claro que dificultava a leitura geral no ecrã.
+- Permissão de reserva de produtos fora de stock ou levantamento em múltiplas lojas na mesma transação.
+
+**Soluções:**
+- Criação de mapeamento de categoria e desdobramento dos preços no carrinho, aplicando o desconto ordenado de forma crescente.
+- Adoção do azul médio `#4b8ae0` e uso do seletor `!important` para sobrescrever variáveis locais antigas.
+- Criação de BehaviorSubject de loja no `CarrinhoService` para rastreio e bloqueio de loja no primeiro artigo adicionado.
+
+**Decisões:**
+- Forçar uma única loja física por reserva para simplificar o levantamento logístico na loja física pelo cliente.
+- Apresentar a discriminação visual detalhada de todos os custos e descontos no ecrã final do carrinho para otimizar o UX.

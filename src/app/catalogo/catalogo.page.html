@@ -1,144 +1,146 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar class="navbar">
-    <ion-title slot="start" class="logo-title">QuickDressKids</ion-title>
-    <div slot="end" class="navbar-end">
-      <span class="nav-link">Catálogo</span>
-      <ion-button fill="clear" class="nav-carrinho" routerLink="/tabs/carrinho">
-        <ion-icon name="cart-outline" size="large"></ion-icon>
+    <ion-title>Catálogo</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar style="--background: #ffffff;">
+    <div style="display: flex; align-items: center; width: 100%; padding: 0 8px;">
+      <ion-searchbar 
+        placeholder="Procurar peças..." 
+        [debounce]="250"
+        (ionInput)="pesquisar($event)"
+        animated="true"
+        style="padding: 0; --box-shadow: none; --background: #f4f5f8; --color: #000000 !important; --placeholder-color: #444444; --icon-color: #000000; color: #000000 !important;">
+      </ion-searchbar>
+      
+      <ion-button id="btn-abrir-filtros" fill="clear" color="dark" style="margin: 0; padding-left: 4px;">
+        <ion-icon slot="icon-only" name="options-outline" style="font-size: 26px; color: #000000;"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="!currentUser" class="btn-entrar" shape="round" routerLink="/login">Entrar</ion-button>
-      <ion-button *ngIf="currentUser" class="btn-entrar" shape="round" routerLink="/tabs/perfil">Olá, {{ currentUser.primeiroNome || currentUser.username }}</ion-button>
+    </div>
+  </ion-toolbar>
+
+  <ion-toolbar style="--background: #ffffff;" *ngIf="categoriaSelecionada || tipoSelecionado || faixaEtariaSelecionada || corSelecionada">
+    <div class="scroll-chips" style="padding: 0 15px 10px 15px; overflow-x: auto; white-space: nowrap; display: flex; gap: 8px;">
+      <ion-chip *ngIf="categoriaSelecionada" (click)="removerFiltro('categoria')" class="chip-active-top">
+        <ion-label>{{ getNomeCategoria() }}</ion-label><ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+      <ion-chip *ngIf="tipoSelecionado" (click)="removerFiltro('tipoProduto')" class="chip-active-top">
+        <ion-label>{{ getNomeTipo() }}</ion-label><ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+      <ion-chip *ngIf="faixaEtariaSelecionada" (click)="removerFiltro('faixaEtaria')" class="chip-active-top">
+        <ion-label>Tamanho: {{ faixaEtariaSelecionada }} Anos</ion-label><ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+      <ion-chip *ngIf="corSelecionada" (click)="removerFiltro('cor')" class="chip-active-top">
+        <ion-label>{{ corSelecionada }}</ion-label><ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="catalogo-content">
-
-  <div class="page-header">
-    <h1 class="page-title">Catálogo de Produtos</h1>
-    <div class="search-filter-row">
-      <ion-searchbar
-        placeholder="Pesquisar produtos..."
-        [value]="pesquisa"
-        (ionInput)="onPesquisaChange($event)"
-        class="searchbar-custom"
-        [animated]="false">
-      </ion-searchbar>
+<ion-content [fullscreen]="true" style="--background: #f7f8fa;">
+  
+  <ion-grid style="padding: 8px;">
+    <ion-row style="display: flex; flex-wrap: wrap;">
       
-      <ion-button fill="outline" class="btn-abrir-filtros" (click)="abrirFiltros()" shape="round">
-        <ion-icon name="funnel-outline" slot="start"></ion-icon>
-        Filtros
-      </ion-button>
-    </div>
-  </div>
+      <ion-col size="6" size-sm="4" size-lg="3" *ngFor="let produto of produtosFiltrados" style="display: flex;">
+        
+        <ion-card class="cartao-produto" [routerLink]="['/produto-detalhe', produto.id]">
+          <div class="imagem-container">
+            <img [src]="produto.imagem" [alt]="produto.nome" />
+            <ion-button fill="clear" class="btn-favorito" (click)="$event.stopPropagation()">
+              <ion-icon name="heart-outline"></ion-icon>
+            </ion-button>
+          </div>
+          
+          <ion-card-header class="corpo-cartao">
+            <ion-card-subtitle class="texto-preto-sub">{{ produto.categoria | uppercase }}</ion-card-subtitle>
+            <ion-card-title class="titulo-produto texto-preto-titulo">{{ produto.nome }}</ion-card-title>
+          </ion-card-header>
+          
+          <ion-card-content class="rodape-cartao">
+            <div class="preco texto-preto-preco">{{ produto.preco | currency:'EUR' }}</div>
+          </ion-card-content>
+        </ion-card>
 
-  <!-- Modal Gaveta de Filtros Premium -->
-  <ion-modal [isOpen]="filtrosAberto" (didDismiss)="fecharFiltros()">
+      </ion-col>
+      
+    </ion-row>
+
+    <div *ngIf="produtosFiltrados.length === 0" class="ion-text-center" style="margin-top: 60px; width: 100%;">
+      <ion-icon name="search-outline" style="font-size: 60px; color: #bbb;"></ion-icon>
+      <h3 style="color: #000000; font-weight: bold; margin-top: 15px;">Nenhum artigo encontrado</h3>
+      <p style="color: #666;">Tenta limpar ou alterar os teus filtros.</p>
+    </div>
+  </ion-grid>
+
+  <ion-modal #modalFiltros trigger="btn-abrir-filtros" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.5, 0.9, 1]">
     <ng-template>
-      <ion-header>
+      <ion-header class="ion-no-border">
         <ion-toolbar class="navbar">
-          <ion-title style="font-weight: 800; color: #ffffff;">Filtrar Artigos</ion-title>
+          <ion-title style="font-size: 1.15rem; font-weight: bold; text-align: center; color: #ffffff;">Filtros de Pesquisa</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="fecharFiltros()" style="font-weight: 700; --color: #ffffff;">Fechar</ion-button>
+            <ion-button (click)="modalFiltros.dismiss()" style="font-weight: 800; --color: #ffffff;">Concluído</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
-      <ion-content class="ion-padding" style="--background: #f9fafb;">
-        <div class="painel-filtros-modal">
-          
-          <div class="filtro-grupo">
-            <label class="filtro-label">Categoria</label>
-            <div class="select-wrapper">
-              <ion-select [value]="categoriaAtiva" (ionChange)="onCategoriaChange($event)" interface="popover" class="filtro-select">
-                <ion-select-option *ngFor="let cat of categorias" [value]="cat.valor">{{ cat.label }}</ion-select-option>
-              </ion-select>
-            </div>
+      <ion-content class="ion-padding" color="light">
+        
+        <div class="bloco-filtro-container">
+          <h3>Categoria</h3>
+          <div class="grupo-chips-filtros">
+            <ion-chip [class.chip-filtro-ativo]="categoriaSelecionada === ''" (click)="selecionarFiltro('categoria', '')">Todas</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="categoriaSelecionada === 'bebe'" (click)="selecionarFiltro('categoria', 'bebe')">Bebé</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="categoriaSelecionada === 'menina'" (click)="selecionarFiltro('categoria', 'menina')">Menina</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="categoriaSelecionada === 'menino'" (click)="selecionarFiltro('categoria', 'menino')">Menino</ion-chip>
           </div>
-
-          <div class="filtro-grupo">
-            <label class="filtro-label">Faixa Etária</label>
-            <div class="select-wrapper">
-              <ion-select [value]="idadeAtiva" (ionChange)="onIdadeChange($event)" interface="popover" class="filtro-select">
-                <ion-select-option *ngFor="let idade of idades" [value]="idade.valor">{{ idade.label }}</ion-select-option>
-              </ion-select>
-            </div>
-          </div>
-
-          <div class="filtro-grupo">
-            <label class="filtro-label">Tipo de Produto</label>
-            <div class="select-wrapper">
-              <ion-select [value]="tipoAtivo" (ionChange)="onTipoChange($event)" interface="popover" class="filtro-select">
-                <ion-select-option *ngFor="let tipo of tipos" [value]="tipo.valor">{{ tipo.label }}</ion-select-option>
-              </ion-select>
-            </div>
-          </div>
-
-          <div class="filtro-grupo">
-            <label class="filtro-label">Cor</label>
-            <div class="select-wrapper">
-              <ion-select [value]="corAtiva" (ionChange)="onCorChange($event)" interface="popover" class="filtro-select">
-                <ion-select-option *ngFor="let cor of cores" [value]="cor.valor">{{ cor.label }}</ion-select-option>
-              </ion-select>
-            </div>
-          </div>
-
-          <ion-button expand="block" shape="round" class="btn-aplicar-filtros ion-margin-top" (click)="fecharFiltros()">
-            Aplicar Filtros
-          </ion-button>
-
-          <ion-button
-            *ngIf="categoriaAtiva !== 'todas' || idadeAtiva !== 'todas' || tipoAtivo !== 'todos' || corAtiva !== 'todas' || pesquisa"
-            expand="block" fill="clear" color="danger" size="small"
-            (click)="limparFiltros(); fecharFiltros()" class="btn-limpar-modal ion-margin-top">
-            Limpar todos os filtros
-          </ion-button>
         </div>
+
+        <div class="bloco-filtro-container">
+          <h3>Tipo de Artigo</h3>
+          <div class="grupo-chips-filtros">
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === ''" (click)="selecionarFiltro('tipoProduto', '')">Todos</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'tshirt'" (click)="selecionarFiltro('tipoProduto', 'tshirt')">T-Shirts</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'casaco'" (click)="selecionarFiltro('tipoProduto', 'casaco')">Casacos</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'calcas'" (click)="selecionarFiltro('tipoProduto', 'calcas')">Calças</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'vestido'" (click)="selecionarFiltro('tipoProduto', 'vestido')">Vestidos</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'body'" (click)="selecionarFiltro('tipoProduto', 'body')">Bodies</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'conjunto'" (click)="selecionarFiltro('tipoProduto', 'conjunto')">Conjuntos</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'calcado'" (click)="selecionarFiltro('tipoProduto', 'calcado')">Calçado</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="tipoSelecionado === 'acessorio'" (click)="selecionarFiltro('tipoProduto', 'acessorio')">Acessórios</ion-chip>
+          </div>
+        </div>
+
+        <div class="bloco-filtro-container">
+          <h3>Faixa Etária</h3>
+          <div class="grupo-chips-filtros">
+            <ion-chip [class.chip-filtro-ativo]="faixaEtariaSelecionada === ''" (click)="selecionarFiltro('faixaEtaria', '')">Todas</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="faixaEtariaSelecionada === '0-2'" (click)="selecionarFiltro('faixaEtaria', '0-2')">0-2 Anos</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="faixaEtariaSelecionada === '3-5'" (click)="selecionarFiltro('faixaEtaria', '3-5')">3-5 Anos</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="faixaEtariaSelecionada === '6-8'" (click)="selecionarFiltro('faixaEtaria', '6-8')">6-8 Anos</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="faixaEtariaSelecionada === '9-12'" (click)="selecionarFiltro('faixaEtaria', '9-12')">9-12 Anos</ion-chip>
+          </div>
+        </div>
+
+        <div class="bloco-filtro-container">
+          <h3>Cores</h3>
+          <div class="grupo-chips-filtros">
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === ''" (click)="selecionarFiltro('cor', '')">Todas</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Azul'" (click)="selecionarFiltro('cor', 'Azul')">Azul</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Rosa'" (click)="selecionarFiltro('cor', 'Rosa')">Rosa</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Branco'" (click)="selecionarFiltro('cor', 'Branco')">Branco</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Preto'" (click)="selecionarFiltro('cor', 'Preto')">Preto</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Verde'" (click)="selecionarFiltro('cor', 'Verde')">Verde</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Amarelo'" (click)="selecionarFiltro('cor', 'Amarelo')">Amarelo</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Vermelho'" (click)="selecionarFiltro('cor', 'Vermelho')">Vermelho</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Cinzento'" (click)="selecionarFiltro('cor', 'Cinzento')">Cinzento</ion-chip>
+          </div>
+        </div>
+
+        <div style="height: 50px;"></div>
+
       </ion-content>
     </ng-template>
   </ion-modal>
-
-  <div class="layout-principal">
-
-    <!-- Área dos produtos (agora 100% largura) -->
-    <div class="area-produtos">
-      <p class="contador-resultados">{{ produtosFiltrados.length }} produtos encontrados</p>
-
-      <ng-container *ngIf="produtosFiltrados.length > 0">
-        <div class="grelha-produtos">
-          <div class="produto-card" *ngFor="let produto of produtosFiltrados" (click)="verDetalhe(produto.id)">
-
-            <div class="card-imagem">
-              <img [src]="produto.imagem" [alt]="produto.nome"
-                onerror="this.src='https://ionicframework.com/docs/img/demos/card-media.png'" />
-            </div>
-
-            <div class="card-info">
-              <h3 class="card-nome">{{ produto.nome }}</h3>
-
-              <div class="card-tags">
-                <span class="tag tag-categoria">{{ produto.categoria }}</span>
-                <span class="tag tag-idade">{{ produto.faixaEtaria }} anos</span>
-              </div>
-
-              <div class="card-cores" *ngIf="produto.cores?.length">
-                <span class="tag tag-cor" *ngFor="let cor of produto.cores">{{ cor }}</span>
-              </div>
-
-              <p class="card-preco">{{ produto.preco | currency:'EUR':'symbol':'1.2-2' }}</p>
-            </div>
-
-          </div>
-        </div>
-      </ng-container>
-
-      <div class="estado-vazio" *ngIf="produtosFiltrados.length === 0">
-        <ion-icon name="search-outline"></ion-icon>
-        <p>Nenhum produto encontrado.</p>
-        <ion-button fill="outline" (click)="limparFiltros()">Limpar filtros</ion-button>
-      </div>
-    </div>
-
-  </div>
 
 </ion-content>

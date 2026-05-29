@@ -1,400 +1,151 @@
-// ─── Font sem serifa global nesta página ─────────────────────────────────────
-:host {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+/* Ocultar barras de scroll feias nos chips ativos do topo */
+.scroll-chips::-webkit-scrollbar {
+  display: none;
 }
 
-// ─── Navbar ──────────────────────────────────────────────────────────────────
-.navbar {
-  --background: #4b8ae0;
-  --border-color: transparent;
-  --color: #ffffff;
-  padding: 0 24px;
-  box-shadow: 0 4px 12px rgba(75, 138, 224, 0.2);
-
-  .logo-title {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #ffffff;
-    padding-left: 0;
-  }
-
-  .navbar-end {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding-right: 8px;
-
-    .nav-link {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.9rem;
-      color: #ffffff;
-      font-weight: 600;
-      cursor: pointer;
-      opacity: 0.95;
-    }
-
-    .nav-carrinho {
-      --color: #ffffff;
-      margin: 0;
-    }
-
-    .btn-entrar {
-      --background: #ffffff;
-      --color: #4b8ae0;
-      --border-radius: 20px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      height: 36px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-
-      &::part(native) {
-        color: #4b8ae0 !important;
-        background: #ffffff !important;
-      }
-    }
-  }
+/* Forçar fontes pretas no texto inserido na barra de pesquisa */
+.pesquisa-escura input {
+  color: #000000 !important;
+  font-weight: 500 !important;
 }
 
-// ─── Conteúdo ─────────────────────────────────────────────────────────────────
-.catalogo-content {
-  --background: #ffffff;
-}
-
-// ─── Cabeçalho da página ──────────────────────────────────────────────────────
-.page-header {
-  padding: 28px 24px 16px;
-
-  .page-title {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #111827;
-    margin: 0 0 16px;
-  }
-
-  .search-filter-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
-    max-width: 620px;
-    
-    .searchbar-custom {
-      --background: #f3f4f6;
-      --border-radius: 12px;
-      --box-shadow: none;
-      --placeholder-color: #9ca3af;
-      --icon-color: #9ca3af;
-      --color: #111827;
-      padding: 0;
-      flex: 1;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    .btn-abrir-filtros {
-      --border-radius: 12px;
-      --border-color: #2563eb;
-      --color: #2563eb;
-      --background: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-weight: 700;
-      height: 44px;
-      margin: 0;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.05);
-      
-      &::part(native) {
-        border-width: 1.5px !important;
-      }
-    }
-  }
-}
-
-// ─── Layout principal ─────────────────────────────────────────────────────────
-.layout-principal {
-  display: block;
-  padding: 0 24px 40px;
-}
-
-// ─── Estilos do Modal de Filtros ──────────────────────────────────────────────
-.painel-filtros-modal {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 8px 4px 20px;
-
-  .filtro-grupo {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-
-    .filtro-label {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #374151;
-    }
-
-    .select-wrapper {
-      border: 1px solid #d1d5db;
-      border-radius: 12px;
-      background: #ffffff;
-      overflow: hidden;
-
-      ion-select.filtro-select {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-weight: 600;
-        font-size: 0.875rem;
-        width: 100%;
-        min-height: 44px;
-        --padding-start: 14px;
-        --padding-end: 14px;
-
-        &::part(text) {
-          color: #0f172a !important;
-        }
-      }
-    }
-  }
-
-  .btn-aplicar-filtros {
-    --background: #2563eb;
-    --color: #ffffff;
-    --border-radius: 14px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-weight: 700;
-    height: 46px;
-    margin-top: 16px;
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
-
-    &::part(native) {
-      color: #ffffff !important;
-    }
-  }
-
-  .btn-limpar-modal {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    margin-top: 8px;
-  }
-}
-
-// ─── Área de produtos ─────────────────────────────────────────────────────────
-.area-produtos {
+/* ALINHAMENTO GEOMÉTRICO DO CARTÃO (Para não desformatar nunca) */
+.cartao-produto {
+  margin: 0;
   width: 100%;
-
-  .contador-resultados {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0 0 16px;
-  }
-}
-
-// ─── Grelha de produtos ───────────────────────────────────────────────────────
-.grelha-produtos {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-
-// ─── Card de produto ──────────────────────────────────────────────────────────
-.produto-card {
-  cursor: pointer;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
   display: flex;
   flex-direction: column;
+  height: 100%; /* Força preenchimento total do bloco pai */
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  background: #ffffff;
+  overflow: hidden;
 
-  &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-
-    .card-imagem img {
-      transform: scale(1.03);
-    }
-  }
-
-  .card-imagem {
+  .imagem-container {
+    position: relative;
     width: 100%;
-    height: 300px;
-    overflow: hidden;
-    background: #f3f4f6;
-    flex-shrink: 0;
-
+    height: 175px; /* Altura idêntica para todas as imagens do catálogo */
+    background: #fdfdfd;
+    
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
+      object-fit: cover; /* Corta as imagens sem amassar */
+    }
+
+    /* Ícone do coração de favoritos flutuante */
+    .btn-favorito {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      margin: 0;
+      height: 32px;
+      width: 32px;
+      --padding-start: 0;
+      --padding-end: 0;
+      
+      ion-icon {
+        font-size: 18px;
+        color: #444444;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        padding: 6px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
     }
   }
 
-  .card-info {
-    padding: 16px;
+  .corpo-cartao {
+    padding: 12px 12px 4px 12px;
     display: flex;
     flex-direction: column;
+  }
+
+  .rodape-cartao {
+    padding: 0 12px 12px 12px;
+    margin-top: auto; /* Truque de flexbox: joga o preço sempre para o fundo do cartão */
+  }
+}
+
+/* REGRAS DE CORES PRETAS EXIGIDAS PARA AS LETRAS */
+.texto-preto-sub {
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  color: #000000 !important; /* Subtítulo a preto */
+  opacity: 0.6;
+  margin-bottom: 3px;
+}
+
+.texto-preto-titulo {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #000000 !important; /* Título a preto carregado */
+  line-height: 1.25;
+  
+  /* Limita os nomes a um máximo de 2 linhas e adiciona reticências (...) se ultrapassar */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.texto-preto-preco {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #000000 !important; /* Preço a preto destacado */
+  margin-top: 10px;
+}
+
+/* BLOCOS DO MODAL DE FILTROS */
+.bloco-filtro-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+
+  h3 {
+    margin: 0 0 14px 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #000000;
+  }
+
+  .grupo-chips-filtros {
+    display: flex;
+    flex-wrap: wrap; /* Permite que caiam de linha em ecrãs pequenos */
     gap: 8px;
-    flex: 1;
 
-    .card-nome {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #111827;
+    ion-chip {
       margin: 0;
-      line-height: 1.3;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 16px 14px;
+      border-radius: 10px;
+      background: #f4f5f8;
+      color: #333333;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
     }
 
-    .card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .card-cores {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .tag {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.75rem;
-      padding: 3px 10px;
-      border-radius: 20px;
-      border: 1px solid #e5e7eb;
-      color: #374151;
-      background: #f9fafb;
-      white-space: nowrap;
-    }
-
-    .card-preco {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #2563eb;
-      margin: 4px 0 0;
+    /* Quando ativado fica na cor primária da tua app */
+    .chip-filtro-ativo {
+      background: var(--ion-color-primary);
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(var(--ion-color-primary-rgb), 0.25);
     }
   }
 }
 
-// ─── Estado vazio ─────────────────────────────────────────────────────────────
-.estado-vazio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 60px 20px;
-  color: #9ca3af;
-  text-align: center;
-
+/* Chips transparentes debaixo da barra de pesquisa no ecrã principal */
+.chip-active-top {
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+  color: var(--ion-color-primary);
+  font-weight: bold;
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.25);
+  
   ion-icon {
-    font-size: 4rem;
-    margin-bottom: 12px;
-  }
-
-  p {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 1rem;
-    margin-bottom: 16px;
-  }
-}
-
-// ─── Responsividade para ecrãs móveis (mobile/tablet) ──────────────────────────
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0 12px;
-    
-    .logo-title {
-      font-size: 1rem;
-    }
-    
-    .navbar-end {
-      gap: 8px;
-      padding-right: 0;
-      
-      .nav-link {
-        display: none !important;
-      }
-      
-      .btn-entrar {
-        height: 32px;
-        font-size: 0.75rem;
-        --padding-start: 10px;
-        --padding-end: 10px;
-      }
-    }
-  }
-
-  .page-header {
-    padding: 20px 16px 12px;
-    
-    .page-title {
-      font-size: 1.4rem;
-      margin-bottom: 12px;
-    }
-    
-    .search-filter-row {
-      gap: 10px;
-      max-width: 100%;
-      
-      .searchbar-custom {
-        max-width: 100%;
-      }
-      
-      .btn-abrir-filtros {
-        font-size: 0.8rem;
-        height: 38px;
-        --padding-start: 12px;
-        --padding-end: 12px;
-      }
-    }
-  }
-
-  .area-produtos {
-    width: 100%;
-    
-    .contador-resultados {
-      font-size: 0.8rem;
-      margin-bottom: 12px;
-    }
-  }
-
-  .grelha-produtos {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .produto-card {
-    border-radius: 8px;
-    
-    .card-imagem {
-      height: 160px;
-    }
-    
-    .card-info {
-      padding: 10px;
-      gap: 4px;
-      
-      .card-nome {
-        font-size: 0.85rem;
-      }
-      
-      .tag {
-        font-size: 0.65rem;
-        padding: 2px 6px;
-      }
-      
-      .card-preco {
-        font-size: 0.95rem;
-        margin-top: 2px;
-      }
-    }
+    color: var(--ion-color-primary);
   }
 }
