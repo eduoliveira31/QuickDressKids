@@ -1,3 +1,17 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="navbar">
+    <ion-title slot="start" class="logo-title">QuickDressKids</ion-title>
+    <div slot="end" class="navbar-end">
+      <span class="nav-link">Home</span>
+      <ion-button fill="clear" class="nav-carrinho" routerLink="/tabs/carrinho">
+        <ion-icon name="cart-outline" size="large"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!currentUser" class="btn-entrar" shape="round" routerLink="/login">Entrar</ion-button>
+      <ion-button *ngIf="currentUser" class="btn-entrar" shape="round" routerLink="/tabs/perfil">Olá, {{ currentUser.primeiroNome || currentUser.username }}</ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true" class="home-page">
   <div class="page-shell">
     <section class="hero-section">
@@ -13,7 +27,55 @@
         <div class="hero-card">
           <div class="hero-spotlight"></div>
           <div class="hero-portrait">
-            <div class="hero-face"></div>
+            <img src="assets/images/hero_girl.png" alt="Hero Portrait" class="hero-img-full" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Secção Promoções & Campanhas -->
+    <section class="section promo-section">
+      <div class="section-header">
+        <div>
+          <p class="section-label">Campanhas</p>
+          <h2>Promoções em Vigor</h2>
+        </div>
+      </div>
+
+      <div class="promo-scroller">
+        <!-- Promo 1 -->
+        <div class="promo-card-custom promo-blue" [routerLink]="['/tabs/catalogo']" [queryParams]="{ campanha: 'verao' }" style="cursor: pointer;">
+          <div class="promo-badge">Desconto</div>
+          <div class="promo-body">
+            <h3>Moda de Verão</h3>
+            <p>Até <strong>30% OFF</strong> em peças selecionadas</p>
+            <div class="promo-footer">
+              <span class="promo-code">CÓDIGO: SUMMER30</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promo 2 -->
+        <div class="promo-card-custom promo-pink" [routerLink]="['/tabs/catalogo']" [queryParams]="{ categoria: 'bebé' }" style="cursor: pointer;">
+          <div class="promo-badge">Especial</div>
+          <div class="promo-body">
+            <h3>Campanha Bebé</h3>
+            <p><strong>Leve 3, Pague 2</strong> em artigos para recém-nascido</p>
+            <div class="promo-footer">
+              <span class="promo-code">BABY3FOR2</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promo 3 -->
+        <div class="promo-card-custom promo-green" [routerLink]="['/tabs/catalogo']" style="cursor: pointer;">
+          <div class="promo-badge">Grátis</div>
+          <div class="promo-body">
+            <h3>Portes de Envio</h3>
+            <p><strong>Portes Grátis</strong> em compras a partir de 40€</p>
+            <div class="promo-footer">
+              <span class="promo-code">Automático</span>
+            </div>
           </div>
         </div>
       </div>
@@ -31,18 +93,39 @@
         </ion-button>
       </div>
 
-      <div class="explore-grid">
-        <ion-card *ngFor="let card of exploracaoCards" class="explore-card">
-          <div class="card-thumb" [style.background]="card.color">
-            <ion-icon [name]="card.icon" aria-hidden="true"></ion-icon>
+      <div class="explore-layout-custom">
+        <!-- Card Grande Cerimónia -->
+        <ion-card class="explore-card-large" [routerLink]="['/tabs/catalogo']" [queryParams]="{ tipo: 'vestido' }" style="cursor: pointer;">
+          <div class="card-image-bg">
+            <img src="assets/images/categoria_cerimonia.png" alt="Cerimónia" />
+            <div class="card-overlay"></div>
+            <div class="card-content-overlay">
+              <h3>Cerimónia</h3>
+            </div>
           </div>
-          <ion-card-header>
-            <ion-card-title>{{ card.title }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            {{ card.subtitle }}
-          </ion-card-content>
         </ion-card>
+
+        <div class="explore-row-sub">
+          <!-- Card Quadrado Bebé Conforto -->
+          <ion-card class="explore-card-square" [routerLink]="['/tabs/catalogo']" [queryParams]="{ categoria: 'bebé' }" style="cursor: pointer;">
+            <div class="card-square-img">
+              <img src="assets/images/categoria_bebe.png" alt="Bebé Conforto" />
+            </div>
+            <ion-card-header>
+              <ion-card-title>Bebé Conforto</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+
+          <!-- Card Quadrado Denim & Essenciais -->
+          <ion-card class="explore-card-square" [routerLink]="['/tabs/catalogo']" [queryParams]="{ tipo: 'calças' }" style="cursor: pointer;">
+            <div class="card-square-img">
+              <img src="assets/images/categoria_denim.png" alt="Denim & Essenciais" />
+            </div>
+            <ion-card-header>
+              <ion-card-title>Denim & Essenciais</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </div>
       </div>
     </section>
 

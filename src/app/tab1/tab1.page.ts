@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Catalogo } from '../services/catalogo';
+import { AuthService, Usuario } from '../services/auth.service';
 
 @Component({
   selector: 'app-tab1',
@@ -10,6 +11,7 @@ import { Catalogo } from '../services/catalogo';
 export class Tab1Page implements OnInit {
 
   featuredProducts: any[] = [];
+  currentUser: Usuario | null = null;
 
   exploracaoCards = [
     {
@@ -32,9 +34,16 @@ export class Tab1Page implements OnInit {
     }
   ];
 
-  constructor(private catalogoService: Catalogo) {}
+  constructor(
+    private catalogoService: Catalogo,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
+
     this.catalogoService.getProdutosDestaque().subscribe((produtos: any[]) => {
       this.featuredProducts = produtos.slice(0, 4);
     });

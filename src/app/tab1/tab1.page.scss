@@ -105,14 +105,223 @@
   align-items: center;
   justify-content: center;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+  overflow: hidden;
 }
 
-.hero-face {
-  width: 80%;
-  height: 80%;
+.hero-img-full {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 28px;
-  background: radial-gradient(circle at top, #f8fafc 0%, #cbd5e1 30%, #94a3b8 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+// ─── Navbar Customizada Figma ──────────────────────────────────────────────────
+.navbar-custom {
+  --background: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+
+  ion-button {
+    --color: #1e3a8a !important;
+    font-size: 1.4rem;
+  }
+
+  .logo-title-center {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1e3a8a;
+    text-align: center;
+    letter-spacing: -0.2px;
+  }
+}
+
+// ─── Secção Promoções & Campanhas ──────────────────────────────────────────────
+.promo-section {
+  margin-top: 28px;
+}
+
+.promo-scroller {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 8px 4px 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.promo-card-custom {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  border-radius: 24px;
+  padding: 20px;
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    top: -30px;
+    right: -30px;
+  }
+
+  .promo-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+  }
+
+  .promo-body {
+    h3 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0 0 16px;
+      font-size: 0.9rem;
+      opacity: 0.95;
+      line-height: 1.4;
+
+      strong {
+        font-size: 1rem;
+        font-weight: 800;
+      }
+    }
+  }
+
+  .promo-footer {
+    display: flex;
+    align-items: center;
+
+    .promo-code {
+      background: #ffffff;
+      color: #0f172a;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &.promo-blue {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  }
+
+  &.promo-pink {
+    background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  }
+
+  &.promo-green {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  }
+}
+
+// ─── Layout Explorar Figma ─────────────────────────────────────────────────────
+.explore-layout-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.explore-card-large {
+  margin: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  height: 180px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+
+  .card-image-bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0) 40%, rgba(15, 23, 42, 0.65) 100%);
+    }
+
+    .card-content-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: #ffffff;
+
+      h3 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+    }
+  }
+}
+
+.explore-row-sub {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.explore-card-square {
+  margin: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+
+  .card-square-img {
+    height: 120px;
+    background: #f3f4f6;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  ion-card-header {
+    padding: 12px 14px 14px;
+    text-align: center;
+
+    ion-card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+  }
 }
 
 .section {
@@ -296,4 +505,85 @@ ion-card-content {
 .commitment-card-content p {
   margin: 8px 0 0;
   color: #475569;
+}
+
+// ─── Navbar ──────────────────────────────────────────────────────────────────
+.navbar {
+  --background: #4b8ae0;
+  --border-color: transparent;
+  --color: #ffffff;
+  padding: 0 24px;
+  box-shadow: 0 4px 12px rgba(75, 138, 224, 0.2);
+
+  .logo-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    padding-left: 0;
+  }
+
+  .navbar-end {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-right: 8px;
+
+    .nav-link {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.9rem;
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+      opacity: 0.95;
+    }
+
+    .nav-carrinho {
+      --color: #ffffff;
+      margin: 0;
+    }
+
+    .btn-entrar {
+      --background: #ffffff;
+      --color: #4b8ae0;
+      --border-radius: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      height: 36px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+      &::part(native) {
+        color: #4b8ae0 !important;
+        background: #ffffff !important;
+      }
+    }
+  }
+}
+
+// ─── Responsividade para a Navbar no Mobile ──────────────────────────────────
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 12px;
+    
+    .logo-title {
+      font-size: 1rem;
+    }
+    
+    .navbar-end {
+      gap: 8px;
+      padding-right: 0;
+      
+      .nav-link {
+        display: none !important;
+      }
+      
+      .btn-entrar {
+        height: 32px;
+        font-size: 0.75rem;
+        --padding-start: 10px;
+        --padding-end: 10px;
+      }
+    }
+  }
 }

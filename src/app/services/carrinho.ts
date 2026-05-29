@@ -26,6 +26,9 @@ export interface ItemCarrinho {
 
   /** Número de unidades deste item no carrinho */
   quantidade: number;
+
+  /** Categoria do produto (ex: 'bebé', 'menino', 'menina') */
+  categoria?: string;
 }
 
 /**
@@ -50,6 +53,38 @@ export class CarrinhoService {
    * Os componentes devem subscrever este Observable para reagir a mudanças.
    */
   itens$ = this.itensSubject.asObservable();
+
+  /**
+   * Subject para a loja de levantamento selecionada
+   */
+  private lojaLevantamentoSubject = new BehaviorSubject<string | null>(null);
+  public lojaLevantamento$ = this.lojaLevantamentoSubject.asObservable();
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      const storedLoja = localStorage.getItem('quickdresskids_loja_levantamento');
+      if (storedLoja) {
+        this.lojaLevantamentoSubject.next(storedLoja);
+      }
+    }
+  }
+
+  // ─── LOJA DE LEVANTAMENTO ───────────────────────────────────────────────────
+
+  getLojaLevantamento(): string | null {
+    return this.lojaLevantamentoSubject.getValue();
+  }
+
+  setLojaLevantamento(loja: string | null): void {
+    this.lojaLevantamentoSubject.next(loja);
+    if (typeof window !== 'undefined') {
+      if (loja) {
+        localStorage.setItem('quickdresskids_loja_levantamento', loja);
+      } else {
+        localStorage.removeItem('quickdresskids_loja_levantamento');
+      }
+    }
+  }
 
   // ─── LEITURA ────────────────────────────────────────────────────────────────
 
@@ -106,6 +141,11 @@ export class CarrinhoService {
     const itens = this.getItens();
     itens.splice(index, 1);
     this.itensSubject.next([...itens]);
+
+    // Se o carrinho ficou vazio, limpa também a loja de levantamento
+    if (itens.length === 0) {
+      this.setLojaLevantamento(null);
+    }
   }
 
   /**
@@ -132,5 +172,6 @@ export class CarrinhoService {
    */
   limparCarrinho(): void {
     this.itensSubject.next([]);
+    this.setLojaLevantamento(null);
   }
 }

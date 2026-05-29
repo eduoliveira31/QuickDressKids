@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AuthService, Usuario } from '../services/auth.service';
 
 @Component({
   selector: 'app-perfil',
@@ -10,42 +11,145 @@ import { Router } from '@angular/router';
 })
 export class PerfilPage implements OnInit {
   
-  utilizador = {
-    nome: 'Carla',
-    email: 'carla@email.com',
-    foto: 'https://ionicframework.com/docs/img/demos/avatar.svg'
-  };
+  currentUser: Usuario | null = null;
+
+  // Estados dos toggles
+  notificacoesAtivas: boolean = true;
+  localizacaoAtiva: boolean = false;
+
+  // Modais
+  modalAjudaAberto: boolean = false;
+  modalPasswordAberto: boolean = false;
+
+  // Formulário Centro de Ajuda
+  ajudaOpcao: string = 'reserva';
+  ajudaDescricao: string = '';
+  ajudaEmail: string = '';
+
+  // Formulário Alteração de Password
+  pwAnterior: string = '';
+  pwNova: string = '';
+  pwConfirmar: string = '';
 
   constructor(
     private toastController: ToastController,
-    private router: Router // <-- Injetamos o Router para conseguir navegar
+    private router: Router,
+    private authService: AuthService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      if (user) {
+        this.ajudaEmail = user.email;
+      } else {
+        this.ajudaEmail = '';
+      }
+    });
+  }
 
   async abrirOpcao(nomeOpcao: string) {
+    if (!this.currentUser) {
+      this.mostrarToast('Inicia sessão para aceder a esta funcionalidade.', 'warning');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     if (nomeOpcao === 'Reservas Ativas') {
-      // Se a opção for as Reservas, navega diretamente para a nova página!
       this.router.navigate(['/reservas']);
     } else {
-      // Para as outras opções, mantém o feedback de construção
-      const toast = await this.toastController.create({
-        message: `A abrir ${nomeOpcao}... (Página em construção)`,
-        duration: 2000,
-        position: 'bottom',
-        color: 'dark'
-      });
-      await toast.present();
+      this.mostrarToast(`A abrir ${nomeOpcao}... (Página em construção)`, 'dark');
     }
   }
 
+  // ─── CENTRO DE AJUDA ─────────────────────────────────────────────────────────
+  abrirModalAjuda() {
+    if (this.currentUser) {
+      this.ajudaEmail = this.currentUser.email;
+    }
+    this.modalAjudaAberto = true;
+  }
+
+  fecharModalAjuda() {
+    this.modalAjudaAberto = false;
+    this.ajudaDescricao = '';
+  }
+
+  async submeterAjuda() {
+    if (!this.ajudaEmail || !this.ajudaDescricao) {
+      this.mostrarToast('Por favor, preenche todos os campos obrigatórios.', 'warning');
+      return;
+    }
+
+    // Simula o envio
+    this.mostrarToast('Mensagem enviada com sucesso! Iremos responder em breve.', 'success');
+    this.fecharModalAjuda();
+  }
+
+  // ─── ALTERAR PASSWORD ────────────────────────────────────────────────────────
+  abrirModalPassword() {
+    this.modalPasswordAberto = true;
+  }
+
+  fecharModalPassword() {
+    this.modalPasswordAberto = false;
+    this.pwAnterior = '';
+    this.pwNova = '';
+    this.pwConfirmar = '';
+  }
+
+  async submeterAlterarPassword() {
+    if (!this.pwAnterior || !this.pwNova || !this.pwConfirmar) {
+      this.mostrarToast('Preenche todos os campos da palavra-passe.', 'warning');
+      return;
+    }
+
+    if (this.pwNova !== this.pwConfirmar) {
+      this.mostrarToast('A nova palavra-passe e a confirmação não coincidem.', 'danger');
+      return;
+    }
+
+    if (this.pwNova.length < 4) {
+      this.mostrarToast('A nova palavra-passe deve ter pelo menos 4 caracteres.', 'warning');
+      return;
+    }
+
+    if (this.currentUser) {
+      const sucesso = this.authService.alterarPassword(
+        this.currentUser.username,
+        this.pwAnterior,
+        this.pwNova
+      );
+
+      if (sucesso) {
+        this.mostrarToast('Palavra-passe alterada com sucesso!', 'success');
+        this.fecharModalPassword();
+      } else {
+        this.mostrarToast('A palavra-passe anterior está incorreta.', 'danger');
+      }
+    }
+  }
+
+  // ─── LOGOUT ──────────────────────────────────────────────────────────────────
   async terminarSessao() {
+    this.authService.logout();
     const toast = await this.toastController.create({
       message: 'Sessão terminada com sucesso!',
       duration: 2000,
       position: 'bottom',
       color: 'success',
       icon: 'checkmark-circle'
+    });
+    await toast.present();
+    this.router.navigate(['/tabs/home']);
+  }
+
+  private async mostrarToast(mensagem: string, cor: string) {
+    const toast = await this.toastController.create({
+      message: mensagem,
+      duration: 2000,
+      position: 'bottom',
+      color: cor
     });
     await toast.present();
   }

@@ -1,62 +1,200 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>O Meu Perfil</ion-title>
+  <ion-toolbar class="navbar">
+    <ion-title slot="start" class="logo-title">QuickDressKids</ion-title>
+    <div slot="end" class="navbar-end" style="padding-right: 16px;">
+      <span class="nav-link">Conta</span>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding" color="light">
   
-  <!-- Cabeçalho do Perfil -->
-  <div class="ion-text-center ion-margin-top">
-    <ion-avatar style="width: 120px; height: 120px; margin: 0 auto; border: 4px solid white; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
-      <img [src]="utilizador.foto" alt="Foto de perfil" />
-    </ion-avatar>
-    
-    <h2 class="ion-margin-top" style="font-weight: bold; color: #333;">{{ utilizador.nome }}</h2>
-    <p style="color: gray; margin-top: -5px;">{{ utilizador.email }}</p>
-    
-    <ion-button fill="outline" shape="round" size="small" class="ion-margin-top" (click)="abrirOpcao('Editar Perfil')">
-      <ion-icon name="create-outline" slot="start"></ion-icon>
-      Editar Perfil
+  <!-- CASO 1: UTILIZADOR LOGADO -->
+  <div *ngIf="currentUser">
+    <!-- Cabeçalho do Perfil -->
+    <div class="ion-text-center ion-margin-top">
+      <ion-avatar style="width: 100px; height: 100px; margin: 0 auto; border: 4px solid white; box-shadow: 0px 4px 12px rgba(0,0,0,0.08);">
+        <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Foto de perfil" />
+      </ion-avatar>
+      
+      <h2 class="ion-margin-top" style="font-weight: 800; color: #0f172a; font-size: 1.4rem;">
+        {{ currentUser.primeiroNome }} {{ currentUser.ultimoNome }}
+      </h2>
+      <p style="color: #6b7280; margin-top: -4px; font-size: 0.95rem; font-weight: 600;">
+        @{{ currentUser.username }} | {{ currentUser.email }}
+      </p>
+      
+      <ion-button fill="outline" shape="round" size="small" class="ion-margin-top" (click)="abrirOpcao('Editar Perfil')" style="--border-radius: 12px;">
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        Editar Perfil
+      </ion-button>
+    </div>
+
+    <!-- Lista de Ações e Segurança -->
+    <ion-list class="ion-margin-top" inset="true" style="--border-radius: 16px;">
+      <ion-item button detail="true" (click)="abrirOpcao('Reservas Ativas')">
+        <ion-icon name="ticket-outline" slot="start" color="primary"></ion-icon>
+        <ion-label style="font-weight: 600;">Reservas Ativas</ion-label>
+      </ion-item>
+      
+      <ion-item button detail="true" lines="none" (click)="abrirModalPassword()">
+        <ion-icon name="lock-closed-outline" slot="start" color="danger"></ion-icon>
+        <ion-label style="font-weight: 600;">Alterar Palavra-passe</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!-- Preferências com Swipe Toggle (Notificações e Localização) -->
+    <ion-list class="ion-margin-top" inset="true" style="--border-radius: 16px;">
+      <ion-item lines="full">
+        <ion-icon name="notifications-outline" slot="start" color="warning"></ion-icon>
+        <ion-label style="font-weight: 600;">Notificações Ativas</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="notificacoesAtivas" color="primary"></ion-toggle>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-icon name="location-outline" slot="start" color="tertiary"></ion-icon>
+        <ion-label style="font-weight: 600;">Permitir Localização</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="localizacaoAtiva" color="primary"></ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <!-- Área de Ajuda -->
+    <ion-list class="ion-margin-top" inset="true" style="--border-radius: 16px;">
+      <ion-item button detail="true" lines="none" (click)="abrirModalAjuda()">
+        <ion-icon name="help-circle-outline" slot="start" color="success"></ion-icon>
+        <ion-label style="font-weight: 600;">Centro de Ajuda</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!-- Botão Terminar Sessão -->
+    <ion-button expand="block" color="danger" fill="clear" class="ion-margin-top" style="margin-bottom: 30px; font-weight: 700;" (click)="terminarSessao()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Terminar Sessão
     </ion-button>
   </div>
 
-  <!-- Menu de Opções -->
-  <ion-list class="ion-margin-top" inset="true">
+  <!-- CASO 2: VISITANTE (NÃO LOGADO) -->
+  <div *ngIf="!currentUser" class="visitante-box ion-text-center">
+    <div class="icon-wrap">
+      <ion-icon name="person-circle-outline"></ion-icon>
+    </div>
     
-    <ion-item button detail="true" (click)="abrirOpcao('Reservas Ativas')">
-      <ion-icon name="ticket-outline" slot="start" color="primary"></ion-icon>
-      <ion-label>Reservas Ativas</ion-label>
-    </ion-item>
+    <h2>Área de Cliente</h2>
+    <p>Inicia sessão para consultar as tuas reservas, gerir as tuas preferências e aceder à tua conta.</p>
     
-    <ion-item button detail="true" (click)="abrirOpcao('Lojas Favoritas')">
-      <ion-icon name="location-outline" slot="start" color="tertiary"></ion-icon>
-      <ion-label>Lojas Favoritas</ion-label>
-    </ion-item>
+    <ion-button expand="block" shape="round" color="primary" class="btn-visitante-entrar ion-margin-top" routerLink="/login">
+      Iniciar Sessão / Criar Conta
+    </ion-button>
 
-    <ion-item button detail="true" (click)="abrirOpcao('Notificações')">
-      <ion-icon name="notifications-outline" slot="start" color="warning"></ion-icon>
-      <ion-label>Notificações</ion-label>
-    </ion-item>
+    <div class="benefits-list ion-text-left ion-margin-top">
+      <div class="benefit-item">
+        <ion-icon name="sparkles" color="primary"></ion-icon>
+        <span>Guarda as tuas roupas preferidas</span>
+      </div>
+      <div class="benefit-item">
+        <ion-icon name="qr-code" color="success"></ion-icon>
+        <span>Efetua reservas dinâmicas com QR Code</span>
+      </div>
+      <div class="benefit-item">
+        <ion-icon name="notifications" color="warning"></ion-icon>
+        <span>Recebe alertas de campanhas exclusivas</span>
+      </div>
+    </div>
+  </div>
 
-    <ion-item button detail="true" lines="none" (click)="abrirOpcao('Definições de Conta')">
-      <ion-icon name="settings-outline" slot="start" color="medium"></ion-icon>
-      <ion-label>Definições de Conta</ion-label>
-    </ion-item>
-  </ion-list>
+  <!-- ─── MODAL: CENTRO DE AJUDA ────────────────────────────────────────────────── -->
+  <ion-modal [isOpen]="modalAjudaAberto" (didDismiss)="fecharModalAjuda()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar class="navbar">
+          <ion-title style="font-weight: 800; color: #ffffff;">Centro de Ajuda</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="fecharModalAjuda()" style="font-weight: 700; --color: #ffffff;">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-  <!-- Área de Ajuda -->
-  <ion-list class="ion-margin-top" inset="true">
-    <ion-item button detail="true" lines="none" (click)="abrirOpcao('Centro de Ajuda')">
-      <ion-icon name="help-circle-outline" slot="start" color="success"></ion-icon>
-      <ion-label>Centro de Ajuda</ion-label>
-    </ion-item>
-  </ion-list>
+      <ion-content class="ion-padding" style="--background: #f9fafb;">
+        <div class="help-box-content">
+          <div class="help-header">
+            <h3>Em que podemos ajudar?</h3>
+            <p>Escolhe uma das opções ou detalha-nos o teu problema em baixo.</p>
+          </div>
 
-  <!-- Botão Terminar Sessão -->
-  <ion-button expand="block" color="danger" fill="clear" class="ion-margin-top" style="margin-bottom: 30px;" (click)="terminarSessao()">
-    <ion-icon name="log-out-outline" slot="start"></ion-icon>
-    Terminar Sessão
-  </ion-button>
+          <div class="form-container-modal ion-margin-top">
+            <div class="input-group-modal">
+              <label>Tipo de Assunto</label>
+              <div class="select-wrapper-modal">
+                <ion-select [(ngModel)]="ajudaOpcao" interface="popover" class="modal-select">
+                  <ion-select-option value="reserva">Problema com reserva</ion-select-option>
+                  <ion-select-option value="tamanho">Dúvida sobre tamanhos</ion-select-option>
+                  <ion-select-option value="sugestao">Sugestão de melhoria</ion-select-option>
+                  <ion-select-option value="outro">Outro assunto</ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+
+            <div class="input-group-modal">
+              <label>Email para contacto</label>
+              <ion-input type="email" [(ngModel)]="ajudaEmail" placeholder="ex: carla@email.com" class="custom-input-modal" [readonly]="currentUser !== null"></ion-input>
+            </div>
+
+            <div class="input-group-modal">
+              <label>Detalhe do problema</label>
+              <ion-textarea [(ngModel)]="ajudaDescricao" placeholder="Escreve aqui detalhadamente em que te podemos ajudar..." rows="6" class="custom-textarea-modal"></ion-textarea>
+            </div>
+
+            <ion-button expand="block" shape="round" class="btn-modal-submit ion-margin-top" (click)="submeterAjuda()">
+              Enviar Mensagem
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- ─── MODAL: ALTERAR PALAVRA-PASSE ─────────────────────────────────────────── -->
+  <ion-modal [isOpen]="modalPasswordAberto" (didDismiss)="fecharModalPassword()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar class="navbar">
+          <ion-title style="font-weight: 800; color: #ffffff;">Alterar Palavra-passe</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="fecharModalPassword()" style="font-weight: 700; --color: #ffffff;">Cancelar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding" style="--background: #f9fafb;">
+        <div class="help-box-content">
+          <div class="help-header">
+            <h3>Definições de Segurança</h3>
+            <p>Introduz a palavra-passe anterior e a nova palavra-passe que desejas utilizar.</p>
+          </div>
+
+          <div class="form-container-modal ion-margin-top">
+            <div class="input-group-modal">
+              <label>Palavra-passe anterior</label>
+              <ion-input type="password" [(ngModel)]="pwAnterior" placeholder="••••••••" class="custom-input-modal"></ion-input>
+            </div>
+
+            <div class="input-group-modal">
+              <label>Nova Palavra-passe</label>
+              <ion-input type="password" [(ngModel)]="pwNova" placeholder="••••••••" class="custom-input-modal"></ion-input>
+            </div>
+
+            <div class="input-group-modal">
+              <label>Confirmar Nova Palavra-passe</label>
+              <ion-input type="password" [(ngModel)]="pwConfirmar" placeholder="••••••••" class="custom-input-modal"></ion-input>
+            </div>
+
+            <ion-button expand="block" shape="round" class="btn-modal-submit ion-margin-top" (click)="submeterAlterarPassword()">
+              Gravar Nova Palavra-passe
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
 </ion-content>

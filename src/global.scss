@@ -36,49 +36,80 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-// ─── Estilos globais QuickDressKids ─────────────────────────────────
+// ─── Estilos globais QuickDressKids (Tema Azul Bebé & Branco) ─────────────────
 
 ion-toolbar {
-  --background: #4a9b6f;
-  --color: #ffffff;
+  --background: #4b8ae0; /* Azul Bebé Mais Carregado */
+  --color: #ffffff;      /* Letras/ícones a branco */
+}
+
+.navbar {
+  --background: #4b8ae0 !important;
+  --color: #ffffff !important;
+  color: #ffffff !important;
+
+  .logo-title, .logo-title-center {
+    color: #ffffff !important;
+  }
+
+  ion-title {
+    color: #ffffff !important;
+  }
+
+  ion-back-button {
+    --color: #ffffff !important;
+    color: #ffffff !important;
+  }
 }
 
 ion-tab-bar {
-  --background: #ffffff;
-  --border: 1px solid #d8e8dc;
-  box-shadow: 0 -2px 8px rgba(74, 155, 111, 0.1);
+  --background: #4b8ae0; /* Aba inferior azul com contraste */
+  --border: none;
+  box-shadow: 0 -4px 16px rgba(75, 138, 224, 0.25);
+  height: 60px;
 }
 
 ion-tab-button {
-  --color: #7a9e87;
-  --color-selected: #4a9b6f;
+  --color: rgba(255, 255, 255, 0.65); /* Ícone inativo a branco translúcido */
+  --color-selected: #ffffff;          /* Ícone ativo a branco sólido */
+  
+  ion-icon {
+    font-size: 22px;
+    margin-bottom: 2px;
+  }
+  
+  ion-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+  }
 }
 
 ion-segment {
-  --background: #d8e8dc;
+  --background: #eff6ff;
   border-radius: 10px;
 }
 
 ion-segment-button {
-  --color: #3a7d59;
+  --color: #1e3a8a;
   --color-checked: #ffffff;
-  --background-checked: #4a9b6f;
+  --background-checked: #4b8ae0;
   --indicator-color: transparent;
   border-radius: 8px;
 }
 
 ion-card {
   --background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(74, 155, 111, 0.12);
-  border: 1px solid #e8f4ec;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(75, 138, 224, 0.1);
+  border: 1px solid #f1f5f9;
 }
 
 ion-button {
-  --border-radius: 10px;
+  --border-radius: 12px;
 }
 
 ion-chip {
-  --background: #e8f4ec;
-  --color: #3a7d59;
+  --background: #eff6ff;
+  --color: #1e3a8a;
 }

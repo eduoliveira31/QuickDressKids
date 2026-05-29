@@ -1,29 +1,38 @@
 ion-tab-bar {
   /* Dá um pequeno sombreado à barra para ficar mais elegante */
-  box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 -4px 16px rgba(155, 195, 235, 0.25);
   border: none;
 }
 
 ion-tab-button {
+  --color: rgba(255, 255, 255, 0.65); /* Ícone/Label inativo a branco translúcido */
+  --color-selected: #ffffff;          /* Ícone/Label ativo a branco sólido */
   
   ion-icon {
     padding: 6px 20px;
     border-radius: 20px;
-    transition: all 0.3s ease-in-out; /* Faz a cor aparecer de forma suave */
+    transition: all 0.3s ease-in-out;
     font-size: 22px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  ion-label {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
   }
 
   &.tab-selected {
     
     ion-icon {
-      /* Fundo com a cor primária, mas um bocado transparente (15%) para ficar suave */
-      background-color: rgba(var(--ion-color-primary-rgb), 0.15);
-      
-      /* O ícone fica com a cor principal forte */
-      color: var(--ion-color-primary); 
+      /* Fundo com branco translúcido para um destaque suave e elegante */
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff !important; 
     }
 
     ion-label {
+      color: #ffffff !important;
       font-weight: bold;
       transition: all 0.3s ease;
     }

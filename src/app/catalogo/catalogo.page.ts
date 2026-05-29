@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Catalogo } from '../services/catalogo';
+import { AuthService, Usuario } from '../services/auth.service';
 
 /**
  * Página principal do catálogo de produtos QuickDressKids.
@@ -18,6 +19,9 @@ import { Catalogo } from '../services/catalogo';
   standalone: false
 })
 export class CatalogoPage implements OnInit {
+
+  currentUser: Usuario | null = null;
+  filtrosAberto: boolean = false;
 
   /** Lista completa de produtos carregada do JSON — fonte de dados para os filtros */
   produtosOriginais: any[] = [];
@@ -84,22 +88,54 @@ export class CatalogoPage implements OnInit {
   /**
    * @param catalogoService - Service que fornece os dados do catálogo via JSON
    * @param router          - Router Angular para navegar para o detalhe do produto
+   * @param route           - ActivatedRoute para ler os parâmetros da rota (queryParams)
+   * @param authService     - Service de Autenticação simulada
    */
   constructor(
     private catalogoService: Catalogo,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   // ─── CICLO DE VIDA ──────────────────────────────────────────────────────────
 
   /**
-   * Carrega todos os produtos e inicializa a lista filtrada.
-   * Chamado automaticamente pelo Angular após a criação do componente.
+   * Carrega todos os produtos, subscreve os queryParams e gere o estado de autenticação do utilizador.
    */
   ngOnInit() {
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
+
     this.catalogoService.getProdutos().subscribe((data: any[]) => {
       this.produtosOriginais = data;
-      this.produtosFiltrados = data;
+      
+      // Detetar parâmetros vindos da HOME ou de links externos
+      this.route.queryParams.subscribe(params => {
+        this.categoriaAtiva = 'todas';
+        this.idadeAtiva = 'todas';
+        this.tipoAtivo = 'todos';
+        this.corAtiva = 'todas';
+        this.pesquisa = '';
+
+        if (params['categoria']) {
+          this.categoriaAtiva = params['categoria'];
+        }
+        if (params['tipo']) {
+          this.tipoAtivo = params['tipo'];
+        }
+
+        if (params['campanha'] === 'verao') {
+          // Filtragem especial para campanha de verão: T-Shirts, Vestidos e Calções
+          this.produtosFiltrados = this.produtosOriginais.filter(produto => {
+            const tipo = produto.tipo?.toLowerCase() ?? '';
+            return tipo === 't-shirt' || tipo === 'vestido' || tipo === 'calcoes' || tipo === 'calções';
+          });
+        } else {
+          this.aplicarFiltros();
+        }
+      });
     });
   }
 
@@ -192,5 +228,13 @@ export class CatalogoPage implements OnInit {
    */
   verDetalhe(id: number) {
     this.router.navigate(['/produto-detalhe', id]);
+  }
+
+  abrirFiltros() {
+    this.filtrosAberto = true;
+  }
+
+  fecharFiltros() {
+    this.filtrosAberto = false;
   }
 }

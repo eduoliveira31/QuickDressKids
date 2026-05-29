@@ -4,6 +4,7 @@ import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
 import { Router } from '@angular/router';
 import { ReservasService } from '../services/reservas';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-carrinho',
@@ -21,7 +22,8 @@ export class CarrinhoPage implements OnInit {
     private custosService: CustosService,
     private alertController: AlertController,
     private router: Router,                      
-    private reservasService: ReservasService     
+    private reservasService: ReservasService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -44,11 +46,42 @@ export class CarrinhoPage implements OnInit {
   }
 
   get subtotal(): number { return this.custosService.getSubtotal(); }
+  get descontoCampanha(): number { return this.custosService.getDescontoCampanha(); }
+  get subtotalFinal(): number { return this.custosService.getFinalSubtotal(); }
   get porte(): number { return this.custosService.getPorte(); }
   get total(): number { return this.custosService.getTotal(); }
   get faltaParteGratis(): number { return this.custosService.getFaltaParteGratis(); }
 
+  get nomeLojaCompleto(): string {
+    const loja = this.carrinhoService.getLojaLevantamento();
+    if (loja === 'braga') return 'Loja Braga Parque';
+    if (loja === 'coimbra') return 'Loja Coimbra Dolce Vita';
+    if (loja === 'lisboa') return 'Loja Lisboa Colombo';
+    return 'Nenhuma loja selecionada';
+  }
+
   async criarReserva() {
+    if (!this.authService.isLoggedIn()) {
+      const alert = await this.alertController.create({
+        header: 'Iniciar Sessão Necessário',
+        message: 'Para criar a sua reserva e encomendar os seus artigos favoritos, necessita de ter sessão iniciada.',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel'
+          },
+          {
+            text: 'Iniciar Sessão',
+            handler: () => {
+              this.router.navigate(['/login']);
+            }
+          }
+        ]
+      });
+      await alert.present();
+      return;
+    }
+
     const numeroReserva = Math.floor(Math.random() * 900000000) + 100000000;
     const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
 
@@ -64,7 +97,7 @@ export class CarrinhoPage implements OnInit {
       dataValidade: dataValidade,
       total: this.total,
       qtdArtigos: qtdTotal,
-      loja: 'Loja Lisboa Colombo - Lisboa',
+      loja: this.nomeLojaCompleto,
       itens: [...this.itens] 
     });
 

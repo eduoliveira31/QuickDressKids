@@ -1,30 +1,103 @@
-<ion-content [fullscreen]="true" class="login-page">
-  <div class="login-shell">
-    <ion-card class="login-card">
-      <ion-card-header>
-        <ion-card-title>Entrar</ion-card-title>
-        <ion-card-subtitle>Escolhe o tipo de sessão que queres iniciar.</ion-card-subtitle>
-      </ion-card-header>
+<ion-header [translucent]="true">
+  <ion-toolbar class="navbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" text="Voltar"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="logo-title">QuickDressKids</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-      <ion-card-content>
-        <ion-button expand="block" color="primary" (click)="login('user')">
-          Entrar como utilizador
-        </ion-button>
-        <ion-button expand="block" fill="outline" color="medium" (click)="login('admin')">
-          Entrar como administrador
-        </ion-button>
+<ion-content [fullscreen]="true" class="login-content ion-padding">
+  <div class="login-container">
+    
+    <!-- Caso NÃO esteja logado -->
+    <div *ngIf="!currentUser" class="auth-box">
+      <div class="auth-header">
+        <h2>{{ modo === 'login' ? 'Iniciar Sessão' : 'Criar Conta' }}</h2>
+        <p>{{ modo === 'login' ? 'Insere os teus dados para aceder à tua conta.' : 'Regista-te para guardar as tuas reservas.' }}</p>
+      </div>
 
-        <div *ngIf="currentRole" class="session-info">
-          <p>Sessão atual: <strong>{{ currentRole === 'admin' ? 'Administrador' : 'Utilizador' }}</strong></p>
-          <ion-button fill="clear" color="danger" size="small" (click)="logout()">
-            Terminar sessão
-          </ion-button>
+      <!-- MODO: LOGIN -->
+      <div *ngIf="modo === 'login'" class="form-container">
+        <div class="input-group">
+          <label>Email ou Nome de Utilizador</label>
+          <ion-input type="text" [(ngModel)]="identifier" placeholder="ex: carla" class="custom-input"></ion-input>
         </div>
 
-        <p class="hint">
-          Nota: esta app não tem autenticação real por backend. A sessão é simulada localmente.
-        </p>
-      </ion-card-content>
-    </ion-card>
+        <div class="input-group">
+          <label>Palavra-passe</label>
+          <ion-input type="password" [(ngModel)]="passwordLocal" placeholder="••••••••" class="custom-input"></ion-input>
+        </div>
+
+        <ion-button expand="block" shape="round" class="btn-primary-auth ion-margin-top" (click)="efetuarLogin()">
+          Entrar
+        </ion-button>
+
+        <div class="auth-footer">
+          <p>Não tem conta? <a (click)="alterarModo('registo')" class="auth-link">Registe-se aqui</a></p>
+        </div>
+      </div>
+
+      <!-- MODO: REGISTO -->
+      <div *ngIf="modo === 'registo'" class="form-container">
+        <div class="input-row">
+          <div class="input-group">
+            <label>Primeiro Nome</label>
+            <ion-input type="text" [(ngModel)]="registoPrimeiroNome" placeholder="ex: Carla" class="custom-input"></ion-input>
+          </div>
+          <div class="input-group">
+            <label>Último Nome</label>
+            <ion-input type="text" [(ngModel)]="registoUltimoNome" placeholder="ex: Santos" class="custom-input"></ion-input>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Nome de Utilizador</label>
+          <ion-input type="text" [(ngModel)]="registoUsername" placeholder="ex: carlasantos" class="custom-input"></ion-input>
+        </div>
+
+        <div class="input-group">
+          <label>Email</label>
+          <ion-input type="email" [(ngModel)]="registoEmail" placeholder="ex: carla@email.com" class="custom-input"></ion-input>
+        </div>
+
+        <div class="input-group">
+          <label>Palavra-passe</label>
+          <ion-input type="password" [(ngModel)]="registoPasswordLocal" placeholder="••••••••" class="custom-input"></ion-input>
+        </div>
+
+        <ion-button expand="block" shape="round" class="btn-primary-auth ion-margin-top" (click)="efetuarRegisto()">
+          Criar Conta
+        </ion-button>
+
+        <div class="auth-footer">
+          <p>Já tem conta? <a (click)="alterarModo('login')" class="auth-link">Inicie sessão</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caso JÁ esteja logado -->
+    <div *ngIf="currentUser" class="logged-box ion-text-center">
+      <ion-avatar class="user-avatar ion-margin-bottom">
+        <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Avatar" />
+      </ion-avatar>
+      
+      <h2>Olá, {{ currentUser.primeiroNome || currentUser.username }}!</h2>
+      <p class="email-sub">{{ currentUser.email }}</p>
+      
+      <div class="card-logged-info ion-margin-top">
+        <p>A tua conta está ativa e podes efetuar reservas no catálogo de forma dinâmica.</p>
+      </div>
+
+      <ion-button expand="block" fill="outline" color="danger" shape="round" class="ion-margin-top" (click)="logout()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Terminar Sessão
+      </ion-button>
+
+      <ion-button expand="block" color="primary" shape="round" class="ion-margin-top" routerLink="/tabs/home">
+        Ir para a Página Inicial
+      </ion-button>
+    </div>
+
   </div>
 </ion-content>
