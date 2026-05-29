@@ -214,34 +214,36 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 - Substituir a integração de APIs externas de autenticação por uma simulação local controlada via JSON devido a falhas de autorização na API anterior, otimizando o fluxo de testes e garantindo total conformidade pedagógica com os requisitos de entrega do projeto.
 
 ## Sessão 9 – 29 de maio de 2026
-**Responsável:** Luis Miguel (Grupo 10)  
-**Objetivo:** Reestruturação visual de contraste, autenticação simulada ativa, simplificação do perfil com centro de ajuda, diversificação do catálogo, filtros laterais Figma, fidelização "Leve 3 Pague 2" e checkout seguro com loja única de levantamento.
+**Responsável:** Luis Martinho Oliveira Lopes  
+**Objetivo:** Reestruturação visual de contraste do tema, implementação de login/registo do utilizador, fluxo de segurança do perfil (alteração de password e centro de ajuda), expansão de artigos do catálogo com imagens reais, menu lateral de filtragem, regras de checkout seguro com sessão obrigatória, controlo de stock por loja física única e fidelização "Leve 3, Pague 2".
 
 **Atividades realizadas:**
-- **Reestruturação Visual de Alto Contraste:** Redesenho completo de todos os cabeçalhos (`ion-toolbar` e `.navbar`) e da barra de navegação inferior (`ion-tab-bar`) para um tom de azul bebé mais carregado (`#4b8ae0`), garantindo 100% de legibilidade e acessibilidade com todos os ícones, logos e nomes de aplicação a branco (`#ffffff`). O botão "Entrar" foi redesenhado como uma pílula branca com texto azul bebé.
-- **Fluxo de Autenticação Ativa (Login / Registo):** Configuração para que a aplicação inicie sempre deslogada (modo visitante) por padrão. Implementação de fluxo onde é obrigatório iniciar sessão ou criar conta para aceder ao perfil e efetuar reservas. Adição da funcionalidade de segurança para alteração de palavra-passe, exigindo a palavra-passe anterior e validação dupla da nova.
-- **Simplificação de Perfil & Centro de Ajuda:** Remoção de secções estáticas e simplificação da área de conta. Implementação de swipe toggles dinâmicos (para ativar/desativar notificações e permissão de localização) e criação do Centro de Ajuda interativo, permitindo escolher o assunto, introduzir o e-mail e detalhar o problema numa caixa de texto.
-- **Diversificação do Catálogo & Novas Imagens:** Enriquecimento do inventário local (`produtos.json`) com novos artigos genéricos e diversificados (como rob de bebé, pijama de estrelas, sapatilhas de desporto), associando fotografias em alta resolução a todos os artigos do catálogo.
-- **Painel de Filtros Figma por Gaveta/Modal:** Implementação de botão lateral de filtros no catálogo, que abre um modal deslizante reativo com chips para seleção instantânea de Categoria, Faixa Etária, Tipo de Artigo e Cor, limpando as tags ativas com um clique.
-- **Fidelização Automática "Leve 3, Pague 2":** Implementação de lógica inteligente no `CustosService` que agrupa peças da categoria "bebé" adicionadas ao carrinho e oferece automaticamente a peça de menor valor a cada 3 artigos, discriminando o desconto na fatura detalhada.
-- **Checkout Seguro & Loja Única de Levantamento:** Acoplamento de regra logística onde todos os artigos da reserva têm de pertencer à mesma loja. O carrinho tranca a loja selecionada na primeira adição, valida stock (bloqueando a loja de Lisboa sem stock) e avisa interativamente o utilizador caso selecione uma loja divergente nos produtos seguintes.
-- **Resolução de Conflitos e Compilação 100% Estável:** Integração limpa das melhorias efetuadas com o código de catálogo Figma dos restantes membros do grupo através da resolução cirúrgica de conflitos de merge Git, garantindo compilação estável do Angular e Ionic Serve.
+- **Ambiente Inicial sem Sessão (Deslogado por Padrão):** Refatoração da lógica de arranque da aplicação (`AuthService`) para garantir que o utilizador inicia sempre como visitante (sem conta ativa), respondendo à necessidade pedagógica de forçar o utilizador a criar conta ou fazer login para interagir com o fluxo completo.
+- **Botão de Acesso Rápido na Home:** Criação de um botão tipo pílula "Entrar" com auto-contraste na barra superior da página inicial (`tab1`), que deteta dinamicamente o estado da sessão e redireciona visitantes para o `/login` ou apresenta o username do utilizador ativo.
+- **Gestão de Perfil Simplificada & Preferências (Toggles):** Remoção de dados fixos antigos e implementação de interruptores dinâmicos de swipe/toggle (`ion-toggle`) integrados no ecrã de Perfil para gestão de "Notificações Ativas" e "Permitir Localização" com excelente resposta visual.
+- **Centro de Ajuda Avançado e Interativo:** Criação de um Centro de Ajuda interativo em modal deslizante, incluindo formulário de contacto com seletor de tipo de assunto ("Problema com reserva", "Dúvida sobre tamanhos", "Outro"), descrição detalhada do problema e preenchimento inteligente de e-mail (capturado se houver sessão ou editável se for visitante).
+- **Segurança Avançada e Alteração de Palavra-passe:** Desenvolvimento de um modal de definições de segurança que exige a introdução da palavra-passe atual e a nova palavra-passe repetida duas vezes. A lógica no serviço valida a palavra-passe atual no Local Storage e aplica a nova credencial de forma segura e imediata.
+- **Diversificação e Expansão do Catálogo com Imagens Reais:** Inclusão de novos produtos com alto detalhe no ficheiro local `produtos.json` (incluindo o "Robe de Bebé Algodão Orgânico", "Pijama Estrelas Soft" e "Sapatilhas Desportivas Kids") enriquecidos com imagens reais de alta definição geradas por inteligência artificial e guardadas localmente, eliminando placeholders genéricos da aplicação.
+- **Barra Lateral Otimizada de Filtros:** Migração de todos os controlos de filtragem do catálogo para um painel/gaveta flutuante lateral (modal de filtros), organizando as opções por chips interativos de Categoria, Faixa Etária, Tipo de Produto e Cor, com botão personalizado vermelho e transparente de "Limpar Filtros".
+- **Redesenho e Reestruturação Visual de Contraste Azul Bebé:** Substituição integral do tema verde pastel por uma palete premium de azul bebé mais carregado e vibrante (`#4b8ae0`), garantindo conformidade de contraste WCAG com texto e ícones brancos (`#ffffff`) na aba superior (`ion-toolbar`) e inferior (`ion-tab-bar`). Estilização personalizada das tabs inferiores para indicar o separador ativo com uma suave bolha translúcida branca.
+- **Sessão Obrigatória para Reserva de Encomendas:** Integração de regras de segurança no carrinho (`carrinho.page.ts`). O botão "Criar Reserva" valida o estado da sessão e, caso o utilizador seja um visitante, bloqueia a operação e abre um `AlertController` reativo para o redirecionar para a página de Login/Registo.
+- **Validação de Stock e Loja Única de Levantamento:** Desenvolvimento de uma robusta lógica de checkout onde todos os produtos de uma encomenda têm de ser associados à mesma loja de levantamento física. Caso o utilizador tente selecionar uma loja divergente da que já está ativa no carrinho, a aplicação exibe uma janela de resolução interativa para esvaziar o carrinho ou reverter. Adicionalmente, implementou-se validação de stock (ex: impedindo a reserva na loja de Lisboa que tem stock 0).
+- **Correção da Campanha "Leve 3, Pague 2":** Otimização do `CustosService` para deduzir automaticamente o valor do artigo de menor valor em grupos de 3 artigos da categoria "bebé" adicionados ao carrinho, exibindo o desconto de forma explícita e transparente na fatura do ecrã de checkout.
+- **Compilação, Merge Git e Estabilização:** Saneamento completo de múltiplos conflitos de fusão (`<<<<<<< HEAD`) resultantes da mesclagem de ramos na estrutura do catálogo (`catalogo.page.html`, `.ts`, `.scss`), garantindo que o projeto compila sem erros com o Angular Compiler.
 
 **Problemas:**
-- A aplicação iniciava logada por padrão, ignorando a experiência de boas-vindas do utilizador.
-- Azul bebé inicial claro provocava pouca visibilidade e problemas de contraste nas abas superiores e inferiores.
-- Inexistência de validação de stock físico ou de uniformidade de loja para levantamento ao efetuar a reserva.
-- Desconto da campanha "Leve 3, Pague 2" não estava implementado nas contas de custos.
-- Conflito crítico de merge nos ficheiros da página de catálogo (`.html`, `.scss`, `.ts`) após a integração dos branches dos colegas.
+- Inconsistência na aplicação do desconto "Leve 3, Pague 2" devido à ausência do campo de categoria nos dados passados ao carrinho.
+- Erros de contraste com azul bebé muito claro que dificultava a leitura geral no ecrã.
+- Permissão de reserva de produtos fora de stock ou levantamento em múltiplas lojas na mesma transação.
+- Conflitos de tags html e de herança de cores nos seletores do catálogo após fusões anteriores.
 
 **Soluções:**
-- Chamada explícita a `logout()` no construtor do `AuthService` para forçar o estado de visitante no arranque.
-- Mapeamento das classes globais `.navbar` no `global.scss` para azul contrastante `#4b8ae0` e texto a branco puro, sobrepondo estilos com `!important`.
-- Armazenamento da loja selecionada no `CarrinhoService` com controlo por BehaviorSubject, associando alertas de dupla opção ao adicionar itens divergentes.
-- Criação do método `getDescontoCampanha()` no `CustosService` ordenando de forma crescente o preço dos artigos de bebé e descontando o mais barato.
-- Resolução de conflitos de git mantendo a estrutura reativa de abas, modal de filtros Figma e corrigindo tags html inválidas (`ion-col`).
+- Criação de mapeamento de categoria e desdobramento dos preços no carrinho, aplicando o desconto ordenado de forma crescente.
+- Adoção do azul médio `#4b8ae0` e uso do seletor `!important` para sobrescrever variáveis locais antigas.
+- Criação de BehaviorSubject de loja no `CarrinhoService` para rastreio e bloqueio de loja no primeiro artigo adicionado, além de verificação explícita do valor de stock do artigo selecionado na loja selecionada.
+- Correção de conflitos do Git, reestruturação da grelha de 3 colunas e aplicação do encapsulamento de estilos adequado em `catalogo.page.scss`.
 
 **Decisões:**
-- Forçar uma única loja física para levantamento em cada reserva para evitar problemas logísticos de múltiplos pontos de recolha numa só transação.
-- Disponibilizar a visualização clara do desconto de campanha no detalhe de custos do carrinho para reforçar a transparência para o cliente.
-- Resolver e estabilizar a branch `main` de imediato com um commit de merge estável para evitar blocos na pipeline de desenvolvimento.
+- Forçar uma única loja física por reserva para simplificar o levantamento logístico na loja física pelo cliente.
+- Apresentar a discriminação visual detalhada de todos os custos e descontos no ecrã final do carrinho para otimizar o UX.
+- Deslogar o utilizador por padrão no arranque para assegurar o correto teste do fluxo de visitantes da app.
