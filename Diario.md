@@ -215,25 +215,33 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 
 ## Sessão 9 – 29 de maio de 2026
 **Responsável:** Luis Miguel (Grupo 10)  
-**Objetivo:** Reestruturação visual de contraste do tema, implementação de regras de checkout seguras, controlo de stock por loja única e correção das regras de fidelização.
+**Objetivo:** Reestruturação visual de contraste, autenticação simulada ativa, simplificação do perfil com centro de ajuda, diversificação do catálogo, filtros laterais Figma, fidelização "Leve 3 Pague 2" e checkout seguro com loja única de levantamento.
 
 **Atividades realizadas:**
-- **Reestruturação Visual de Contraste:** Redesenho e alteração de todos os cabeçalhos (`ion-toolbar` e `.navbar`) e da barra de navegação inferior (`ion-tab-bar`) para um azul bebé mais carregado e vibrante (`#4b8ae0`), garantindo conformidade de acessibilidade e excelente contraste com texto e ícones brancos (`#ffffff`).
-- **Enquadramento de Sessão Obrigatória:** Integração de regras de segurança no carrinho que bloqueiam a criação de reservas para visitantes não autenticados, apresentando diálogos interativos do `AlertController` para encaminhamento direto para a página de Login.
-- **Validação de Stock e Loja Única de Levantamento:** Desenvolvimento de uma robusta lógica de checkout onde todos os produtos de uma encomenda têm de ser associados à mesma loja de levantamento. Caso o utilizador tente selecionar uma loja divergente da que já está ativa no carrinho, a aplicação exibe uma janela de resolução interativa para esvaziar o carrinho ou reverter. Adicionalmente, impede a reserva de artigos sem stock (ex: na loja de Lisboa).
-- **Correção da Campanha "Leve 3, Pague 2"**: Otimização do `CustosService` para deduzir automaticamente o valor do artigo de menor valor em grupos de 3 artigos da categoria "bebé" adicionados ao carrinho, exibindo o desconto de forma explícita e transparente na fatura do ecrã de checkout.
-- **Compilação e Estabilização:** Ajuste de encapsulamento de estilos e imports do Angular para garantir que todo o projeto compila com absoluto sucesso, sem quaisquer erros ou falhas de tempo de execução.
+- **Reestruturação Visual de Alto Contraste:** Redesenho completo de todos os cabeçalhos (`ion-toolbar` e `.navbar`) e da barra de navegação inferior (`ion-tab-bar`) para um tom de azul bebé mais carregado (`#4b8ae0`), garantindo 100% de legibilidade e acessibilidade com todos os ícones, logos e nomes de aplicação a branco (`#ffffff`). O botão "Entrar" foi redesenhado como uma pílula branca com texto azul bebé.
+- **Fluxo de Autenticação Ativa (Login / Registo):** Configuração para que a aplicação inicie sempre deslogada (modo visitante) por padrão. Implementação de fluxo onde é obrigatório iniciar sessão ou criar conta para aceder ao perfil e efetuar reservas. Adição da funcionalidade de segurança para alteração de palavra-passe, exigindo a palavra-passe anterior e validação dupla da nova.
+- **Simplificação de Perfil & Centro de Ajuda:** Remoção de secções estáticas e simplificação da área de conta. Implementação de swipe toggles dinâmicos (para ativar/desativar notificações e permissão de localização) e criação do Centro de Ajuda interativo, permitindo escolher o assunto, introduzir o e-mail e detalhar o problema numa caixa de texto.
+- **Diversificação do Catálogo & Novas Imagens:** Enriquecimento do inventário local (`produtos.json`) com novos artigos genéricos e diversificados (como rob de bebé, pijama de estrelas, sapatilhas de desporto), associando fotografias em alta resolução a todos os artigos do catálogo.
+- **Painel de Filtros Figma por Gaveta/Modal:** Implementação de botão lateral de filtros no catálogo, que abre um modal deslizante reativo com chips para seleção instantânea de Categoria, Faixa Etária, Tipo de Artigo e Cor, limpando as tags ativas com um clique.
+- **Fidelização Automática "Leve 3, Pague 2":** Implementação de lógica inteligente no `CustosService` que agrupa peças da categoria "bebé" adicionadas ao carrinho e oferece automaticamente a peça de menor valor a cada 3 artigos, discriminando o desconto na fatura detalhada.
+- **Checkout Seguro & Loja Única de Levantamento:** Acoplamento de regra logística onde todos os artigos da reserva têm de pertencer à mesma loja. O carrinho tranca a loja selecionada na primeira adição, valida stock (bloqueando a loja de Lisboa sem stock) e avisa interativamente o utilizador caso selecione uma loja divergente nos produtos seguintes.
+- **Resolução de Conflitos e Compilação 100% Estável:** Integração limpa das melhorias efetuadas com o código de catálogo Figma dos restantes membros do grupo através da resolução cirúrgica de conflitos de merge Git, garantindo compilação estável do Angular e Ionic Serve.
 
 **Problemas:**
-- Inconsistência na aplicação do desconto "Leve 3, Pague 2" devido à ausência do campo de categoria nos dados passados ao carrinho.
-- Erros de contraste com azul bebé muito claro que dificultava a leitura geral no ecrã.
-- Permissão de reserva de produtos fora de stock ou levantamento em múltiplas lojas na mesma transação.
+- A aplicação iniciava logada por padrão, ignorando a experiência de boas-vindas do utilizador.
+- Azul bebé inicial claro provocava pouca visibilidade e problemas de contraste nas abas superiores e inferiores.
+- Inexistência de validação de stock físico ou de uniformidade de loja para levantamento ao efetuar a reserva.
+- Desconto da campanha "Leve 3, Pague 2" não estava implementado nas contas de custos.
+- Conflito crítico de merge nos ficheiros da página de catálogo (`.html`, `.scss`, `.ts`) após a integração dos branches dos colegas.
 
 **Soluções:**
-- Criação de mapeamento de categoria e desdobramento dos preços no carrinho, aplicando o desconto ordenado de forma crescente.
-- Adoção do azul médio `#4b8ae0` e uso do seletor `!important` para sobrescrever variáveis locais antigas.
-- Criação de BehaviorSubject de loja no `CarrinhoService` para rastreio e bloqueio de loja no primeiro artigo adicionado.
+- Chamada explícita a `logout()` no construtor do `AuthService` para forçar o estado de visitante no arranque.
+- Mapeamento das classes globais `.navbar` no `global.scss` para azul contrastante `#4b8ae0` e texto a branco puro, sobrepondo estilos com `!important`.
+- Armazenamento da loja selecionada no `CarrinhoService` com controlo por BehaviorSubject, associando alertas de dupla opção ao adicionar itens divergentes.
+- Criação do método `getDescontoCampanha()` no `CustosService` ordenando de forma crescente o preço dos artigos de bebé e descontando o mais barato.
+- Resolução de conflitos de git mantendo a estrutura reativa de abas, modal de filtros Figma e corrigindo tags html inválidas (`ion-col`).
 
 **Decisões:**
-- Forçar uma única loja física por reserva para simplificar o levantamento logístico na loja física pelo cliente.
-- Apresentar a discriminação visual detalhada de todos os custos e descontos no ecrã final do carrinho para otimizar o UX.
+- Forçar uma única loja física para levantamento em cada reserva para evitar problemas logísticos de múltiplos pontos de recolha numa só transação.
+- Disponibilizar a visualização clara do desconto de campanha no detalhe de custos do carrinho para reforçar a transparência para o cliente.
+- Resolver e estabilizar a branch `main` de imediato com um commit de merge estável para evitar blocos na pipeline de desenvolvimento.
