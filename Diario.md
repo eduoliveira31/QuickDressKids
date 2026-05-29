@@ -187,3 +187,28 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 **Decisões:**
 - Estruturar os painéis de reserva recorrendo à estratégia *Model-View-ViewModel (MVVM)*, centralizando todo o poder de estado, alteração, consulta e deleção no nível do serviço em detrimento da página.
 - Optar por agrupar subcommits e gerir as ramificações garantindo que as implementações vitais (Storage e HttpClient) fossem agrupadas logicamente como *Features* para a `develop`, simplificando as entregas de *Pull Requests*.
+
+## Sessão 8 – 29 de maio de 2026
+**Responsável:** Rodrigo Fernandes Malheiro   
+**Objetivo:** Redesenho completo da interface do catálogo alinhado com o Figma, implementação de um sistema de autenticação local via JSON e padronização dos dados de produtos.  
+
+**Atividades realizadas:**
+- Redesign do Catálogo (Figma): Reestruturação visual e funcional da página de catálogo (catalogo.page.html e .scss) para replicar o protótipo. Implementação de uma grelha de 3 colunas para exibição dos produtos com imagens integradas, tags de identificação e preços posicionados na base do card.  
+- Customização do Painel de Filtros: Otimização do menu lateral de filtros (Categoria, Faixa Etária, Tipo de Produto e Cor). - - - - Configuração de tipografia sem serifa (sans-serif), estilização dos textos e dos elementos internos em negrito e na cor preta, além da inclusão de bordas arredondadas nos cartões.  
+- Estilização Avançada com Web Components: Utilização do seletor ::part do Ionic no ficheiro catalogo.page.scss para contornar limitações de encapsulamento. Forçou-se a exibição dos textos internos dos selects em preto e estilizou-se o botão "Limpar Filtros" com uma moldura vermelha semitransparente e bordas definidas.  
+- Padronização Genérica do Inventário: Revisão e modificação completa do ficheiro local src/assets/data/produtos.json. -Removeram-se nomenclaturas específicas de cores presentes nos títulos das peças de vestuário, substituindo-as por descrições genéricas focadas na tipologia do produto e público-alvo.  
+- Sistema de Autenticação Simulado: Criação e estruturação de uma base de dados local de utilizadores em src/assets/data/utilizadores.json. Implementação da lógica de validação de credenciais no AuthService com recurso exclusivo a diretivas [(ngModel)] no formulário da página de login, garantindo o redirecionamento automático para a página de perfil após o sucesso da sessão.  
+- Gestão de Versões e Commits: Organização e execução sequencial de commits isolados no Git para cada bloco de tarefas concluído na sessão (otimização do carrinho com services dedicados, correção do layout do catálogo e atualização do catálogo de produtos em formato JSON).  
+
+**Problemas:**
+- Incompatibilidade de interatividade e quebra de fluxo nos componentes de filtragem após a aplicação de propriedades nativas de inversão de direção (flex-direction: row-reverse) diretamente nas pseudo-elements do Ionic.  
+- Omissão de dados textuais e placeholders invisíveis nos menus dropdown do catálogo causados pela ausência de herança de cor explícita nas variáveis utilitárias do componente ion-select.  
+- Erro de compilação na diretiva estrutural de repetição do Angular (*ngFor) no ficheiro catalogo.page.html devido a uma incorreção na sintaxe descritiva.  
+
+**Soluções:**
+- Refatoração do ficheiro catalogo.page.scss com a remoção dos blocos de posicionamento que bloqueavam a execução do clique, devolvendo a funcionalidade nativa estável às caixas de seleção.  
+- Injeção das propriedades ::part(placeholder) e ::part(text) com a marcação !important para anular os estilos padrão e garantir o contraste visual do texto em preto puro.  Correção ortográfica e sintática imediata no template HTML de let produto de ... para let produto of ..., restabelecendo o ciclo de renderização correto dos produtos na tela.  
+
+**Decisões:**
+- Manter as setas de seleção dos filtros na sua posição original padrão à direita devido às restrições técnicas e instabilidades encontradas na manipulação direta da estrutura interna do componente do Ionic.  
+- Substituir a integração de APIs externas de autenticação por uma simulação local controlada via JSON devido a falhas de autorização na API anterior, otimizando o fluxo de testes e garantindo total conformidade pedagógica com os requisitos de entrega do projeto.
