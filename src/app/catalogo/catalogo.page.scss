@@ -1,54 +1,298 @@
+// ─── Font sem serifa global nesta página ─────────────────────────────────────
+:host {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+// ─── Esconde a tab bar nesta página ──────────────────────────────────────────
+ion-tab-bar {
+  display: none !important;
+}
+
+// ─── Navbar ──────────────────────────────────────────────────────────────────
+.navbar {
+  --background: #ffffff;
+  --border-color: #e5e7eb;
+  padding: 0 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  .logo-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #2563eb;
+    padding-left: 0;
+  }
+
+  .navbar-end {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-right: 8px;
+
+    .nav-link {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.9rem;
+      color: #374151;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .nav-carrinho {
+      --color: #374151;
+      margin: 0;
+    }
+
+    .btn-entrar {
+      --background: #111827;
+      --color: #ffffff;
+      --border-radius: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      height: 36px;
+
+      &::part(native) {
+        color: #ffffff !important;
+      }
+    }
+  }
+}
+
+// ─── Conteúdo ─────────────────────────────────────────────────────────────────
+.catalogo-content {
+  --background: #ffffff;
+}
+
+// ─── Cabeçalho da página ──────────────────────────────────────────────────────
+.page-header {
+  padding: 28px 24px 16px;
+
+  .page-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 16px;
+  }
+
+  .searchbar-custom {
+    --background: #f3f4f6;
+    --border-radius: 8px;
+    --box-shadow: none;
+    --placeholder-color: #9ca3af;
+    --icon-color: #9ca3af;
+    --color: #111827;
+    padding: 0;
+    max-width: 460px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+// ─── Layout principal ─────────────────────────────────────────────────────────
+.layout-principal {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 0 24px 40px;
+}
+
+// ─── Painel de filtros ────────────────────────────────────────────────────────
+.painel-filtros {
+  width: 220px;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px 16px;
+  position: sticky;
+  top: 16px;
+
+  .filtros-titulo {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 16px;
+  }
+
+  .filtro-grupo {
+    margin-bottom: 16px;
+
+    .filtro-label {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 6px;
+    }
+
+    .select-wrapper {
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #f9fafb;
+      overflow: hidden;
+
+      ion-select.filtro-select {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 700;
+        font-size: 0.875rem;
+        width: 100%;
+        min-height: 42px;
+        --padding-start: 12px;
+        --padding-end: 12px;
+        --padding-top: 10px;
+        --padding-bottom: 10px;
+
+        &::part(placeholder) {
+          color: #000000 !important;
+        }
+
+        &::part(text) {
+          color: #000000 !important;
+        }
+      }
+    }
+  }
+
+  .btn-limpar {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    width: 100%;
+
+    &::part(native) {
+      color: #dc2626 !important;
+      background: rgba(220, 38, 38, 0.08) !important;
+      border: 1px solid #dc2626 !important;
+      border-radius: 8px !important;
+    }
+  }
+}
+
+// ─── Área de produtos ─────────────────────────────────────────────────────────
+.area-produtos {
+  flex: 1;
+  min-width: 0;
+
+  .contador-resultados {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0 0 16px;
+  }
+}
+
+// ─── Grelha de produtos ───────────────────────────────────────────────────────
+.grelha-produtos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+// ─── Card de produto ──────────────────────────────────────────────────────────
 .produto-card {
-  height: 100%;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(74, 155, 111, 0.2) !important;
+
+    .card-imagem img {
+      transform: scale(1.03);
+    }
+  }
+
+  .card-imagem {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    background: #f3f4f6;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .card-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+
+    .card-nome {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .card-cores {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      background: #f9fafb;
+      white-space: nowrap;
+    }
+
+    .card-preco {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2563eb;
+      margin: 4px 0 0;
+    }
   }
 }
 
-.produto-imagem {
-  height: 180px;
-  object-fit: cover;
-  width: 100%;
-  border-radius: 16px 16px 0 0;
-}
-
-ion-card-content {
-  flex-grow: 1;
+// ─── Estado vazio ─────────────────────────────────────────────────────────────
+.estado-vazio {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding-top: 4px;
-}
+  align-items: center;
+  padding: 60px 20px;
+  color: #9ca3af;
+  text-align: center;
 
-ion-card-subtitle {
-  color: #7bc4a0 !important;
-  font-weight: 600;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-ion-card-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #1a2e22;
-  line-height: 1.3;
-}
-
-.preco-container {
-  margin-bottom: 8px;
-  h2 {
-    font-size: 16px;
-    color: #4a9b6f;
-    margin: 4px 0;
+  ion-icon {
+    font-size: 4rem;
+    margin-bottom: 12px;
   }
-}
 
-ion-segment {
-  margin-bottom: 16px;
+  p {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
 }

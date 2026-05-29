@@ -1,20 +1,18 @@
+import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { CatalogoPageRoutingModule } from './catalogo-routing.module';
 import { CatalogoPage } from './catalogo.page';
-import { RouterModule } from '@angular/router'; 
-import { HttpClientModule } from '@angular/common/http'; 
+import { CatalogoPageRoutingModule } from './catalogo-routing.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
+    IonicModule,
     CommonModule,
     FormsModule,
-    IonicModule,
-    CatalogoPageRoutingModule,
     RouterModule,
-    HttpClientModule
+    CatalogoPageRoutingModule
   ],
   declarations: [CatalogoPage]
 })

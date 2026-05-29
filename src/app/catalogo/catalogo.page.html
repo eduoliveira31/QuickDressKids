@@ -1,53 +1,118 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Catálogo QuickDressKids</ion-title>
+  <ion-toolbar class="navbar">
+    <ion-title slot="start" class="logo-title">QuickDressKids</ion-title>
+    <div slot="end" class="navbar-end">
+      <span class="nav-link">Catálogo</span>
+      <ion-button fill="clear" class="nav-carrinho" routerLink="/tabs/tab2">
+        <ion-icon name="cart-outline" size="large"></ion-icon>
+      </ion-button>
+      <ion-button class="btn-entrar" shape="round">Entrar</ion-button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Catálogo</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="catalogo-content">
 
-  <ion-segment value="todos" (ionChange)="filtrarCategoria($event)" class="ion-margin-bottom">
-    <ion-segment-button value="todos">
-      <ion-icon name="grid-outline"></ion-icon>
-      <ion-label>Todos</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="bebe">
-      <ion-icon name="heart-outline"></ion-icon>
-      <ion-label>Bebé</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="menina">
-      <ion-icon name="female-outline"></ion-icon>
-      <ion-label>Menina</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="menino">
-      <ion-icon name="male-outline"></ion-icon>
-      <ion-label>Menino</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+  <div class="page-header">
+    <h1 class="page-title">Catálogo de Produtos</h1>
+    <ion-searchbar
+      placeholder="Pesquisar produtos..."
+      [value]="pesquisa"
+      (ionInput)="onPesquisaChange($event)"
+      class="searchbar-custom"
+      [animated]="false">
+    </ion-searchbar>
+  </div>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6" size-md="4" size-lg="3" *ngFor="let produto of produtosFiltrados">
-        <ion-card class="produto-card">
-          <img [src]="produto.imagem" [alt]="produto.nome" class="produto-imagem"
-               onerror="this.src='https://ionicframework.com/docs/img/demos/card-media.png'" />
+  <div class="layout-principal">
 
-          <ion-card-header>
-            <ion-card-subtitle>{{ produto.categoria | titlecase }}</ion-card-subtitle>
-            <ion-card-title class="ion-text-wrap">{{ produto.nome }}</ion-card-title>
-          </ion-card-header>
+    <!-- Painel de filtros -->
+    <div class="painel-filtros">
+      <h3 class="filtros-titulo">Filtros</h3>
 
-          <ion-card-content>
-            <div class="preco-container">
-              <ion-text color="primary">
-                <h2><strong>{{ produto.preco | currency:'EUR' }}</strong></h2>
-              </ion-text>
+      <div class="filtro-grupo">
+        <label class="filtro-label">Categoria</label>
+        <div class="select-wrapper">
+          <ion-select [value]="categoriaAtiva" (ionChange)="onCategoriaChange($event)" interface="popover" class="filtro-select">
+            <ion-select-option *ngFor="let cat of categorias" [value]="cat.valor">{{ cat.label }}</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+
+      <div class="filtro-grupo">
+        <label class="filtro-label">Faixa Etária</label>
+        <div class="select-wrapper">
+          <ion-select [value]="idadeAtiva" (ionChange)="onIdadeChange($event)" interface="popover" class="filtro-select">
+            <ion-select-option *ngFor="let idade of idades" [value]="idade.valor">{{ idade.label }}</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+
+      <div class="filtro-grupo">
+        <label class="filtro-label">Tipo de Produto</label>
+        <div class="select-wrapper">
+          <ion-select [value]="tipoAtivo" (ionChange)="onTipoChange($event)" interface="popover" class="filtro-select">
+            <ion-select-option *ngFor="let tipo of tipos" [value]="tipo.valor">{{ tipo.label }}</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+
+      <div class="filtro-grupo">
+        <label class="filtro-label">Cor</label>
+        <div class="select-wrapper">
+          <ion-select [value]="corAtiva" (ionChange)="onCorChange($event)" interface="popover" class="filtro-select">
+            <ion-select-option *ngFor="let cor of cores" [value]="cor.valor">{{ cor.label }}</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+
+      <ion-button
+        *ngIf="categoriaAtiva !== 'todas' || idadeAtiva !== 'todas' || tipoAtivo !== 'todos' || corAtiva !== 'todas' || pesquisa"
+        expand="block" fill="clear" color="medium" size="small"
+        (click)="limparFiltros()" class="btn-limpar">
+        Limpar filtros
+      </ion-button>
+    </div>
+
+    <!-- Área dos produtos -->
+    <div class="area-produtos">
+      <p class="contador-resultados">{{ produtosFiltrados.length }} produtos encontrados</p>
+
+      <ng-container *ngIf="produtosFiltrados.length > 0">
+        <div class="grelha-produtos">
+          <div class="produto-card" *ngFor="let produto of produtosFiltrados" (click)="verDetalhe(produto.id)">
+
+            <div class="card-imagem">
+              <img [src]="produto.imagem" [alt]="produto.nome"
+                onerror="this.src='https://ionicframework.com/docs/img/demos/card-media.png'" />
             </div>
-            <ion-button expand="block" fill="outline" size="small" class="ion-margin-top"
-                        [routerLink]="['/produto-detalhe', produto.id]">
-              <ion-icon name="eye-outline" slot="start"></ion-icon>
+
+            <div class="card-info">
+              <h3 class="card-nome">{{ produto.nome }}</h3>
+
+              <div class="card-tags">
+                <span class="tag tag-categoria">{{ produto.categoria }}</span>
+                <span class="tag tag-idade">{{ produto.faixaEtaria }} anos</span>
+              </div>
+
+              <div class="card-cores" *ngIf="produto.cores?.length">
+                <span class="tag tag-cor" *ngFor="let cor of produto.cores">{{ cor }}</span>
+              </div>
+
+              <p class="card-preco">{{ produto.preco | currency:'EUR':'symbol':'1.2-2' }}</p>
+            </div>
+
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="estado-vazio" *ngIf="produtosFiltrados.length === 0">
+        <ion-icon name="search-outline"></ion-icon>
+        <p>Nenhum produto encontrado.</p>
+        <ion-button fill="outline" (click)="limparFiltros()">Limpar filtros</ion-button>
+      </div>
+    </div>
+
+  </div>
+
+</ion-content>

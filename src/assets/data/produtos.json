@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "nome": "Casaco Azul Náutico",
+    "nome": "Casaco para Menino",
     "categoria": "menino",
     "tipo": "casaco",
     "preco": 34.99,
@@ -15,7 +15,7 @@
   },
   {
     "id": 2,
-    "nome": "T-Shirt Flores",
+    "nome": "T-Shirt com Flores",
     "categoria": "menina",
     "tipo": "tshirt",
     "preco": 14.99,
@@ -29,7 +29,7 @@
   },
   {
     "id": 3,
-    "nome": "Calças Ganga",
+    "nome": "Calças de Ganga para Menino",
     "categoria": "menino",
     "tipo": "calcas",
     "preco": 24.99,
@@ -43,7 +43,7 @@
   },
   {
     "id": 4,
-    "nome": "Vestido Verão",
+    "nome": "Vestido de Verão",
     "categoria": "menina",
     "tipo": "vestido",
     "preco": 29.99,
@@ -57,7 +57,7 @@
   },
   {
     "id": 5,
-    "nome": "Body Bebé Estrelas",
+    "nome": "Body com Estrelas para Bebé",
     "categoria": "bebe",
     "tipo": "body",
     "preco": 9.99,
@@ -71,7 +71,7 @@
   },
   {
     "id": 6,
-    "nome": "Sapatilhas Coloridas",
+    "nome": "Sapatilhas para Menino",
     "categoria": "menino",
     "tipo": "calcado",
     "preco": 39.99,
@@ -85,7 +85,7 @@
   },
   {
     "id": 7,
-    "nome": "Casaco Rosa Bebé",
+    "nome": "Casaco para Bebé",
     "categoria": "bebe",
     "tipo": "casaco",
     "preco": 22.99,
@@ -99,7 +99,7 @@
   },
   {
     "id": 8,
-    "nome": "Gorro Listrado",
+    "nome": "Gorro com Listras para Menina",
     "categoria": "menina",
     "tipo": "acessorio",
     "preco": 8.99,
@@ -113,7 +113,7 @@
   },
   {
     "id": 9,
-    "nome": "Camisola Dinossauros",
+    "nome": "Camisola com Dinossauros",
     "categoria": "menino",
     "tipo": "camisola",
     "preco": 19.99,
@@ -127,7 +127,7 @@
   },
   {
     "id": 10,
-    "nome": "Saia Tutu",
+    "nome": "Saia Tutu para Menina",
     "categoria": "menina",
     "tipo": "saia",
     "preco": 18.99,
@@ -141,7 +141,7 @@
   },
   {
     "id": 11,
-    "nome": "Pijama Ursinhos",
+    "nome": "Pijama com Ursinhos para Bebé",
     "categoria": "bebe",
     "tipo": "pijama",
     "preco": 16.99,
@@ -155,7 +155,7 @@
   },
   {
     "id": 12,
-    "nome": "Calções Praia",
+    "nome": "Calções de Praia para Menino",
     "categoria": "menino",
     "tipo": "calcoes",
     "preco": 12.99,
@@ -169,7 +169,7 @@
   },
   {
     "id": 13,
-    "nome": "Vestido Festas",
+    "nome": "Vestido de Festa para Menina",
     "categoria": "menina",
     "tipo": "vestido",
     "preco": 44.99,
@@ -183,7 +183,7 @@
   },
   {
     "id": 14,
-    "nome": "Bota Chuva Colorida",
+    "nome": "Botas de Chuva para Menina",
     "categoria": "menina",
     "tipo": "calcado",
     "preco": 27.99,
@@ -197,7 +197,7 @@
   },
   {
     "id": 15,
-    "nome": "Conjunto Bebé Recém-nascido",
+    "nome": "Conjunto para Recém-nascido",
     "categoria": "bebe",
     "tipo": "conjunto",
     "preco": 19.99,
