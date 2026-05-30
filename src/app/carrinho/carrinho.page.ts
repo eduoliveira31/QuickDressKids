@@ -36,13 +36,49 @@ export class CarrinhoPage implements OnInit {
     this.carrinhoService.removerItem(index);
   }
 
-  alterarQuantidade(index: number, delta: number) {
+  async alterarQuantidade(index: number, delta: number) {
     const novaQtd = this.itens[index].quantidade + delta;
-    this.carrinhoService.alterarQuantidade(index, novaQtd);
+    if (novaQtd <= 0) {
+      const alert = await this.alertController.create({
+        header: 'Confirmar Remoção',
+        message: `Tem a certeza que deseja remover o artigo "${this.itens[index].nome}" do seu carrinho?`,
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel'
+          },
+          {
+            text: 'Remover',
+            handler: () => {
+              this.carrinhoService.removerItem(index);
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      this.carrinhoService.alterarQuantidade(index, novaQtd);
+    }
   }
 
-  limparCarrinho() {
-    this.carrinhoService.limparCarrinho();
+  async limparCarrinho() {
+    const alert = await this.alertController.create({
+      header: 'Esvaziar Carrinho',
+      message: 'Tem a certeza que deseja remover todos os artigos do seu carrinho?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Esvaziar',
+          handler: () => {
+            this.carrinhoService.limparCarrinho();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   get subtotal(): number { return this.custosService.getSubtotal(); }

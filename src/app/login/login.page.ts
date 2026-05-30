@@ -60,6 +60,17 @@ export class LoginPage implements OnInit {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.registoEmail)) {
+      this.mostrarToast('Por favor, introduz um endereço de e-mail válido.', 'warning');
+      return;
+    }
+
+    if (this.registoPasswordLocal.length < 8) {
+      this.mostrarToast('A palavra-passe tem de conter pelo menos 8 caracteres.', 'warning');
+      return;
+    }
+
     const novoUser: Usuario = {
       username: this.registoUsername,
       email: this.registoEmail,

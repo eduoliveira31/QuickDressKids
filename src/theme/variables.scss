@@ -1,136 +1,19 @@
-// QuickDressKids - Tema Ionic
-// Cor principal: Azul (#2563eb), Secundária: Rosa (#ec4899)
-
-:root {
-  /** primary - Azul principal da marca **/
-  --ion-color-primary: #2563eb;
-  --ion-color-primary-rgb: 37, 99, 235;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #1d4ed8;
-  --ion-color-primary-tint: #3b82f6;
-
-  /** secondary - Rosa **/
-  --ion-color-secondary: #ec4899;
-  --ion-color-secondary-rgb: 236, 72, 153;
-  --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #db2777;
-  --ion-color-secondary-tint: #f472b6;
-
-  /** tertiary - Verde **/
-  --ion-color-tertiary: #10b981;
-  --ion-color-tertiary-rgb: 16, 185, 129;
-  --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #059669;
-  --ion-color-tertiary-tint: #34d399;
-
-  /** success **/
-  --ion-color-success: #22c55e;
-  --ion-color-success-rgb: 34, 197, 94;
-  --ion-color-success-contrast: #ffffff;
-  --ion-color-success-contrast-rgb: 255, 255, 255;
-  --ion-color-success-shade: #16a34a;
-  --ion-color-success-tint: #4ade80;
-
-  /** warning **/
-  --ion-color-warning: #f59e0b;
-  --ion-color-warning-rgb: 245, 158, 11;
-  --ion-color-warning-contrast: #000000;
-  --ion-color-warning-contrast-rgb: 0, 0, 0;
-  --ion-color-warning-shade: #d97706;
-  --ion-color-warning-tint: #fbbf24;
-
-  /** danger **/
-  --ion-color-danger: #ef4444;
-  --ion-color-danger-rgb: 239, 68, 68;
-  --ion-color-danger-contrast: #ffffff;
-  --ion-color-danger-contrast-rgb: 255, 255, 255;
-  --ion-color-danger-shade: #dc2626;
-  --ion-color-danger-tint: #f87171;
-
-  /** dark **/
-  --ion-color-dark: #030213;
-  --ion-color-dark-rgb: 3, 2, 19;
-  --ion-color-dark-contrast: #ffffff;
-  --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #020110;
-  --ion-color-dark-tint: #1c1b2b;
-
-  /** medium **/
-  --ion-color-medium: #92949c;
-  --ion-color-medium-rgb: 146, 148, 156;
-  --ion-color-medium-contrast: #ffffff;
-  --ion-color-medium-contrast-rgb: 255, 255, 255;
-  --ion-color-medium-shade: #808289;
-  --ion-color-medium-tint: #9d9fa6;
-
-  /** light **/
-  --ion-color-light: #f4f5f8;
-  --ion-color-light-rgb: 244, 245, 248;
-  --ion-color-light-contrast: #000000;
-  --ion-color-light-contrast-rgb: 0, 0, 0;
-  --ion-color-light-shade: #d7d8da;
-  --ion-color-light-tint: #f5f6f9;
-
-  // ─── Cores personalizadas QuickDressKids ───────────────────────────
-
-  /** menino - Azul **/
-  --ion-color-menino: #2563eb;
-  --ion-color-menino-rgb: 37, 99, 235;
-  --ion-color-menino-contrast: #ffffff;
-  --ion-color-menino-contrast-rgb: 255, 255, 255;
-  --ion-color-menino-shade: #1d4ed8;
-  --ion-color-menino-tint: #3b82f6;
-
-  /** menina - Rosa **/
-  --ion-color-menina: #ec4899;
-  --ion-color-menina-rgb: 236, 72, 153;
-  --ion-color-menina-contrast: #ffffff;
-  --ion-color-menina-contrast-rgb: 255, 255, 255;
-  --ion-color-menina-shade: #db2777;
-  --ion-color-menina-tint: #f472b6;
-
-  /** bebe - Amarelo suave **/
-  --ion-color-bebe: #f59e0b;
-  --ion-color-bebe-rgb: 245, 158, 11;
-  --ion-color-bebe-contrast: #ffffff;
-  --ion-color-bebe-contrast-rgb: 255, 255, 255;
-  --ion-color-bebe-shade: #d97706;
-  --ion-color-bebe-tint: #fbbf24;
-
-  // ─── Globais ───────────────────────────────────────────────────────
-
-  // Fundo geral
-  --ion-background-color: #f8fafc;
-  --ion-text-color: #030213;
-
-  // Font
-  --ion-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-}
-
-// ─── Classes Ionic para cores personalizadas ──────────────────────────
-
-.ion-color-menino {
-  --ion-color-base: var(--ion-color-menino);
-  --ion-color-base-rgb: var(--ion-color-menino-rgb);
-  --ion-color-contrast: var(--ion// QuickDressKids - Tema Verde Pastel
+// QuickDressKids - Tema Verde Pastel
 
 :root {
   /** primary - Verde pastel **/
-  --ion-color-primary: #4a9b6f;
-  --ion-color-primary-rgb: 74, 155, 111;
+  --ion-color-primary: #4e9a74;
+  --ion-color-primary-rgb: 78, 154, 116;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3a7d59;
-  --ion-color-primary-tint: #6ab88a;
+  --ion-color-primary-shade: #3d7e5e;
+  --ion-color-primary-tint: #6bb08d;
 
-  /** secondary - Verde claro **/
+  /** secondary - Verde claro / Sage **/
   --ion-color-secondary: #a8d5b5;
   --ion-color-secondary-rgb: 168, 213, 181;
-  --ion-color-secondary-contrast: #2d5a3d;
-  --ion-color-secondary-contrast-rgb: 45, 90, 61;
+  --ion-color-secondary-contrast: #1a2e22;
+  --ion-color-secondary-contrast-rgb: 26, 46, 34;
   --ion-color-secondary-shade: #8ec4a0;
   --ion-color-secondary-tint: #b8dfc4;
 
@@ -193,12 +76,12 @@
   // ─── Cores personalizadas QuickDressKids ───────────────────────────
 
   /** menino - Verde azulado **/
-  --ion-color-menino: #4a9b6f;
-  --ion-color-menino-rgb: 74, 155, 111;
+  --ion-color-menino: #4e9a74;
+  --ion-color-menino-rgb: 78, 154, 116;
   --ion-color-menino-contrast: #ffffff;
   --ion-color-menino-contrast-rgb: 255, 255, 255;
-  --ion-color-menino-shade: #3a7d59;
-  --ion-color-menino-tint: #6ab88a;
+  --ion-color-menino-shade: #3d7e5e;
+  --ion-color-menino-tint: #6bb08d;
 
   /** menina - Verde rosado **/
   --ion-color-menina: #7bc4a0;
@@ -211,8 +94,8 @@
   /** bebe - Verde menta suave **/
   --ion-color-bebe: #a8d5b5;
   --ion-color-bebe-rgb: 168, 213, 181;
-  --ion-color-bebe-contrast: #2d5a3d;
-  --ion-color-bebe-contrast-rgb: 45, 90, 61;
+  --ion-color-bebe-contrast: #1a2e22;
+  --ion-color-bebe-contrast-rgb: 26, 46, 34;
   --ion-color-bebe-shade: #8ec4a0;
   --ion-color-bebe-tint: #b8dfc4;
 
@@ -249,67 +132,45 @@
   --ion-color-contrast-rgb: var(--ion-color-bebe-contrast-rgb);
   --ion-color-shade: var(--ion-color-bebe-shade);
   --ion-color-tint: var(--ion-color-bebe-tint);
-}-color-menino-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-menino-contrast-rgb);
-  --ion-color-shade: var(--ion-color-menino-shade);
-  --ion-color-tint: var(--ion-color-menino-tint);
-}
-
-.ion-color-menina {
-  --ion-color-base: var(--ion-color-menina);
-  --ion-color-base-rgb: var(--ion-color-menina-rgb);
-  --ion-color-contrast: var(--ion-color-menina-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-menina-contrast-rgb);
-  --ion-color-shade: var(--ion-color-menina-shade);
-  --ion-color-tint: var(--ion-color-menina-tint);
-}
-
-.ion-color-bebe {
-  --ion-color-base: var(--ion-color-bebe);
-  --ion-color-base-rgb: var(--ion-color-bebe-rgb);
-  --ion-color-contrast: var(--ion-color-bebe-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-bebe-contrast-rgb);
-  --ion-color-shade: var(--ion-color-bebe-shade);
-  --ion-color-tint: var(--ion-color-bebe-tint);
 }
 
 // ─── Dark mode ────────────────────────────────────────────────────────
 
 @media (prefers-color-scheme: dark) {
   body {
-    --ion-color-primary: #3b82f6;
-    --ion-color-primary-rgb: 59, 130, 246;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: #2563eb;
-    --ion-color-primary-tint: #60a5fa;
+    --ion-color-primary: #6bb08d;
+    --ion-color-primary-rgb: 107, 176, 141;
+    --ion-color-primary-contrast: #1a2e22;
+    --ion-color-primary-contrast-rgb: 26, 46, 34;
+    --ion-color-primary-shade: #4e9a74;
+    --ion-color-primary-tint: #8ec4a0;
 
-    --ion-background-color: #0f172a;
-    --ion-text-color: #f1f5f9;
+    --ion-background-color: #0f1f16;
+    --ion-text-color: #f0f7f2;
 
-    --ion-color-step-50: #1e293b;
-    --ion-color-step-100: #243042;
-    --ion-color-step-150: #29374d;
-    --ion-color-step-200: #2f3e58;
-    --ion-color-step-250: #344563;
-    --ion-color-step-300: #3a4c6e;
-    --ion-color-step-350: #3f5379;
-    --ion-color-step-400: #455a84;
-    --ion-color-step-450: #4a618f;
-    --ion-color-step-500: #50689a;
-    --ion-color-step-550: #5a77a9;
-    --ion-color-step-600: #6a87b8;
-    --ion-color-step-650: #7a97c7;
-    --ion-color-step-700: #8aa7d6;
-    --ion-color-step-750: #9ab7e5;
-    --ion-color-step-800: #aac7f4;
-    --ion-color-step-850: #bad4f8;
-    --ion-color-step-900: #cae1fb;
-    --ion-color-step-950: #daeffe;
+    --ion-color-step-50: #1a2e22;
+    --ion-color-step-100: #1f3427;
+    --ion-color-step-150: #243a2c;
+    --ion-color-step-200: #294031;
+    --ion-color-step-250: #2e4636;
+    --ion-color-step-300: #334c3b;
+    --ion-color-step-350: #385240;
+    --ion-color-step-400: #3d5845;
+    --ion-color-step-450: #425e4a;
+    --ion-color-step-500: #47644f;
+    --ion-color-step-550: #51715b;
+    --ion-color-step-600: #60806a;
+    --ion-color-step-650: #70907a;
+    --ion-color-step-700: #80a08a;
+    --ion-color-step-750: #90b09a;
+    --ion-color-step-800: #a0c0aa;
+    --ion-color-step-850: #b0d0ba;
+    --ion-color-step-900: #c0e0ca;
+    --ion-color-step-950: #d0f0da;
 
-    --ion-item-background: #1e293b;
-    --ion-toolbar-background: #1e293b;
-    --ion-tab-bar-background: #1e293b;
-    --ion-card-background: #1e293b;
+    --ion-item-background: #1a2e22;
+    --ion-toolbar-background: #1a2e22;
+    --ion-tab-bar-background: #1a2e22;
+    --ion-card-background: #1a2e22;
   }
 }

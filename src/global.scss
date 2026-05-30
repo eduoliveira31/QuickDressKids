@@ -36,15 +36,15 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-// ─── Estilos globais QuickDressKids (Tema Azul Bebé & Branco) ─────────────────
+// ─── Estilos globais QuickDressKids (Tema Verde Pastel & Branco) ─────────────────
 
 ion-toolbar {
-  --background: #4b8ae0; /* Azul Bebé Mais Carregado */
+  --background: #4e9a74; /* Verde Pastel Mais Carregado */
   --color: #ffffff;      /* Letras/ícones a branco */
 }
 
 .navbar {
-  --background: #4b8ae0 !important;
+  --background: #4e9a74 !important;
   --color: #ffffff !important;
   color: #ffffff !important;
 
@@ -63,9 +63,9 @@ ion-toolbar {
 }
 
 ion-tab-bar {
-  --background: #4b8ae0; /* Aba inferior azul com contraste */
+  --background: #4e9a74; /* Aba inferior verde com contraste */
   --border: none;
-  box-shadow: 0 -4px 16px rgba(75, 138, 224, 0.25);
+  box-shadow: 0 -4px 16px rgba(78, 154, 116, 0.25);
   height: 60px;
 }
 
@@ -86,14 +86,14 @@ ion-tab-button {
 }
 
 ion-segment {
-  --background: #eff6ff;
+  --background: #e8f5ee;
   border-radius: 10px;
 }
 
 ion-segment-button {
-  --color: #1e3a8a;
+  --color: #2d5a43;
   --color-checked: #ffffff;
-  --background-checked: #4b8ae0;
+  --background-checked: #4e9a74;
   --indicator-color: transparent;
   border-radius: 8px;
 }
@@ -101,7 +101,7 @@ ion-segment-button {
 ion-card {
   --background: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(75, 138, 224, 0.1);
+  box-shadow: 0 10px 30px rgba(78, 154, 116, 0.1);
   border: 1px solid #f1f5f9;
 }
 
@@ -110,6 +110,6 @@ ion-button {
 }
 
 ion-chip {
-  --background: #eff6ff;
-  --color: #1e3a8a;
+  --background: #e8f5ee;
+  --color: #2d5a43;
 }

@@ -509,11 +509,11 @@ ion-card-content {
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 .navbar {
-  --background: #4b8ae0;
+  --background: #4e9a74;
   --border-color: transparent;
   --color: #ffffff;
   padding: 0 24px;
-  box-shadow: 0 4px 12px rgba(75, 138, 224, 0.2);
+  box-shadow: 0 4px 12px rgba(78, 154, 116, 0.2);
 
   .logo-title {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -545,7 +545,7 @@ ion-card-content {
 
     .btn-entrar {
       --background: #ffffff;
-      --color: #4b8ae0;
+      --color: #4e9a74;
       --border-radius: 20px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 0.85rem;
@@ -554,7 +554,7 @@ ion-card-content {
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
       &::part(native) {
-        color: #4b8ae0 !important;
+        color: #4e9a74 !important;
         background: #ffffff !important;
       }
     }

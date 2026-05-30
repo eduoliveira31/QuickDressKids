@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Catalogo } from '../services/catalogo';
 import { CarrinhoService } from '../services/carrinho';
 import { ToastController, AlertController } from '@ionic/angular';
@@ -25,6 +25,7 @@ export class ProdutoDetalhePage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private catalogo: Catalogo,
     private carrinhoService: CarrinhoService,
     private toastController: ToastController,
@@ -147,11 +148,19 @@ export class ProdutoDetalhePage implements OnInit {
     this.carrinhoService.adicionarItem(pacoteProduto, this.quantidade);
 
     const toast = await this.toastController.create({
-      message: `${this.quantidade}x ${this.produto.nome} adicionado(s) ao carrinho para levantamento na ${this.getNomeLoja(this.lojaSelecionada)}!`,
-      duration: 3000,
+      message: `${this.quantidade}x ${this.produto.nome} adicionado(s) ao carrinho!`,
+      duration: 4000,
       position: 'bottom',
       color: 'success',
-      icon: 'checkmark-circle'
+      icon: 'checkmark-circle',
+      buttons: [
+        {
+          text: 'Ver Carrinho',
+          handler: () => {
+            this.router.navigate(['/tabs/carrinho']);
+          }
+        }
+      ]
     });
     await toast.present();
   }

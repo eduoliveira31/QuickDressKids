@@ -81,6 +81,12 @@ export class PerfilPage implements OnInit {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.ajudaEmail)) {
+      this.mostrarToast('Por favor, introduz um endereço de e-mail válido.', 'warning');
+      return;
+    }
+
     // Simula o envio
     this.mostrarToast('Mensagem enviada com sucesso! Iremos responder em breve.', 'success');
     this.fecharModalAjuda();
@@ -109,8 +115,8 @@ export class PerfilPage implements OnInit {
       return;
     }
 
-    if (this.pwNova.length < 4) {
-      this.mostrarToast('A nova palavra-passe deve ter pelo menos 4 caracteres.', 'warning');
+    if (this.pwNova.length < 8) {
+      this.mostrarToast('A nova palavra-passe deve ter pelo menos 8 caracteres.', 'warning');
       return;
     }
 
