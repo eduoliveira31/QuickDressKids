@@ -38,6 +38,11 @@
 
 // ─── Estilos globais QuickDressKids (Tema Verde Pastel & Branco) ─────────────────
 
+ion-back-button {
+  --color: #000000 !important;
+  color: #000000 !important;
+}
+
 ion-toolbar {
   --background: #4e9a74; /* Verde Pastel Mais Carregado */
   --color: #ffffff;      /* Letras/ícones a branco */
