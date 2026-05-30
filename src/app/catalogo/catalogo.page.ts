@@ -16,6 +16,7 @@ export class CatalogoPage implements OnInit {
   tipoSelecionado: string = '';
   faixaEtariaSelecionada: string = '';
   corSelecionada: string = '';
+  lojaSelecionada: string = '';
 
   constructor(private catalogoService: Catalogo) {}
 
@@ -40,6 +41,7 @@ export class CatalogoPage implements OnInit {
     if (tipo === 'tipoProduto') this.tipoSelecionado = valor;
     if (tipo === 'faixaEtaria') this.faixaEtariaSelecionada = valor;
     if (tipo === 'cor') this.corSelecionada = valor;
+    if (tipo === 'loja') this.lojaSelecionada = valor;
     this.aplicarFiltros();
   }
 
@@ -69,7 +71,17 @@ export class CatalogoPage implements OnInit {
         matchCor = produto.cores.includes(this.corSelecionada);
       }
 
-      return matchPesquisa && matchCategoria && matchTipo && matchFaixa && matchCor;
+      // 6. Filtro de Loja Disponível (Braga/Coimbra = tudo em stock, Lisboa = apenas IDs pares em stock na simulação)
+      let matchLoja = !this.lojaSelecionada;
+      if (!matchLoja) {
+        if (this.lojaSelecionada === 'braga' || this.lojaSelecionada === 'coimbra') {
+          matchLoja = true;
+        } else if (this.lojaSelecionada === 'lisboa') {
+          matchLoja = (produto.id % 2 === 0);
+        }
+      }
+
+      return matchPesquisa && matchCategoria && matchTipo && matchFaixa && matchCor && matchLoja;
     });
   }
 
@@ -88,5 +100,12 @@ export class CatalogoPage implements OnInit {
       'calcado': 'Calçado', 'acessorio': 'Acessório'
     };
     return dicionario[this.tipoSelecionado] || this.tipoSelecionado;
+  }
+
+  getNomeLoja(): string {
+    if (this.lojaSelecionada === 'braga') return 'Braga Parque';
+    if (this.lojaSelecionada === 'coimbra') return 'Coimbra Dolce Vita';
+    if (this.lojaSelecionada === 'lisboa') return 'Lisboa Colombo';
+    return '';
   }
 }

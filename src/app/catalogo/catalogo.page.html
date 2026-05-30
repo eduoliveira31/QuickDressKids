@@ -24,7 +24,7 @@
     </div>
   </ion-toolbar>
 
-  <ion-toolbar style="--background: #ffffff;" *ngIf="categoriaSelecionada || tipoSelecionado || faixaEtariaSelecionada || corSelecionada">
+  <ion-toolbar style="--background: #ffffff;" *ngIf="categoriaSelecionada || tipoSelecionado || faixaEtariaSelecionada || corSelecionada || lojaSelecionada">
     <div class="scroll-chips" style="padding: 0 15px 10px 15px; overflow-x: auto; white-space: nowrap; display: flex; gap: 8px;">
       <ion-chip *ngIf="categoriaSelecionada" (click)="removerFiltro('categoria')" class="chip-active-top">
         <ion-label>{{ getNomeCategoria() }}</ion-label><ion-icon name="close-circle"></ion-icon>
@@ -37,6 +37,9 @@
       </ion-chip>
       <ion-chip *ngIf="corSelecionada" (click)="removerFiltro('cor')" class="chip-active-top">
         <ion-label>{{ corSelecionada }}</ion-label><ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+      <ion-chip *ngIf="lojaSelecionada" (click)="removerFiltro('loja')" class="chip-active-top">
+        <ion-label>Loja: {{ getNomeLoja() }}</ion-label><ion-icon name="close-circle"></ion-icon>
       </ion-chip>
     </div>
   </ion-toolbar>
@@ -139,6 +142,16 @@
             <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Amarelo'" (click)="selecionarFiltro('cor', 'Amarelo')">Amarelo</ion-chip>
             <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Vermelho'" (click)="selecionarFiltro('cor', 'Vermelho')">Vermelho</ion-chip>
             <ion-chip [class.chip-filtro-ativo]="corSelecionada === 'Cinzento'" (click)="selecionarFiltro('cor', 'Cinzento')">Cinzento</ion-chip>
+          </div>
+        </div>
+
+        <div class="bloco-filtro-container">
+          <h3>Loja Disponível</h3>
+          <div class="grupo-chips-filtros">
+            <ion-chip [class.chip-filtro-ativo]="lojaSelecionada === ''" (click)="selecionarFiltro('loja', '')">Todas</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="lojaSelecionada === 'braga'" (click)="selecionarFiltro('loja', 'braga')">Braga Parque</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="lojaSelecionada === 'coimbra'" (click)="selecionarFiltro('loja', 'coimbra')">Coimbra Dolce Vita</ion-chip>
+            <ion-chip [class.chip-filtro-ativo]="lojaSelecionada === 'lisboa'" (click)="selecionarFiltro('loja', 'lisboa')">Lisboa Colombo</ion-chip>
           </div>
         </div>
 
