@@ -23,6 +23,17 @@ export class ProdutoDetalhePage implements OnInit {
   mensagemStock: string = '';
   corStock: string = 'medium';
 
+  // Geolocalização e sugestões de loja
+  lojaSugerida: string = '';
+  nomeLojaSugerida: string = '';
+  distanciaSugerida: number = 0;
+
+  readonly LOJAS_GPS = [
+    { id: 'braga', nome: 'Loja Braga Parque', lat: 41.5503, lng: -8.4200 },
+    { id: 'coimbra', nome: 'Loja Coimbra Dolce Vita', lat: 40.2056, lng: -8.4195 },
+    { id: 'lisboa', nome: 'Loja Lisboa Colombo', lat: 38.7223, lng: -9.1393 }
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -41,6 +52,21 @@ export class ProdutoDetalhePage implements OnInit {
         fetched.subscribe((dados: any) => this.prepararProduto(dados));
       } else {
         this.prepararProduto(fetched);
+      }
+    }
+
+    // Verificar se já tem permissão para calcular a loja mais próxima automaticamente
+    if (typeof window !== 'undefined') {
+      const locationPermitted = localStorage.getItem('quickdresskids_location_permitted');
+      if (locationPermitted === 'true' && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.calcularLojaMaisProxima(position.coords.latitude, position.coords.longitude);
+          },
+          (err) => {
+            localStorage.setItem('quickdresskids_location_permitted', 'false');
+          }
+        );
       }
     }
   }
@@ -176,5 +202,76 @@ export class ProdutoDetalhePage implements OnInit {
       this.mensagemStock = 'Em stock! Disponível para reserva.';
       this.corStock = 'success'; // Fica verde
     }
+  }
+
+  // ─── GEOLOCALIZAÇÃO E SUGESTÃO DE LOJA ─────────────────────────────────────
+  pedirLocalizacao() {
+    if (typeof window !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          localStorage.setItem('quickdresskids_location_permitted', 'true');
+          this.calcularLojaMaisProxima(position.coords.latitude, position.coords.longitude);
+          this.apresentarToastMsg('Localização ativada com sucesso!', 'success');
+        },
+        (error) => {
+          this.apresentarToastMsg('Não foi possível obter a sua localização.', 'warning');
+        }
+      );
+    } else {
+      this.apresentarToastMsg('A geolocalização não é suportada por este dispositivo.', 'danger');
+    }
+  }
+
+  calcularLojaMaisProxima(userLat: number, userLng: number) {
+    let menorDistancia = Infinity;
+    let lojaMaisProxima = '';
+    let nomeLoja = '';
+
+    for (const loja of this.LOJAS_GPS) {
+      const dist = this.calcularDistanciaHaversine(userLat, userLng, loja.lat, loja.lng);
+      if (dist < menorDistancia) {
+        menorDistancia = dist;
+        lojaMaisProxima = loja.id;
+        nomeLoja = loja.nome;
+      }
+    }
+
+    this.lojaSugerida = lojaMaisProxima;
+    this.nomeLojaSugerida = nomeLoja;
+    this.distanciaSugerida = Math.round(menorDistancia * 10) / 10; // Arredondar a 1 casa decimal
+  }
+
+  calcularDistanciaHaversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Raio da Terra em km
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  deg2rad(deg: number): number {
+    return deg * (Math.PI / 180);
+  }
+
+  selecionarLojaSugerida() {
+    if (this.lojaSugerida) {
+      this.lojaSelecionada = this.lojaSugerida;
+      this.verificarStock({ detail: { value: this.lojaSelecionada } });
+      this.apresentarToastMsg(`Loja ${this.nomeLojaSugerida} selecionada automaticamente!`, 'success');
+    }
+  }
+
+  private async apresentarToastMsg(mensagem: string, cor: string) {
+    const toast = await this.toastController.create({
+      message: mensagem,
+      duration: 2500,
+      color: cor,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 }

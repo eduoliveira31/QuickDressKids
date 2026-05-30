@@ -89,11 +89,25 @@
 
     <h3 style="font-weight: bold; margin-top: 35px; margin-bottom: 10px; color: #333; margin-left: 5px;">Disponibilidade em Lojas</h3>
     
-    <ion-item color="warning" lines="none" style="border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+    <!-- Geolocalização dinâmica e sugestão de loja -->
+    <ion-item color="success" lines="none" style="border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);" *ngIf="lojaSugerida">
+      <ion-icon name="location" slot="start" color="light"></ion-icon>
+      <ion-label class="ion-text-wrap" style="font-size: 0.85rem; color: #ffffff;">
+        Loja mais próxima: <strong>{{ nomeLojaSugerida }}</strong> (a {{ distanciaSugerida }} km de distância).
+      </ion-label>
+      <ion-button slot="end" fill="clear" color="light" style="font-weight: bold; --color: #ffffff;" (click)="selecionarLojaSugerida()">
+        Selecionar
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="warning" lines="none" style="border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);" *ngIf="!lojaSugerida">
       <ion-icon name="location-outline" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap" style="font-size: 0.85rem;">
-        Permissão de localização negada.
+        Permissão de localização não ativada.
       </ion-label>
+      <ion-button slot="end" fill="outline" color="dark" size="small" style="font-weight: bold;" (click)="pedirLocalizacao()">
+        Ativar
+      </ion-button>
     </ion-item>
 
     <ion-list inset="true" class="ion-no-margin" style="border-radius: 12px; margin-bottom: 10px;">

@@ -54,7 +54,7 @@
       <ion-item lines="none">
         <ion-icon name="location-outline" slot="start" color="tertiary"></ion-icon>
         <ion-label style="font-weight: 600;">Permitir Localização</ion-label>
-        <ion-toggle slot="end" [(ngModel)]="localizacaoAtiva" color="primary"></ion-toggle>
+        <ion-toggle slot="end" [(ngModel)]="localizacaoAtiva" (ionChange)="aoMudarLocalizacao($event)" color="primary"></ion-toggle>
       </ion-item>
     </ion-list>
 

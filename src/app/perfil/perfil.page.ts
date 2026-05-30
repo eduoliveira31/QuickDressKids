@@ -46,6 +46,11 @@ export class PerfilPage implements OnInit {
         this.ajudaEmail = '';
       }
     });
+
+    if (typeof window !== 'undefined') {
+      const locationPermitted = localStorage.getItem('quickdresskids_location_permitted');
+      this.localizacaoAtiva = locationPermitted === 'true';
+    }
   }
 
   async abrirOpcao(nomeOpcao: string) {
@@ -59,6 +64,31 @@ export class PerfilPage implements OnInit {
       this.router.navigate(['/reservas']);
     } else {
       this.mostrarToast(`A abrir ${nomeOpcao}... (Página em construção)`, 'dark');
+    }
+  }
+
+  aoMudarLocalizacao(event: any) {
+    const ativa = event.detail.checked;
+    if (ativa) {
+      if (typeof window !== 'undefined' && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            localStorage.setItem('quickdresskids_location_permitted', 'true');
+            this.mostrarToast('Permissão de localização concedida com sucesso!', 'success');
+          },
+          (error) => {
+            localStorage.setItem('quickdresskids_location_permitted', 'false');
+            this.localizacaoAtiva = false;
+            this.mostrarToast('Permissão de localização recusada pelo utilizador ou dispositivo.', 'warning');
+          }
+        );
+      } else {
+        this.localizacaoAtiva = false;
+        this.mostrarToast('A geolocalização não é suportada por este dispositivo.', 'danger');
+      }
+    } else {
+      localStorage.setItem('quickdresskids_location_permitted', 'false');
+      this.mostrarToast('Localização desativada.', 'medium');
     }
   }
 
