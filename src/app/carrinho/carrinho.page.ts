@@ -152,7 +152,7 @@ export class CarrinhoPage implements OnInit {
         {
           text: 'Ver Minhas Reservas',
           handler: () => {
-            this.limparCarrinho();
+            this.carrinhoService.limparCarrinho();
             this.router.navigate(['/reservas']);
           }
         }

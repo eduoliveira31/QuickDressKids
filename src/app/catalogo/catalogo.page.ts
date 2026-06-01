@@ -49,6 +49,15 @@ export class CatalogoPage implements OnInit {
     this.selecionarFiltro(tipo, '');
   }
 
+  limparTodosFiltros() {
+    this.categoriaSelecionada = '';
+    this.tipoSelecionado = '';
+    this.faixaEtariaSelecionada = '';
+    this.corSelecionada = '';
+    this.lojaSelecionada = '';
+    this.aplicarFiltros();
+  }
+
   aplicarFiltros() {
     this.produtosFiltrados = this.produtos.filter((produto: any) => {
       

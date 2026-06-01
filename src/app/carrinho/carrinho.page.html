@@ -32,8 +32,8 @@
         </ion-label>
 
         <div slot="end" style="display: flex; align-items: center; gap: 8px;">
-          <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, -1)">
-            <ion-icon name="remove-circle-outline"></ion-icon>
+          <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, -1)" [color]="item.quantidade === 1 ? 'danger' : 'primary'">
+            <ion-icon [name]="item.quantidade === 1 ? 'trash-outline' : 'remove-circle-outline'"></ion-icon>
           </ion-button>
           
           <span style="font-weight: bold; font-size: 16px;">{{ item.quantidade }}</span>

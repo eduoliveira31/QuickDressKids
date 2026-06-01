@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Catalogo } from '../services/catalogo';
 import { CarrinhoService } from '../services/carrinho';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, IonicSafeString } from '@ionic/angular';
 
 @Component({
   selector: 'app-produto-detalhe',
@@ -125,7 +125,7 @@ export class ProdutoDetalhePage implements OnInit {
       // O utilizador selecionou uma loja diferente da do carrinho!
       const alert = await this.alertController.create({
         header: 'Loja de Levantamento Diferente',
-        message: `O seu carrinho já tem artigos para levantar na <strong>${this.getNomeLoja(lojaCarrinho)}</strong>.<br><br>Todos os artigos de uma reserva devem ser levantados na mesma loja. Deseja esvaziar o carrinho atual para mudar de loja ou manter a loja anterior?`,
+        message: new IonicSafeString(`O seu carrinho já tem artigos para levantar na <strong>${this.getNomeLoja(lojaCarrinho)}</strong>.<br><br>Todos os artigos de uma reserva devem ser levantados na mesma loja. Deseja esvaziar o carrinho atual para mudar de loja ou manter a loja anterior?`),
         buttons: [
           {
             text: 'Manter anterior',
