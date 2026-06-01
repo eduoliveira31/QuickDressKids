@@ -207,55 +207,73 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 
 **Soluções:**
 - Refatoração do ficheiro catalogo.page.scss com a remoção dos blocos de posicionamento que bloqueavam a execução do clique, devolvendo a funcionalidade nativa estável às caixas de seleção.  
-- Injeção das propriedades ::part(placeholder) e ::part(text) com a marcaç�## Sessão 9 – 30 de maio de 2026
-**Responsável:** Luis Martinho Oliveira Lopes  
-**Objetivo:** Transição cromática do tema para Verde Pastel de alto contraste, implementação de login/registo com requisitos mínimos de segurança de palavra-passe, fluxo de segurança do perfil (alteração de password e centro de ajuda), expansão de artigos do catálogo com imagens reais, menu lateral de filtragem, regras de checkout seguro com sessão obrigatória, diálogos de confirmação de eliminação no carrinho, controlo de stock por loja física única, fidelização "Leve 3, Pague 2" e otimização dos budgets de compilação.
+- Injeção das propriedades ::part(placeholder) e ::part(text) com a marcação.\n
+
+## Sessão 9 – 30 de maio de 2026
+**Responsável:** Luís Martinho Oliveira Lopes
+**Objetivo:** Alteração do tema para Verde Pastel, validações de segurança nos formulários (e-mail e password) e preparação da app para testes no telemóvel Android.
 
 **Atividades realizadas:**
-- **Ambiente Inicial sem Sessão (Deslogado por Padrão):** Refatoração da lógica de arranque da aplicação (`AuthService`) para garantir que o utilizador inicia sempre como visitante (sem conta ativa), respondendo à necessidade pedagógica de forçar o utilizador a criar conta ou fazer login para interagir com o fluxo completo.
-- **Botão de Acesso Rápido na Home:** Criação de um botão tipo pílula "Entrar" com auto-contraste na barra superior da página inicial (`tab1`), que deteta dinamicamente o estado da sessão e redireciona visitantes para o `/login` ou apresenta o username do utilizador ativo.
-- **Gestão de Perfil Simplificada & Preferências (Toggles):** Remoção de dados fixos antigos e implementação de interruptores dinâmicos de swipe/toggle (`ion-toggle`) integrados no ecrã de Perfil para gestão de "Notificações Ativas" e "Permitir Localização" com excelente resposta visual.
-- **Centro de Ajuda Avançado e Interativo:** Criação de um Centro de Ajuda interativo em modal deslizante, incluindo formulário de contacto com seletor de tipo de assunto ("Problema com reserva", "Dúvida sobre tamanhos", "Outro"), descrição detalhada do problema e preenchimento inteligente de e-mail (capturado se houver sessão ou editável se for visitante).
-- **Segurança Avançada, Validação e Alteração de Palavra-passe:** Desenvolvimento de um modal de definições de segurança e validação no registo de novas contas (`login.page.ts`) que exige a introdução de uma palavra-passe de pelo menos 8 caracteres. Na alteração da senha, exige a password anterior correta e a confirmação em duas instâncias da nova palavra-passe (também validando o tamanho mínimo de 8 caracteres).
-- **Diversificação e Expansão do Catálogo com Imagens Reais:** Inclusão de novos produtos com alto detalhe no ficheiro local `produtos.json` (incluindo o "Robe de Bebé Algodão Orgânico", "Pijama Estrelas Soft" e "Sapatilhas Desportivas Kids") enriquecidos com imagens reais de alta definição geradas por inteligência artificial e guardadas localmente, eliminando placeholders genéricos da aplicação.
-- **Barra Lateral Otimizada de Filtros:** Migração de todos os controlos de filtragem do catálogo para um painel/gaveta flutuante lateral (modal de filtros), organizando as opções por chips interativos de Categoria, Faixa Etária, Tipo de Produto e Cor, com botão personalizado vermelho e transparente de "Limpar Filtros".
-- **Redesenho e Reestruturação Visual de Contraste Verde Pastel:** Substituição integral do tema azul para uma palete premium de verde pastel/menta/sage (`#4e9a74`, `#e8f5ee`, `#2d5a43`), garantindo conformidade de contraste WCAG com texto e ícones brancos (`#ffffff`) na aba superior (`ion-toolbar`) e inferior (`ion-tab-bar`). Estilização personalizada das tabs inferiores para indicar o separador ativo com uma suave bolha translúcida branca.
-- **Diálogos de Confirmação no Carrinho:** Integração de janelas de dupla confirmação (`AlertController`) ao tentar remover um artigo do carrinho (quando a quantidade chega a 0 pelo botão de decremento) e ao tentar acionar o botão "Esvaziar Carrinho", evitando a perda acidental de produtos pelo utilizador.
-- **Sessão Obrigatória para Reserva de Encomendas:** Integração de regras de segurança no carrinho (`carrinho.page.ts`). O botão "Criar Reserva" valida o estado da sessão e, caso o utilizador seja um visitante, bloqueia a operação e abre um `AlertController` reativo para o redirecionar para a página de Login/Registo.
-- **Validação de Stock e Loja Única de Levantamento:** Desenvolvimento de uma robusta lógica de checkout onde todos os produtos de uma encomenda têm de ser associados à mesma loja de levantamento física. Caso o utilizador tente selecionar uma loja divergente da que já está ativa no carrinho, a aplicação exibe uma janela de resolução interativa para esvaziar o carrinho ou reverter. Adicionalmente, implementou-se validação de stock (ex: impedindo a reserva na loja de Lisboa que tem stock 0).
-- **Correção da Campanha "Leve 3, Pague 2":** Otimização do `CustosService` para deduzir automaticamente o valor do artigo de menor valor em grupos de 3 artigos da categoria "bebé" adicionados ao carrinho, exibindo o desconto de forma explícita e transparente na fatura do ecrã de checkout.
-- **Otimização de Orçamentos (Budgets) do Angular:** Ajuste no ficheiro de configuração `angular.json` para aumentar o limite máximo de erro dos estilos de componentes (`anyComponentStyle`) de 4kB para 20kB, resolvendo problemas de interrupção de compilação indevida.
-- **Compilação, Saneamento Git e Estabilização:** Eliminação de todas as duplicações e erros de sintaxe no ficheiro de estilos de variáveis (`variables.scss`) e conflitos de mesclagem no catálogo (`catalogo.page.html`, `.ts`, `.scss`), obtendo um build de produção 100% limpo e funcional.
+- **Novo Tema Verde Pastel:** Alteração da palete de cores de azul para tons de verde pastel (#4e9a74, #e8f5ee, #2d5a43). Ajuste do contraste das toolbars para branco (#ffffff) para cumprir as normas de acessibilidade (WCAG).
+- **Validações de Registo e Login:** Adição de validações nos formulários: a password agora exige pelo menos 8 caracteres e o e-mail tem de ter um formato válido (com "@").
+- **Setas de Voltar Atrás:** Mudança da cor da seta de voltar atrás (`ion-back-button`) para preto sólido, resolvendo problemas de visibilidade nas páginas de detalhes e reservas.
+- **Carrinho no Catálogo:** Colocação do ícone do carrinho de compras diretamente no cabeçalho da página do Catálogo para acesso rápido.
+- **Filtro de Lojas:** Criação de um filtro para cruzar a pesquisa com o stock disponível em lojas específicas (Braga Parque, Coimbra Dolce Vita, Lisboa Colombo).
+- **Atalho no Popup:** Adição do botão "Ver Carrinho" na notificação (Toast) que aparece quando se adiciona um produto.
+- **Sincronização Android:** Acoplamento do projeto web à plataforma Android usando o Capacitor (`npx cap sync android`).
+- **Build para Telemóvel:** Geração do APK de testes (`app-debug.apk`) e instalação via cabo USB para testar permissões nativas de GPS.
+- **Bloqueio de Stock e Lojas:** Implementação de lógica para impedir reservas de artigos sem stock (ex: Lisboa) e obrigar a que toda a encomenda seja levantada numa única loja.
+- **Correção "Leve 3, Pague 2":** Ajuste no `CustosService` para aplicar o desconto de forma correta na peça de bebé mais barata.
+- **Aumento do Budget do Angular:** Ajuste do limite de tamanho dos estilos no `angular.json` para 20kB, permitindo compilar para produção sem erros.
 
 **Problemas:**
-- Inconsistência na aplicação do desconto "Leve 3, Pague 2" devido à ausência do campo de categoria nos dados passados ao carrinho.
-- Erros de contraste com azul bebé muito claro que dificultava a leitura geral no ecrã.
-- Permissão de reserva de produtos fora de stock ou levantamento em múltiplas lojas na mesma transação.
-- Conflitos de tags html, herança de cores nos seletores e duplicações severas de blocos `:root` em `variables.scss`.
-- Quebra de compilação em builds de produção devido ao tamanho dos ficheiros de estilo locais dos novos componentes exceder o orçamento padrão do Angular (4kB).
-- Risco de perda acidental de produtos do carrinho por falta de caixas de confirmação de eliminação.
-- Vulnerabilidade de palavra-passe fraca por falta de limites de caracteres mínimos no fluxo de autenticação local.
+- O desconto "Leve 3, Pague 2" não estava a funcionar porque faltava enviar a informação da categoria no carrinho.
+- A antiga cor azul bebé era muito clara e dificultava a leitura da interface.
+- O sistema deixava encomendar produtos de lojas diferentes ao mesmo tempo ou artigos que não tinham stock.
+- Havia blocos `:root` duplicados e conflitos de herança de cores no ficheiro `variables.scss`.
+- A compilação final falhava porque os ficheiros de CSS excediam o limite padrão de 4kB do Angular.
+- Era possível remover artigos do carrinho acidentalmente, sem qualquer aviso.
+- O formulário permitia a criação de contas com passwords demasiado curtas.
 
 **Soluções:**
-- Criação de mapeamento de categoria e desdobramento dos preços no carrinho, aplicando o desconto ordenado de forma crescente.
-- Adoção do verde pastel de alto contraste `#4e9a74` e tons e8f5ee/2d5a43 para consistência global.
-- Criação de BehaviorSubject de loja no `CarrinhoService` para rastreio e bloqueio de loja no primeiro artigo adicionado, além de verificação explícita do valor de stock do artigo selecionado na loja selecionada.
-- Saneamento completo de `variables.scss`, centralizando todas as variáveis num único `:root` limpo e sem comentários inválidos do tipo `//` em CSS.
-- Expansão dos orçamentos de estilos no `angular.json` para 20kB de limite máximo de erro.
-- Implementação de alertas assíncronos (`AlertController`) com botões de confirmar/cancelar para controlo de quantidade zero e esvaziamento do carrinho.
-- Adição de blocos de validação com comprimento `.length < 8` com exibição de toasts informativos reativos no registo de novas contas (`LoginPage`) e na alteração de palavra-passe (`PerfilPage`).o orçamento padrão do Angular (4kB).
-- Risco de perda acidental de produtos do carrinho por falta de caixas de confirmação de eliminação.
-
-**Soluções:**
-- Criação de mapeamento de categoria e desdobramento dos preços no carrinho, aplicando o desconto ordenado de forma crescente.
-- Adoção do verde pastel de alto contraste `#4e9a74` e tons e8f5ee/2d5a43 para consistência global.
-- Criação de BehaviorSubject de loja no `CarrinhoService` para rastreio e bloqueio de loja no primeiro artigo adicionado, além de verificação explícita do valor de stock do artigo selecionado na loja selecionada.
-- Saneamento completo de `variables.scss`, centralizando todas as variáveis num único `:root` limpo e sem comentários inválidos do tipo `//` em CSS.
-- Expansão dos orçamentos de estilos no `angular.json` para 20kB de limite máximo de erro.
-- Implementação de alertas assíncronos (`AlertController`) com botões de confirmar/cancelar para controlo de quantidade zero e esvaziamento do carrinho.
+- Ajuste na lógica para mapear as categorias e aplicar o desconto no carrinho, ordenando os preços de forma crescente.
+- Mudança global para o tema verde pastel para resolver a legibilidade.
+- Uso de um `BehaviorSubject` no `CarrinhoService` para trancar a loja escolhida logo no primeiro artigo adicionado, alertando se houver divergências.
+- Limpeza do ficheiro `variables.scss`, deixando apenas um bloco `:root` principal.
+- Atualização do `angular.json` para suportar estilos até 20kB.
+- Adição de popups do `AlertController` para confirmar a eliminação de artigos ou o esvaziamento do carrinho.
+- Inclusão de validação simples (`.length < 8`) com exibição de mensagens de aviso ao tentar registar a conta.
 
 **Decisões:**
-- Forçar uma única loja física por reserva para simplificar o levantamento logístico na loja física pelo cliente.
-- Apresentar a discriminação visual detalhada de todos os custos e descontos no ecrã final do carrinho para otimizar o UX.
-- Deslogar o utilizador por padrão no arranque para assegurar o correto teste do fluxo de visitantes da app.
-- Desativar e unificar as paletes de cores antigas num tema Verde Pastel premium e consistente para melhorar o aspeto geral e contraste do protótipo móvel.
+- Limitar as reservas a uma única loja física para simplificar a logística para o cliente final.
+- Mostrar a discriminação dos descontos diretamente no ecrã do carrinho para ser mais transparente.
+- Fazer a app arrancar sempre com a sessão fechada (visitante) para facilitar os testes de login.
+- Abandonar o tema azul e assumir definitivamente o verde pastel no protótipo móvel.
+
+## Sessão 10 – 01 de junho de 2026
+**Responsável:** Luís Martinho Oliveira Lopes
+**Objetivo:** Melhorias na usabilidade mobile, correção de pequenos erros no checkout e ajuste de filtros.
+
+**Atividades realizadas:**
+- **Botão Repor Filtros:** Adição de um botão com contorno vermelho no final do painel de filtros do Catálogo para limpar imediatamente as escolhas de categoria, idade, cor e loja.
+- **Ícone de Lixo no Carrinho:** Lógica dinâmica no carrinho: quando a quantidade de um artigo chega a `1`, o botão de subtrair muda para um ícone de caixote do lixo (`trash-outline`) e fica vermelho.
+- **Checkout Automático:** O botão "Ver Minhas Reservas" no fim da compra agora limpa o carrinho automaticamente através do `CarrinhoService`, sem disparar a caixa que pergunta se queremos esvaziá-lo.
+- **Correção de Tags HTML nos Alertas:** Uso do componente `IonicSafeString` no detalhe do produto para que as tags de HTML (`<strong>`, `<br>`) do alerta de divergência de loja funcionem corretamente em vez de aparecerem como texto cru.
+- **Voltar Atrás no Carrinho:** Inserção de um `ion-back-button` no cabeçalho do carrinho. A seta só aparece se o utilizador chegar ao carrinho através da notificação de um artigo, ocultando-se se entrar pelo menu inferior normal.
+- **Sincronização Final:** Nova compilação de produção (`npm run build`) e sincronização Android para testar os últimos ajustes no telemóvel.
+
+**Problemas:**
+- As tags de formatação HTML estavam a aparecer literalmente escritas nos textos dos alertas.
+- A app abria um popup a perguntar para esvaziar o carrinho logo depois de concluir a reserva com sucesso.
+- Faltava uma seta de voltar atrás no carrinho, o que dificultava o regresso ao artigo que estávamos a ver.
+- Desmarcar os filtros na pesquisa um a um não era nada prático.
+
+**Soluções:**
+- Passagem do texto do alerta por uma `IonicSafeString` para o Ionic o interpretar corretamente.
+- Chamada direta da função `limparCarrinho()` no código do checkout, saltando a validação do modal.
+- Inclusão condicional da seta de voltar atrás no header do carrinho baseada no histórico de navegação.
+- Criação da função `limparTodosFiltros()` associada ao novo botão vermelho.
+
+**Decisões:**
+- Evitar popups desnecessários depois de o utilizador já ter confirmado uma compra com sucesso.
+- Colocar atalhos rápidos para limpeza de filtros de forma a tornar a navegação da app mais fluida.

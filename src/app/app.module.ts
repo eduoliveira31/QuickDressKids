@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-// 1. ADICIONA ESTA LINHA AQUI NO TOPO:
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule.forRoot(), 
     AppRoutingModule,
     IonicStorageModule.forRoot(),
-    // 2. ADICIONA O MÓDULO AQUI DENTRO DOS IMPORTS:
     HttpClientModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

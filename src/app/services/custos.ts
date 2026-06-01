@@ -51,7 +51,7 @@ export class CustosService {
    * Por cada conjunto de 3 artigos de bebé, o mais barato é oferecido (descontado).
    */
   getDescontoCampanha(): number {
-    const babyItems = this.carrinhoService.getItens().filter(item => item.categoria === 'bebé');
+    const babyItems = this.carrinhoService.getItens().filter(item => item.categoria === 'bebé' || item.categoria === 'bebe');
     const prices: number[] = [];
     
     // Desdobra os preços conforme a quantidade de cada item

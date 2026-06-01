@@ -66,7 +66,14 @@ export class CatalogoPage implements OnInit {
         (produto.nome && produto.nome.toLowerCase().includes(this.termoPesquisa.toLowerCase()));
       
       // 2. Filtro de Categoria (menino, menina, bebe)
-      const matchCategoria = !this.categoriaSelecionada || produto.categoria === this.categoriaSelecionada;
+      let matchCategoria = !this.categoriaSelecionada;
+      if (!matchCategoria) {
+        if (this.categoriaSelecionada === 'bebe') {
+          matchCategoria = (produto.categoria === 'bebe' || produto.categoria === 'bebé');
+        } else {
+          matchCategoria = (produto.categoria === this.categoriaSelecionada);
+        }
+      }
       
       // 3. Filtro do Tipo de Peça (tshirt, casaco, etc)
       const matchTipo = !this.tipoSelecionado || produto.tipo === this.tipoSelecionado;
