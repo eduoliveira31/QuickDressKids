@@ -1,15 +1,30 @@
-/* Ocultar barras de scroll feias nos chips ativos do topo */
+/* --- BARRA DE PESQUISA E CHIPS NO TOPO --- */
 .scroll-chips::-webkit-scrollbar {
   display: none;
 }
 
-/* Forçar fontes pretas no texto inserido na barra de pesquisa */
 .pesquisa-escura input {
   color: #000000 !important;
   font-weight: 500 !important;
 }
 
-/* ALINHAMENTO GEOMÉTRICO DO CARTÃO (Para não desformatar nunca) */
+.chip-active-top {
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+  color: var(--ion-color-primary);
+  font-weight: bold;
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.25);
+  
+  ion-icon {
+    color: var(--ion-color-primary);
+  }
+}
+
+/* --- GRELHA E CARTÕES (A CORREÇÃO DO DESALINHAMENTO) --- */
+.coluna-produto {
+  display: flex;
+  padding: 6px;
+}
+
 .cartao-produto {
   margin: 0;
   width: 100%;
@@ -22,36 +37,15 @@
   overflow: hidden;
 
   .imagem-container {
-    position: relative;
     width: 100%;
-    height: 175px; /* Altura idêntica para todas as imagens do catálogo */
+    height: 180px; /* ALTURA FIXA PARA TODAS AS IMAGENS */
     background: #fdfdfd;
     
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Corta as imagens sem amassar */
-    }
-
-    /* Ícone do coração de favoritos flutuante */
-    .btn-favorito {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      margin: 0;
-      height: 32px;
-      width: 32px;
-      --padding-start: 0;
-      --padding-end: 0;
-      
-      ion-icon {
-        font-size: 18px;
-        color: #444444;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 50%;
-        padding: 6px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      }
+      object-fit: cover; /* MUITO IMPORTANTE: Corta as imagens sem amassar */
+      display: block;
     }
   }
 
@@ -67,7 +61,7 @@
   }
 }
 
-/* REGRAS DE CORES PRETAS EXIGIDAS PARA AS LETRAS */
+/* --- REGRAS DE CORES PRETAS EXIGIDAS PARA AS LETRAS --- */
 .texto-preto-sub {
   font-size: 0.7rem;
   font-weight: bold;
@@ -97,7 +91,7 @@
   margin-top: 10px;
 }
 
-/* BLOCOS DO MODAL DE FILTROS */
+/* --- BLOCOS DO MODAL DE FILTROS --- */
 .bloco-filtro-container {
   background: #ffffff;
   border-radius: 16px;
@@ -114,7 +108,7 @@
 
   .grupo-chips-filtros {
     display: flex;
-    flex-wrap: wrap; /* Permite que caiam de linha em ecrãs pequenos */
+    flex-wrap: wrap; 
     gap: 8px;
 
     ion-chip {
@@ -129,23 +123,10 @@
       border: 1px solid transparent;
     }
 
-    /* Quando ativado fica na cor primária da tua app */
     .chip-filtro-ativo {
       background: var(--ion-color-primary);
       color: #ffffff;
       box-shadow: 0 3px 8px rgba(var(--ion-color-primary-rgb), 0.25);
     }
-  }
-}
-
-/* Chips transparentes debaixo da barra de pesquisa no ecrã principal */
-.chip-active-top {
-  background: rgba(var(--ion-color-primary-rgb), 0.12);
-  color: var(--ion-color-primary);
-  font-weight: bold;
-  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.25);
-  
-  ion-icon {
-    color: var(--ion-color-primary);
   }
 }

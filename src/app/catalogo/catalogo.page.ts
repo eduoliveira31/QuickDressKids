@@ -10,12 +10,10 @@ import { Catalogo } from '../services/catalogo';
 })
 export class CatalogoPage implements OnInit {
 
-  /** Lista completa de produtos carregada do JSON */
   produtosOriginais: any[] = [];
-
-  /** Lista de produtos a apresentar após aplicar todos os filtros */
   produtosFiltrados: any[] = [];
 
+<<<<<<< HEAD
   /** Filtros selecionados */
   categoriaSelecionada: string = '';
   tipoSelecionado: string = '';
@@ -24,6 +22,47 @@ export class CatalogoPage implements OnInit {
   lojaSelecionada: string = '';
   termoPesquisa: string = '';
 
+=======
+  pesquisa: string = '';
+  categoriaSelecionada: string = '';
+  faixaEtariaSelecionada: string = '';
+  tipoSelecionado: string = '';
+  corSelecionada: string = '';
+
+  readonly categorias = [
+    { valor: 'menino', label: 'Menino' },
+    { valor: 'menina', label: 'Menina' },
+    { valor: 'bebé', label: 'Bebé' }
+  ];
+
+  readonly idades = [
+    { valor: '0-2', label: '0-2 anos' },
+    { valor: '3-5', label: '3-5 anos' },
+    { valor: '6-8', label: '6-8 anos' },
+    { valor: '9-12', label: '9-12 anos' }
+  ];
+
+  readonly tipos = [
+    { valor: 'casaco', label: 'Casacos' },
+    { valor: 't-shirt', label: 'T-Shirts' },
+    { valor: 'calças', label: 'Calças' },
+    { valor: 'vestido', label: 'Vestidos' },
+    { valor: 'sapatilhas', label: 'Sapatilhas' },
+    { valor: 'acessório', label: 'Acessórios' }
+  ];
+
+  readonly cores = [
+    { valor: 'Azul', label: 'Azul' },
+    { valor: 'Rosa', label: 'Rosa' },
+    { valor: 'Verde', label: 'Verde' },
+    { valor: 'Vermelho', label: 'Vermelho' },
+    { valor: 'Amarelo', label: 'Amarelo' },
+    { valor: 'Branco', label: 'Branco' },
+    { valor: 'Preto', label: 'Preto' },
+    { valor: 'Cinzento', label: 'Cinzento' }
+  ];
+
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   constructor(
     private catalogoService: Catalogo,
     private router: Router
@@ -36,38 +75,39 @@ export class CatalogoPage implements OnInit {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Aplica todos os filtros ativos e atualiza produtosFiltrados.
    */
+=======
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   aplicarFiltros() {
     this.produtosFiltrados = this.produtosOriginais.filter((produto: any) => {
       
-      // 1. Filtro da Barra de Pesquisa
-      const matchPesquisa = !this.termoPesquisa || 
-        (produto.nome && produto.nome.toLowerCase().includes(this.termoPesquisa.toLowerCase()));
+      const matchPesquisa = !this.pesquisa || 
+        (produto.nome && produto.nome.toLowerCase().includes(this.pesquisa.toLowerCase()));
       
-      // 2. Filtro de Categoria (menino, menina, bebe)
       let matchCategoria = !this.categoriaSelecionada;
       if (!matchCategoria) {
-        if (this.categoriaSelecionada === 'bebe') {
-          matchCategoria = (produto.categoria === 'bebe' || produto.categoria === 'bebé');
-        } else {
-          matchCategoria = (produto.categoria === this.categoriaSelecionada);
-        }
+        matchCategoria = (produto.categoria === this.categoriaSelecionada || 
+                         (this.categoriaSelecionada === 'bebé' && produto.categoria === 'bebe'));
       }
       
-      // 3. Filtro do Tipo de Peça (tshirt, casaco, etc)
       const matchTipo = !this.tipoSelecionado || produto.tipo === this.tipoSelecionado;
-      
-      // 4. Filtro da Faixa Etária (0-2, 3-5, etc)
       const matchFaixa = !this.faixaEtariaSelecionada || produto.faixaEtaria === this.faixaEtariaSelecionada;
 
+<<<<<<< HEAD
       // 5. Filtro de Cor
+=======
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
       let matchCor = !this.corSelecionada;
       if (!matchCor && produto.cores && Array.isArray(produto.cores)) {
         matchCor = produto.cores.includes(this.corSelecionada);
+      } else if (!matchCor && produto.cor) {
+        matchCor = produto.cor === this.corSelecionada;
       }
 
+<<<<<<< HEAD
       // 6. Filtro de Loja Disponível (Braga/Coimbra = tudo em stock, Lisboa = apenas IDs pares em stock na simulação)
       let matchLoja = !this.lojaSelecionada;
       if (!matchLoja) {
@@ -167,7 +207,49 @@ export class CatalogoPage implements OnInit {
   /**
    * Navega para o detalhe do produto.
    */
+=======
+      return matchPesquisa && matchCategoria && matchTipo && matchFaixa && matchCor;
+    });
+  }
+
+  selecionarFiltro(tipo: string, valor: string) {
+    if (tipo === 'categoria') this.categoriaSelecionada = valor;
+    if (tipo === 'tipoProduto') this.tipoSelecionado = valor;
+    if (tipo === 'faixaEtaria') this.faixaEtariaSelecionada = valor;
+    if (tipo === 'cor') this.corSelecionada = valor;
+    this.aplicarFiltros();
+  }
+
+  removerFiltro(tipo: string) {
+    this.selecionarFiltro(tipo, '');
+  }
+
+  onPesquisaChange(event: any) {
+    this.pesquisa = event.detail.value || '';
+    this.aplicarFiltros();
+  }
+
+  limparTodosFiltros() {
+    this.pesquisa = '';
+    this.categoriaSelecionada = '';
+    this.faixaEtariaSelecionada = '';
+    this.tipoSelecionado = '';
+    this.corSelecionada = '';
+    this.produtosFiltrados = this.produtosOriginais;
+  }
+
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   verDetalhe(id: number) {
     this.router.navigate(['/produto-detalhe', id]);
+  }
+
+  getNomeCategoria(): string {
+    const found = this.categorias.find(c => c.valor === this.categoriaSelecionada);
+    return found ? found.label : this.categoriaSelecionada;
+  }
+
+  getNomeTipo(): string {
+    const found = this.tipos.find(t => t.valor === this.tipoSelecionado);
+    return found ? found.label : this.tipoSelecionado;
   }
 }

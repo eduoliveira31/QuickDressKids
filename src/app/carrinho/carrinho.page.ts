@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
 import { AlertController, IonicSafeString, ToastController } from '@ionic/angular';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
+=======
+import { ToastController } from '@ionic/angular';
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
 import { Router } from '@angular/router';
-import { ReservasService } from '../services/reservas';
-import { AuthService } from '../services/auth.service';
+import { CarrinhoService } from '../services/carrinho'; // Confirma o teu caminho
 
 @Component({
   selector: 'app-carrinho',
@@ -13,14 +16,15 @@ import { AuthService } from '../services/auth.service';
   standalone: false
 })
 export class CarrinhoPage implements OnInit {
-
-  itens: ItemCarrinho[] = [];
-  readonly limitePorteGratis = PORTE_GRATIS_A_PARTIR_DE;
+  itens: any[] = [];
+  total: number = 0;
+  lojaSelecionada: string = '';
 
   lojaSelecionada: string = '';
 
   constructor(
     private carrinhoService: CarrinhoService,
+<<<<<<< HEAD
     private custosService: CustosService,
     private alertController: AlertController,
     private router: Router,                      
@@ -36,70 +40,49 @@ export class CarrinhoPage implements OnInit {
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
       this.lojaSelecionada = loja || '';
     });
+=======
+    private toastController: ToastController,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.carregarCarrinho();
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   }
 
-  removerItem(index: number) {
-    this.carrinhoService.removerItem(index);
+  ionViewWillEnter() {
+    this.carregarCarrinho();
   }
 
-  async alterarQuantidade(index: number, delta: number) {
-    const novaQtd = this.itens[index].quantidade + delta;
-    if (novaQtd <= 0) {
-      const alert = await this.alertController.create({
-        header: 'Confirmar Remoção',
-        message: `Tem a certeza que deseja remover o artigo "${this.itens[index].nome}" do seu carrinho?`,
-        buttons: [
-          {
-            text: 'Cancelar',
-            role: 'cancel'
-          },
-          {
-            text: 'Remover',
-            handler: () => {
-              this.carrinhoService.removerItem(index);
-            }
-          }
-        ]
-      });
-      await alert.present();
+  carregarCarrinho() {
+    // Vai buscar os itens ao serviço (ajusta o método se o teu se chamar de outra forma)
+    this.itens = this.carrinhoService.getItens ? this.carrinhoService.getItens() : [];
+    this.calcularTotal();
+  }
+
+  calcularTotal() {
+    this.total = this.itens.reduce((acc, item) => acc + (item.preco * (item.quantidade || 1)), 0);
+  }
+
+  removerItem(item: any) {
+    // Remove o item e recalcula o total automaticamente
+    if(this.carrinhoService.removerItem) {
+      this.carrinhoService.removerItem(item.id);
     } else {
-      this.carrinhoService.alterarQuantidade(index, novaQtd);
+      this.itens = this.itens.filter(i => i.id !== item.id); // Fallback
     }
+    this.carregarCarrinho();
   }
 
-  async limparCarrinho() {
-    const alert = await this.alertController.create({
-      header: 'Esvaziar Carrinho',
-      message: 'Tem a certeza que deseja remover todos os artigos do seu carrinho?',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Esvaziar',
-          handler: () => {
-            this.carrinhoService.limparCarrinho();
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  // LÓGICA DO CENÁRIO DO JOÃO
+  verificarStockItem(item: any): boolean {
+    if (!this.lojaSelecionada) return true;
 
-  get subtotal(): number { return this.custosService.getSubtotal(); }
-  get descontoCampanha(): number { return this.custosService.getDescontoCampanha(); }
-  get subtotalFinal(): number { return this.custosService.getFinalSubtotal(); }
-  get porte(): number { return this.custosService.getPorte(); }
-  get total(): number { return this.custosService.getTotal(); }
-  get faltaParteGratis(): number { return this.custosService.getFaltaParteGratis(); }
-
-  get nomeLojaCompleto(): string {
-    const loja = this.carrinhoService.getLojaLevantamento();
-    if (loja === 'braga') return 'Loja Braga Parque';
-    if (loja === 'coimbra') return 'Loja Coimbra Dolce Vita';
-    if (loja === 'lisboa') return 'Loja Lisboa Colombo';
-    return 'Nenhuma loja selecionada';
+    // Se a loja escolhida for Lisboa e o artigo for o Casaco de Inverno -> Indisponível
+    if (this.lojaSelecionada === 'lisboa' && item.nome && item.nome.includes('Casaco de Inverno')) {
+      return false; 
+    }
+    return true; 
   }
 
   aoMudarLoja(event: any) {
@@ -117,27 +100,20 @@ export class CarrinhoPage implements OnInit {
   }
 
   async criarReserva() {
-    if (!this.authService.isLoggedIn()) {
-      const alert = await this.alertController.create({
-        header: 'Iniciar Sessão Necessário',
-        message: 'Para criar a sua reserva e encomendar os seus artigos favoritos, necessita de ter sessão iniciada.',
-        buttons: [
-          {
-            text: 'Cancelar',
-            role: 'cancel'
-          },
-          {
-            text: 'Iniciar Sessão',
-            handler: () => {
-              this.router.navigate(['/login']);
-            }
-          }
-        ]
+    const semStock = this.itens.some(item => !this.verificarStockItem(item));
+    
+    if (semStock) {
+      const toast = await this.toastController.create({
+        message: 'Atenção: Remova os artigos indisponíveis antes de reservar.',
+        duration: 2500,
+        color: 'danger',
+        icon: 'warning'
       });
-      await alert.present();
+      await toast.present();
       return;
     }
 
+<<<<<<< HEAD
     if (!this.lojaSelecionada) {
       const alert = await this.alertController.create({
         header: 'Selecionar Loja de Levantamento',
@@ -160,10 +136,38 @@ export class CarrinhoPage implements OnInit {
 
     const numeroReserva = Math.floor(Math.random() * 900000000) + 100000000;
     const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
+=======
+    if (this.itens.length === 0) {
+      const toast = await this.toastController.create({
+        message: 'O seu carrinho está vazio.',
+        duration: 2000,
+        color: 'warning'
+      });
+      await toast.present();
+      return;
+    }
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
 
-    const dataAtual = new Date();
-    const dataCriacao = dataAtual.toLocaleDateString('pt-PT') + ' às ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+    if (!this.lojaSelecionada) {
+      const toast = await this.toastController.create({
+        message: 'Por favor, selecione uma loja para levantamento.',
+        duration: 2000,
+        color: 'warning'
+      });
+      await toast.present();
+      return;
+    }
+
+    // Sucesso na Reserva!
+    const toast = await this.toastController.create({
+      message: 'Reserva criada com sucesso!',
+      duration: 2000,
+      color: 'success',
+      icon: 'checkmark-circle'
+    });
+    await toast.present();
     
+<<<<<<< HEAD
     const dataAmanha = new Date(dataAtual.getTime() + 24 * 60 * 60 * 1000);
     const dataValidade = dataAmanha.toLocaleDateString('pt-PT') + ' às ' + dataAmanha.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
@@ -220,5 +224,11 @@ export class CarrinhoPage implements OnInit {
     });
 
     await alert.present();
+=======
+    // Limpa o carrinho e redireciona (ajusta se necessário)
+    if(this.carrinhoService.limparCarrinho) this.carrinhoService.limparCarrinho();
+    this.carregarCarrinho();
+    this.router.navigate(['/tabs/reservas']);
+>>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   }
 }
