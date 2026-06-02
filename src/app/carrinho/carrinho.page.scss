@@ -1,80 +1,144 @@
-.quantidade-controls {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  span {
-    font-weight: 700;
-    font-size: 16px;
-    min-width: 24px;
-    text-align: center;
-    color: #1a2e22;
-  }
+.titulo-seccao {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 12px;
 }
 
-.progresso-porte {
-  padding: 12px 16px;
-  background: #f0f7f2;
-  margin: 8px 16px;
+.loja-selector-container {
+  background: #fff;
   border-radius: 12px;
-
-  p {
-    margin: 0 0 8px 0;
-    font-size: 13px;
-    color: #3a7d59;
-  }
+  padding: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 
-.resumo-card {
-  margin: 16px;
+.loja-item {
+  --background: #f7f8fa;
+  border-radius: 8px;
+  border: 1px solid #eee;
 }
 
-.linha-custo {
+/* ESTILOS DO CARTÃO NO CARRINHO */
+.cartao-carrinho {
+  margin: 0 0 15px 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  border: 2px solid transparent; /* Margem invisível para quando houver erro */
+  transition: all 0.3s ease;
+}
+
+/* REGRA QUE DÁ O CONTORNO VERMELHO AO CASACO */
+.sem-stock {
+  border-color: #eb445a !important; /* Vermelho Ionic */
+  background-color: #fff5f5; /* Fundo ligeiramente avermelhado */
+}
+
+.conteudo-carrinho {
   display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  font-size: 14px;
-  color: #1a2e22;
-
-  &.total {
-    font-size: 16px;
-    font-weight: 700;
-    color: #4a9b6f;
-    margin-top: 4px;
-  }
-}
-
-.gratis {
-  color: #4a9b6f;
-  font-weight: 600;
-}
-
-.carrinho-vazio {
-  display: flex;
-  flex-direction: column;
+  padding: 12px;
   align-items: center;
-  justify-content: center;
-  height: 60vh;
-  gap: 12px;
-  color: #7a9e87;
+}
 
-  ion-icon {
-    font-size: 64px;
-    color: #a8d5b5;
-  }
+.imagem-wrapper {
+  width: 75px;
+  height: 75px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f4f5f8;
+  flex-shrink: 0;
 
-  h2 {
-    font-size: 20px;
-    color: #1a2e22;
-    margin: 0;
-  }
-
-  p {
-    color: #7a9e87;
-    margin: 0;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
-.btn-reserva {
-  margin: 8px 16px;
+.detalhes-wrapper {
+  flex-grow: 1;
+  padding-left: 15px;
+
+  .nome-artigo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+  }
+
+  .variantes {
+    font-size: 0.8rem;
+    color: #777;
+    margin: 0 0 6px 0;
+  }
+
+  .preco-artigo {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--ion-color-primary);
+    margin: 0;
+    
+    .quantidade {
+      font-size: 0.85rem;
+      color: #999;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+  }
+
+  .erro-stock {
+    color: #eb445a;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.btn-lixo {
+  margin: 0;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  height: 40px;
+  align-self: flex-start;
+  margin-top: -5px;
+  margin-right: -5px;
+}
+
+/* RODAPÉ E BOTÃO CRIAR RESERVA */
+.footer-container {
+  background: #fff;
+  padding: 20px 20px 30px 20px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  border-radius: 24px 24px 0 0;
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .total-label {
+      font-size: 1.1rem;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .total-valor {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #000;
+    }
+  }
+
+  .btn-reserva {
+    margin: 0;
+    height: 52px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    --border-radius: 14px;
+    --box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+  }
 }

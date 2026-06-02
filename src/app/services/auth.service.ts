@@ -6,7 +6,7 @@ export interface Usuario {
   ultimoNome?: string;
   username: string;
   email: string;
-  password?: string; // used for auth logic, not strictly safe in localStorage but acceptable for local prototype
+  password?: string; 
 }
 
 @Injectable({
@@ -21,8 +21,31 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
-    // Garantir que a app inicia sempre sem sessão ativa (deslogada) por padrão
-    this.logout();
+    // 1. Cria um utilizador de teste caso o armazenamento esteja vazio
+    this.criarUtilizadorDeTeste();
+    
+    // 2. Carrega a sessão guardada (em vez de fazer this.logout() como estava antes!)
+    this.loadSession();
+  }
+
+  // --- NOVA FUNÇÃO PARA INJETAR CREDENCIAIS NO ARMAZENAMENTO ---
+  private criarUtilizadorDeTeste() {
+    if (typeof window === 'undefined') return;
+    
+    const utilizadoresGuardados = localStorage.getItem(this.USERS_KEY);
+    
+    // Se não houver utilizadores no armazenamento, cria um por defeito
+    if (!utilizadoresGuardados || utilizadoresGuardados === '[]') {
+      const userTeste: Usuario = {
+        username: 'joao',
+        email: 'joao@quickdresskids.pt',
+        password: 'password123',
+        primeiroNome: 'João',
+        ultimoNome: 'Silva'
+      };
+      this.saveUsers([userTeste]);
+      console.log('Credenciais de teste guardadas no armazenamento: joao / password123');
+    }
   }
 
   private getUsers(): Usuario[] {
@@ -46,14 +69,14 @@ export class AuthService {
 
   public register(user: Usuario): boolean {
     const users = this.getUsers();
-    // Check if user already exists
+    // Verifica se já existe
     if (users.find(u => u.username === user.username || u.email === user.email)) {
-      return false; // User exists
+      return false; 
     }
     users.push(user);
     this.saveUsers(users);
     
-    // Auto-login after register
+    // Faz login automático após registo
     this.login(user.username, user.password!);
     return true;
   }

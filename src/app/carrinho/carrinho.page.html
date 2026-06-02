@@ -1,114 +1,79 @@
-<ion-header [translucent]="true">
-  <ion-toolbar class="navbar">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/catalogo" text="" icon="arrow-back-outline"></ion-back-button>
-    </ion-buttons>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
     <ion-title>O Meu Carrinho</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  
-  <div *ngIf="itens.length === 0" class="ion-text-center" style="margin-top: 50px;">
-    <ion-icon name="cart-outline" style="font-size: 80px; color: #ccc;"></ion-icon>
-    <h2 style="color: #666;">O carrinho está vazio</h2>
-    <p style="color: #999;">Adiciona os teus produtos favoritos do catálogo</p>
-    
-    <ion-button [routerLink]="['/tabs/catalogo']" fill="outline" color="primary" class="ion-margin-top">
-      <ion-icon name="shirt-outline" slot="start"></ion-icon>
-      Ir para o Catálogo
-    </ion-button>
+<ion-content color="light" class="ion-padding">
+
+  <!-- SELETOR DE LOJA -->
+  <div class="loja-selector-container">
+    <h3 class="titulo-seccao">Local de Levantamento</h3>
+    <ion-item lines="none" class="loja-item">
+      <ion-icon name="storefront-outline" slot="start" color="primary"></ion-icon>
+      <ion-select [(ngModel)]="lojaSelecionada" placeholder="Escolha a loja mais próxima" interface="action-sheet" style="width: 100%;">
+        <ion-select-option value="braga">Loja Braga Parque</ion-select-option>
+        <ion-select-option value="lisboa">Loja Lisboa Colombo</ion-select-option>
+        <ion-select-option value="coimbra">Loja Coimbra</ion-select-option>
+      </ion-select>
+    </ion-item>
   </div>
 
-  <div *ngIf="itens.length > 0">
+  <h3 class="titulo-seccao" style="margin-top: 25px;">Artigos na Reserva</h3>
+
+  <!-- LISTA DE ARTIGOS NO CARRINHO -->
+  <div *ngIf="itens.length > 0; else carrinhoVazio">
     
-    <ion-list>
-      <ion-item *ngFor="let item of itens; let i = index">
-        <ion-thumbnail slot="start">
-          <img [src]="item.imagem" [alt]="item.nome" />
-        </ion-thumbnail>
-        
-        <ion-label>
-          <h2>{{ item.nome }}</h2>
-          <p>Tam: <strong>{{ item.tamanho }}</strong> | Cor: <strong>{{ item.cor }}</strong></p>
-          <h3 color="primary">{{ item.preco | currency:'EUR' }}</h3>
-        </ion-label>
-
-        <div slot="end" style="display: flex; align-items: center; gap: 8px;">
-          <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, -1)" [color]="item.quantidade === 1 ? 'danger' : 'primary'">
-            <ion-icon [name]="item.quantidade === 1 ? 'trash-outline' : 'remove-circle-outline'"></ion-icon>
-          </ion-button>
-          
-          <span style="font-weight: bold; font-size: 16px;">{{ item.quantidade }}</span>
-          
-          <ion-button fill="clear" size="small" (click)="alterarQuantidade(i, 1)">
-            <ion-icon name="add-circle-outline"></ion-icon>
-          </ion-button>
+    <!-- O ngClass adiciona o contorno vermelho se não houver stock -->
+    <ion-card *ngFor="let item of itens" 
+              class="cartao-carrinho" 
+              [ngClass]="{'sem-stock': !verificarStockItem(item)}">
+      
+      <ion-card-content class="conteudo-carrinho">
+        <div class="imagem-wrapper">
+          <img [src]="item.imagem" [alt]="item.nome">
         </div>
-      </ion-item>
-    </ion-list>
+        
+        <div class="detalhes-wrapper">
+          <h2 class="nome-artigo">{{ item.nome }}</h2>
+          <p class="variantes">Cor: {{ item.cor || 'Única' }} | Tam: {{ item.tamanho || 'Único' }}</p>
+          <h3 class="preco-artigo">{{ item.preco | currency:'EUR' }} <span class="quantidade">x{{ item.quantidade || 1 }}</span></h3>
+          
+          <!-- MENSAGEM: ARTIGO INDISPONÍVEL -->
+          <div class="erro-stock" *ngIf="!verificarStockItem(item)">
+            <ion-icon name="alert-circle"></ion-icon> Artigo indisponível
+          </div>
+        </div>
 
-    <!-- Cart Pickup Store Card -->
-    <ion-card class="ion-margin-top" color="light" style="border-radius: 14px;">
-      <ion-card-header style="padding: 14px 14px 4px;">
-        <ion-card-subtitle style="font-weight: 700; color: #4e9a74; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.4px;">Loja de Levantamento</ion-card-subtitle>
-        <ion-card-title style="font-size: 1rem; font-weight: 800; color: #2d5a43; display: flex; align-items: center; gap: 8px;">
-          <ion-icon name="storefront-outline"></ion-icon>
-          {{ nomeLojaCompleto }}
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content style="padding: 0 14px 14px; font-size: 0.8rem; color: #6b7280;">
-        Todos os artigos selecionados serão reservados e preparados nesta loja para o seu levantamento.
+        <!-- ÍCONE DO LIXO -->
+        <ion-button fill="clear" color="danger" class="btn-lixo" (click)="removerItem(item)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <!-- Resumo de Custos Card -->
-    <ion-card class="ion-margin-top" color="light" style="border-radius: 14px;">
-      <ion-card-content>
-        <ion-item lines="none" color="light">
-          <ion-label>Subtotal Bruto</ion-label>
-          <ion-note slot="end">{{ subtotal | currency:'EUR' }}</ion-note>
-        </ion-item>
-        
-        <ion-item lines="none" color="light" *ngIf="descontoCampanha > 0">
-          <ion-label color="danger" style="font-weight: 600;">Desconto (Leve 3 Pague 2)</ion-label>
-          <ion-note slot="end" color="danger" style="font-weight: bold;">-{{ descontoCampanha | currency:'EUR' }}</ion-note>
-        </ion-item>
+  </div>
 
-        <ion-item lines="none" color="light" *ngIf="descontoCampanha > 0">
-          <ion-label style="font-weight: 600;">Subtotal Líquido</ion-label>
-          <ion-note slot="end" style="font-weight: bold;">{{ subtotalFinal | currency:'EUR' }}</ion-note>
-        </ion-item>
-        
-        <ion-item lines="none" color="light">
-          <ion-label>Portes de Envio</ion-label>
-          <ion-note slot="end" [color]="porte === 0 ? 'success' : 'medium'">
-            {{ porte === 0 ? 'Grátis' : (porte | currency:'EUR') }}
-          </ion-note>
-        </ion-item>
-        
-        <p *ngIf="porte > 0" style="text-align: right; font-size: 12px; color: #888; margin-top: 4px; margin-bottom: 4px;">
-          Faltam {{ faltaParteGratis | currency:'EUR' }} para portes grátis!
-        </p>
+  <!-- MENSAGEM SE CARRINHO ESTIVER VAZIO -->
+  <ng-template #carrinhoVazio>
+    <div class="ion-text-center" style="margin-top: 50px;">
+      <ion-icon name="cart-outline" style="font-size: 60px; color: #ccc;"></ion-icon>
+      <p style="color: #666; font-size: 1.1rem;">Não tem artigos para reservar.</p>
+    </div>
+  </ng-template>
 
-        <ion-item lines="none" color="light" style="margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 8px;">
-          <ion-label style="font-size: 1.2rem; font-weight: bold;">TOTAL</ion-label>
-          <ion-note slot="end" color="primary" style="font-size: 1.3rem; font-weight: bold;">
-            {{ total | currency:'EUR' }}
-          </ion-note>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
+</ion-content>
 
-    <ion-button expand="block" size="large" color="success" class="ion-margin-top" (click)="criarReserva()">
-      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+<!-- RODAPÉ FIXO COM O TOTAL E O BOTÃO -->
+<ion-footer class="ion-no-border">
+  <div class="footer-container">
+    <div class="total-row">
+      <span class="total-label">Total da Reserva:</span>
+      <span class="total-valor">{{ total | currency:'EUR' }}</span>
+    </div>
+    
+    <ion-button expand="block" color="primary" class="btn-reserva" (click)="criarReserva()">
       Criar Reserva
     </ion-button>
-    
-    <ion-button expand="block" fill="clear" color="danger" class="ion-margin-top" (click)="limparCarrinho()">
-      <ion-icon name="trash-outline" slot="start"></ion-icon>
-      Esvaziar Carrinho
-    </ion-button>
-    
   </div>
-</ion-content>
+</ion-footer>
