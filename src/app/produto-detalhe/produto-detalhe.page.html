@@ -121,12 +121,22 @@
       </ion-item>
     </ion-list>
 
-    <ion-item *ngIf="mensagemStock" lines="none" style="border-radius: 12px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);" [color]="corStock === 'success' ? 'light' : 'danger'">
-      <ion-icon [name]="corStock === 'success' ? 'checkmark-circle' : 'close-circle'" slot="start" [color]="corStock === 'success' ? 'success' : 'light'"></ion-icon>
-      <ion-label class="ion-text-wrap" [style.color]="corStock === 'success' ? '#2dd36f' : 'white'">
-        <strong>{{ mensagemStock }}</strong>
-      </ion-label>
-    </ion-item>
+    <ion-card *ngIf="lojaSelecionada" style="border-radius: 12px; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-left: 0; margin-right: 0;" [color]="corStock === 'success' ? 'light' : 'danger'">
+      <ion-card-content style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <ion-icon [name]="corStock === 'success' ? 'checkmark-circle' : 'close-circle'" [color]="corStock === 'success' ? 'success' : 'light'" style="font-size: 20px;"></ion-icon>
+          <span [style.color]="corStock === 'success' ? '#2dd36f' : 'white'" style="font-weight: bold; font-size: 0.95rem;">
+            {{ corStock === 'success' ? 'Disponível para Reserva' : 'Artigo Indisponível nesta Loja' }}
+          </span>
+        </div>
+        <p [style.color]="corStock === 'success' ? '#444' : '#fff'" style="margin: 0; font-size: 0.85rem; padding-left: 28px;">
+          <strong>Quantidade:</strong> {{ mensagemQtdStock }}
+        </p>
+        <p [style.color]="corStock === 'success' ? '#444' : '#fff'" style="margin: 0; font-size: 0.85rem; padding-left: 28px;">
+          <strong>Horário:</strong> {{ mensagemHorarioLoja }}
+        </p>
+      </ion-card-content>
+    </ion-card>
 
   </div>
 

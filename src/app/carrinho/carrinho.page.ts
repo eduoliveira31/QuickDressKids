@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, IonicSafeString } from '@ionic/angular';
+import { AlertController, IonicSafeString, ToastController } from '@ionic/angular';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
 import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
 import { Router } from '@angular/router';
@@ -17,18 +17,24 @@ export class CarrinhoPage implements OnInit {
   itens: ItemCarrinho[] = [];
   readonly limitePorteGratis = PORTE_GRATIS_A_PARTIR_DE;
 
+  lojaSelecionada: string = '';
+
   constructor(
     private carrinhoService: CarrinhoService,
     private custosService: CustosService,
     private alertController: AlertController,
     private router: Router,                      
     private reservasService: ReservasService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
     this.carrinhoService.itens$.subscribe(itens => {
       this.itens = itens;
+    });
+    this.carrinhoService.lojaLevantamento$.subscribe(loja => {
+      this.lojaSelecionada = loja || '';
     });
   }
 
@@ -96,6 +102,20 @@ export class CarrinhoPage implements OnInit {
     return 'Nenhuma loja selecionada';
   }
 
+  aoMudarLoja(event: any) {
+    const loja = event.detail.value;
+    this.lojaSelecionada = loja;
+    this.carrinhoService.setLojaLevantamento(loja ? loja : null);
+  }
+
+  isItemDisponivel(item: ItemCarrinho): boolean {
+    // Na nossa simulação, se a loja for 'lisboa' (Lisboa Colombo), os artigos com id ímpar estão indisponíveis (como o casaco que tem ID 1)
+    if (this.lojaSelecionada === 'lisboa' && item.id % 2 !== 0) {
+      return false;
+    }
+    return true;
+  }
+
   async criarReserva() {
     if (!this.authService.isLoggedIn()) {
       const alert = await this.alertController.create({
@@ -113,6 +133,26 @@ export class CarrinhoPage implements OnInit {
             }
           }
         ]
+      });
+      await alert.present();
+      return;
+    }
+
+    if (!this.lojaSelecionada) {
+      const alert = await this.alertController.create({
+        header: 'Selecionar Loja de Levantamento',
+        message: 'Por favor, selecione uma loja no seletor do carrinho para efetuar o levantamento antes de criar a sua reserva.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return;
+    }
+
+    if (this.itens.some(item => !this.isItemDisponivel(item))) {
+      const alert = await this.alertController.create({
+        header: 'Artigos Indisponíveis',
+        message: 'O seu carrinho contém artigos indisponíveis na loja selecionada. Por favor, remova-os ou selecione outra loja antes de prosseguir.',
+        buttons: ['OK']
       });
       await alert.present();
       return;
@@ -144,6 +184,26 @@ export class CarrinhoPage implements OnInit {
              alt="QR Code" style="margin-top: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
       </div>
     `);
+
+    // Mostrar Notificação Push simulada com horários
+    let fechoLoja = '23h00';
+    if (this.lojaSelecionada === 'lisboa') fechoLoja = '00h00';
+    if (this.lojaSelecionada === 'coimbra') fechoLoja = '22h00';
+
+    const toastNotif = await this.toastController.create({
+      header: 'QuickDressKids • Notificação de Reserva',
+      message: `A sua reserva #${numeroReserva} está agendada! Levante na ${this.nomeLojaCompleto} das 10h00 às ${fechoLoja} nas próximas 24 horas.`,
+      position: 'top',
+      color: 'success',
+      duration: 6000,
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel'
+        }
+      ]
+    });
+    await toastNotif.present();
 
     const alert = await this.alertController.create({
       header: 'Reserva Criada!',

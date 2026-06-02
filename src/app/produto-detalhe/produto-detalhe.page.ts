@@ -22,6 +22,8 @@ export class ProdutoDetalhePage implements OnInit {
   lojaSelecionada: string = '';
   mensagemStock: string = '';
   corStock: string = 'medium';
+  mensagemQtdStock: string = '';
+  mensagemHorarioLoja: string = '';
 
   // Geolocalização e sugestões de loja
   lojaSugerida: string = '';
@@ -93,58 +95,6 @@ export class ProdutoDetalhePage implements OnInit {
 
   async adicionarAoCarrinho() {
     if (!this.produto) return;
-
-    // 1. Verificar se o utilizador selecionou alguma loja
-    if (!this.lojaSelecionada) {
-      const toast = await this.toastController.create({
-        message: 'Por favor, selecione uma loja para verificar o stock e levantar o artigo!',
-        duration: 3000,
-        position: 'bottom',
-        color: 'warning',
-        icon: 'warning'
-      });
-      await toast.present();
-      return;
-    }
-
-    // 2. Verificar se a loja selecionada tem stock (lisboa não tem stock nesta simulação)
-    if (this.lojaSelecionada === 'lisboa') {
-      const alert = await this.alertController.create({
-        header: 'Sem Stock Disponível',
-        message: `Lamentamos, mas este artigo está esgotado na ${this.getNomeLoja(this.lojaSelecionada)}. Por favor, escolha outra loja com stock disponível.`,
-        buttons: ['OK']
-      });
-      await alert.present();
-      return;
-    }
-
-    // 3. Obter a loja que já está bloqueada/ativa no carrinho
-    const lojaCarrinho = this.carrinhoService.getLojaLevantamento();
-
-    if (lojaCarrinho && lojaCarrinho !== this.lojaSelecionada) {
-      // O utilizador selecionou uma loja diferente da do carrinho!
-      const alert = await this.alertController.create({
-        header: 'Loja de Levantamento Diferente',
-        message: new IonicSafeString(`O seu carrinho já tem artigos para levantar na <strong>${this.getNomeLoja(lojaCarrinho)}</strong>.<br><br>Todos os artigos de uma reserva devem ser levantados na mesma loja. Deseja esvaziar o carrinho atual para mudar de loja ou manter a loja anterior?`),
-        buttons: [
-          {
-            text: 'Manter anterior',
-            role: 'cancel'
-          },
-          {
-            text: 'Esvaziar e Alterar Loja',
-            handler: () => {
-              this.carrinhoService.limparCarrinho();
-              this.executarAdicao();
-            }
-          }
-        ]
-      });
-      await alert.present();
-      return;
-    }
-
-    // Se estiver tudo correto, adiciona
     this.executarAdicao();
   }
 
@@ -166,8 +116,8 @@ export class ProdutoDetalhePage implements OnInit {
       categoria: this.produto.categoria // Muito importante para a campanha "Leve 3, Pague 2"!
     };
 
-    // Bloquear a loja no carrinho se for o primeiro item
-    if (!this.carrinhoService.getLojaLevantamento()) {
+    // Bloquear a loja no carrinho se for o primeiro item e tiver uma loja selecionada
+    if (!this.carrinhoService.getLojaLevantamento() && this.lojaSelecionada) {
       this.carrinhoService.setLojaLevantamento(this.lojaSelecionada);
     }
 
@@ -194,14 +144,39 @@ export class ProdutoDetalhePage implements OnInit {
   // NOVA FUNÇÃO: VERIFICAR STOCK
   verificarStock(event: any) {
     const loja = event.detail.value;
+    if (!loja) {
+      this.mensagemQtdStock = '';
+      this.mensagemHorarioLoja = '';
+      return;
+    }
+    
+    let qtdStock = 0;
+    let horario = '';
     
     if (loja === 'lisboa') {
-      this.mensagemStock = 'Artigo indisponível nesta loja.';
-      this.corStock = 'danger'; // Fica vermelho
-    } else if (loja === 'braga' || loja === 'coimbra') {
-      this.mensagemStock = 'Em stock! Disponível para reserva.';
-      this.corStock = 'success'; // Fica verde
+      // Simulação: artigos de ID ímpar não têm stock na loja de Lisboa (Colombo)
+      if (this.produto && this.produto.id % 2 !== 0) {
+        qtdStock = 0;
+      } else {
+        qtdStock = (this.produto.id * 3) % 5 + 2;
+      }
+      horario = 'Todos os dias das 10h00 às 00h00';
+    } else if (loja === 'braga') {
+      qtdStock = (this.produto.id * 4) % 7 + 3;
+      horario = 'Todos os dias das 10h00 às 23h00';
+    } else if (loja === 'coimbra') {
+      qtdStock = (this.produto.id * 2) % 4 + 1;
+      horario = 'Todos os dias das 10h00 às 22h00';
     }
+
+    if (qtdStock === 0) {
+      this.mensagemQtdStock = '0 unidades (Esgotado)';
+      this.corStock = 'danger';
+    } else {
+      this.mensagemQtdStock = `${qtdStock} unidades em stock`;
+      this.corStock = 'success';
+    }
+    this.mensagemHorarioLoja = horario;
   }
 
   // ─── GEOLOCALIZAÇÃO E SUGESTÃO DE LOJA ─────────────────────────────────────

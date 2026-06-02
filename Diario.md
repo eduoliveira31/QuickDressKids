@@ -277,3 +277,27 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 **Decisões:**
 - Evitar popups desnecessários depois de o utilizador já ter confirmado uma compra com sucesso.
 - Colocar atalhos rápidos para limpeza de filtros de forma a tornar a navegação da app mais fluida.
+
+## Sessão 11 – 02 de junho de 2026
+**Responsável:** Luís Martinho Oliveira Lopes
+**Objetivo:** Alinhamento da app com os requisitos das tarefas Mobile 1, 2 e 3 e resolução de conflitos de compilação no Catálogo.
+
+**Atividades realizadas:**
+- **Resolução de Conflitos no Catálogo:** Remoção dos marcadores de conflito de Git (`<<<<<<<`, `=======`, `>>>>>>>`) no ficheiro `catalogo.page.ts` e correção das propriedades e métodos para garantir a compilação e o funcionamento correto dos chips de filtragem.
+- **Mobile 1 (Acesso Opcional e Horários de Stock):** Remoção do bloqueio de seleção de loja na página de detalhes de produto ao adicionar ao carrinho. Exibição de stock em unidades e horários de funcionamento (Braga Parque: 10h-23h; Coimbra: 10h-22h; Lisboa Colombo: 10h-00h) quando uma loja for selecionada.
+- **Mobile 2 (Seletor de Loja no Carrinho & Borda de Indisponibilidade):** Introdução do seletor de loja de levantamento na página do carrinho. Aplicação automática de contorno vermelho e mensagem de indisponibilidade aos produtos sem stock na loja selecionada (ex: artigos de ID ímpar como o casaco de ID 1 na loja Lisboa Colombo). Implementação de recálculo dinâmico (com subtotal correto de 67,50€ para sapatilhas + jardineiras após a remoção do casaco) e bloqueio da reserva se houver itens indisponíveis.
+- **Mobile 3 (Notificação de Agendamento de Reserva):** Integração de uma notificação push simulada (Toast) disparada no momento da criação da reserva, indicando o agendamento correto, prazo de validade de 24 horas e o horário de levantamento da loja selecionada.
+
+**Problemas:**
+- Havia marcas de conflito de merge remanescentes no controlador do catálogo (`catalogo.page.ts`), quebrando a compilação global da aplicação.
+- A seleção de loja era exigida no detalhe do produto, impedindo o fluxo livre do utilizador.
+- O carrinho não permitia escolher ou alterar a loja, validando a disponibilidade no momento errado.
+
+**Soluções:**
+- Limpeza dos blocos duplicados em `catalogo.page.ts` e ajuste dos métodos para usar chips e as variáveis corretas.
+- Permissão de adição ao carrinho sem loja selecionada no detalhe do produto e transferência da validação reativa de stock para o ecrã do carrinho.
+- Adição de seletor `<ion-select>` no carrinho e vinculação estilizada de classe condicional para artigos indisponíveis.
+
+**Decisões:**
+- Permitir que o utilizador simule a recolha e valide o stock a qualquer momento na própria página do carrinho.
+- Disparar a notificação push simulada logo após a confirmação da reserva como reforço visual e de contexto das condições da loja.
