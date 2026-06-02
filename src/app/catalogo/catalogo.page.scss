@@ -1,294 +1,132 @@
-:host {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+/* --- BARRA DE PESQUISA E CHIPS NO TOPO --- */
+.scroll-chips::-webkit-scrollbar {
+  display: none;
 }
 
-ion-tab-bar {
-  display: none !important;
+.pesquisa-escura input {
+  color: #000000 !important;
+  font-weight: 500 !important;
 }
 
-.navbar {
+.chip-active-top {
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+  color: var(--ion-color-primary);
+  font-weight: bold;
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.25);
+  
+  ion-icon {
+    color: var(--ion-color-primary);
+  }
+}
+
+/* --- GRELHA E CARTÕES (A CORREÇÃO DO DESALINHAMENTO) --- */
+.coluna-produto {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  height: 56px;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-
-  .logo-title {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #2563eb;
-    cursor: pointer;
-  }
-
-  .navbar-end {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    .nav-link {
-      font-size: 0.9rem;
-      color: #374151;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-
-      &:hover { color: #2563eb; }
-
-      ion-icon { font-size: 22px; }
-    }
-
-    .btn-entrar {
-      background: #111827;
-      color: #ffffff;
-      border: none;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      height: 36px;
-      padding: 0 18px;
-      cursor: pointer;
-
-      &:hover { background: #374151; }
-    }
-  }
+  padding: 6px;
 }
 
-.catalogo-content {
-  --background: #ffffff;
-}
-
-.page-header {
-  padding: 28px 24px 16px;
-
-  .page-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #111827;
-    margin: 0 0 16px;
-  }
-
-  .searchbar-custom {
-    --background: #f3f4f6;
-    --border-radius: 8px;
-    --box-shadow: none;
-    --placeholder-color: #9ca3af;
-    --icon-color: #9ca3af;
-    --color: #111827;
-    padding: 0;
-    max-width: 460px;
-  }
-}
-
-.layout-principal {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 0 24px 40px;
-}
-
-.painel-filtros {
-  width: 220px;
-  min-width: 220px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px 16px;
-  position: sticky;
-  top: 72px;
-
-  .filtros-titulo {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #000000;
-    margin: 0 0 16px;
-  }
-
-  .filtro-grupo {
-    margin-bottom: 16px;
-
-    .filtro-label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #000000;
-      margin-bottom: 6px;
-    }
-
-    .select-wrapper {
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      background: #f9fafb;
-      overflow: hidden;
-
-      ion-select.filtro-select {
-        font-weight: 700;
-        font-size: 0.875rem;
-        width: 100%;
-        min-height: 42px;
-        --padding-start: 12px;
-        --padding-end: 12px;
-        --padding-top: 10px;
-        --padding-bottom: 10px;
-
-        &::part(placeholder) { color: #000000 !important; }
-        &::part(text) { color: #000000 !important; }
-      }
-    }
-  }
-
-  .btn-limpar {
-    margin-top: 8px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    width: 100%;
-
-    &::part(native) {
-      color: #dc2626 !important;
-      background: rgba(220, 38, 38, 0.08) !important;
-      border: 1px solid #dc2626 !important;
-      border-radius: 8px !important;
-    }
-  }
-}
-
-.area-produtos {
-  flex: 1;
-  min-width: 0;
-
-  .contador-resultados {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0 0 16px;
-  }
-}
-
-.grelha-produtos {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.produto-card {
-  cursor: pointer;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+.cartao-produto {
+  margin: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%; /* Força preenchimento total do bloco pai */
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  background: #ffffff;
+  overflow: hidden;
 
-  &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-
-    .card-imagem img { transform: scale(1.03); }
-  }
-
-  .card-imagem {
+  .imagem-container {
     width: 100%;
-    height: 300px;
-    overflow: hidden;
-    background: #f3f4f6;
-    flex-shrink: 0;
-
+    height: 180px; /* ALTURA FIXA PARA TODAS AS IMAGENS */
+    background: #fdfdfd;
+    
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover; /* MUITO IMPORTANTE: Corta as imagens sem amassar */
       display: block;
-      transition: transform 0.3s ease;
     }
   }
 
-  .card-info {
-    padding: 16px;
+  .corpo-cartao {
+    padding: 12px 12px 4px 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    flex: 1;
+  }
 
-    .card-nome {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #111827;
-      margin: 0;
-      line-height: 1.3;
-    }
-
-    .card-tags, .card-cores {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .tag {
-      font-size: 0.75rem;
-      padding: 3px 10px;
-      border-radius: 20px;
-      border: 1px solid #e5e7eb;
-      color: #374151;
-      background: #f9fafb;
-      white-space: nowrap;
-    }
-
-    .card-preco {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #2563eb;
-      margin: 4px 0 0;
-    }
+  .rodape-cartao {
+    padding: 0 12px 12px 12px;
+    margin-top: auto; /* Truque de flexbox: joga o preço sempre para o fundo do cartão */
   }
 }
 
-.estado-vazio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 60px 20px;
-  color: #9ca3af;
-  text-align: center;
-
-  ion-icon {
-    font-size: 4rem;
-    margin-bottom: 12px;
-  }
-
-  p {
-    font-size: 1rem;
-    margin-bottom: 16px;
-  }
-
-  /* Estilo do Botão Vermelho de Limpar Filtros */
-.btn-limpar-container {
-  padding: 8px 16px 4px;
-  background: #ffffff;
+/* --- REGRAS DE CORES PRETAS EXIGIDAS PARA AS LETRAS --- */
+.texto-preto-sub {
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  color: #000000 !important; /* Subtítulo a preto */
+  opacity: 0.6;
+  margin-bottom: 3px;
 }
 
-.btn-limpar-vermelho {
-  width: 100%;
-  height: 44px;
-  background-color: #dc2626; /* Vermelho Sólido */
-  color: #ffffff;            /* Letras Brancas */
+.texto-preto-titulo {
   font-size: 0.95rem;
   font-weight: 700;
-  border: none;
-  border-radius: 6px;        /* Formato Retangular Reto (cantos ligeiramente suavizados) */
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
-  transition: background-color 0.1s ease, transform 0.1s ease;
-
-  &:active {
-    background-color: #b91c1c; /* Vermelho mais escuro ao pressionar */
-    transform: scale(0.98);    /* Efeito físico de clique */
-  }
+  color: #000000 !important; /* Título a preto carregado */
+  line-height: 1.25;
+  
+  /* Limita os nomes a um máximo de 2 linhas e adiciona reticências (...) se ultrapassar */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
+
+.texto-preto-preco {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #000000 !important; /* Preço a preto destacado */
+  margin-top: 10px;
+}
+
+/* --- BLOCOS DO MODAL DE FILTROS --- */
+.bloco-filtro-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+
+  h3 {
+    margin: 0 0 14px 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #000000;
+  }
+
+  .grupo-chips-filtros {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 8px;
+
+    ion-chip {
+      margin: 0;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 16px 14px;
+      border-radius: 10px;
+      background: #f4f5f8;
+      color: #333333;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+    }
+
+    .chip-filtro-ativo {
+      background: var(--ion-color-primary);
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(var(--ion-color-primary-rgb), 0.25);
+    }
+  }
 }
