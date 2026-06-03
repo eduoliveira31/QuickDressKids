@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
+import { Router } from '@angular/router';
 import { AlertController, IonicSafeString, ToastController } from '@ionic/angular';
 import { CarrinhoService, ItemCarrinho } from '../services/carrinho';
-import { CustosService, PORTE_GRATIS_A_PARTIR_DE } from '../services/custos';
-=======
-import { ToastController } from '@ionic/angular';
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
-import { Router } from '@angular/router';
-import { CarrinhoService } from '../services/carrinho'; // Confirma o teu caminho
+import { CustosService } from '../services/custos';
+import { ReservasService } from '../services/reservas';
+import { AuthService, Usuario } from '../services/auth.service';
 
 @Component({
   selector: 'app-carrinho',
@@ -19,12 +16,10 @@ export class CarrinhoPage implements OnInit {
   itens: any[] = [];
   total: number = 0;
   lojaSelecionada: string = '';
-
-  lojaSelecionada: string = '';
+  currentUser: Usuario | null = null;
 
   constructor(
     private carrinhoService: CarrinhoService,
-<<<<<<< HEAD
     private custosService: CustosService,
     private alertController: AlertController,
     private router: Router,                      
@@ -34,20 +29,16 @@ export class CarrinhoPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
     this.carrinhoService.itens$.subscribe(itens => {
       this.itens = itens;
+      this.calcularTotal();
     });
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
       this.lojaSelecionada = loja || '';
     });
-=======
-    private toastController: ToastController,
-    private router: Router
-  ) {}
-
-  ngOnInit() {
-    this.carregarCarrinho();
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   }
 
   ionViewWillEnter() {
@@ -55,34 +46,60 @@ export class CarrinhoPage implements OnInit {
   }
 
   carregarCarrinho() {
-    // Vai buscar os itens ao serviço (ajusta o método se o teu se chamar de outra forma)
-    this.itens = this.carrinhoService.getItens ? this.carrinhoService.getItens() : [];
+    this.itens = this.carrinhoService.getItens();
     this.calcularTotal();
   }
 
-  calcularTotal() {
-    this.total = this.itens.reduce((acc, item) => acc + (item.preco * (item.quantidade || 1)), 0);
+  voltar() {
+    if (window.history.length > 2) {
+      window.history.back();
+    } else {
+      this.router.navigate(['/tabs/home']);
+    }
   }
 
-  removerItem(item: any) {
-    // Remove o item e recalcula o total automaticamente
-    if(this.carrinhoService.removerItem) {
-      this.carrinhoService.removerItem(item.id);
-    } else {
-      this.itens = this.itens.filter(i => i.id !== item.id); // Fallback
+  calcularTotal() {
+    this.total = this.custosService.getTotal();
+  }
+
+  alterarQuantidade(index: number, delta: number) {
+    const item = this.itens[index];
+    const novaQtd = item.quantidade + delta;
+    if (novaQtd >= 1) {
+      this.carrinhoService.alterarQuantidade(index, novaQtd);
+      this.calcularTotal();
     }
+  }
+
+  removerItem(index: number) {
+    this.carrinhoService.removerItem(index);
     this.carregarCarrinho();
   }
 
-  // LÓGICA DO CENÁRIO DO JOÃO
+  obterStockItem(item: any, loja: string): number {
+    if (!loja) return 999;
+    const id = item.id;
+    if (loja === 'lisboa') {
+      if (id === 1 || (item.nome && item.nome.toLowerCase().includes('casaco de inverno'))) {
+        return 0;
+      }
+      return (id * 3) % 5 + 2;
+    } else if (loja === 'braga') {
+      return (id * 4) % 7 + 3;
+    } else if (loja === 'coimbra') {
+      return (id * 2) % 4 + 1;
+    }
+    return 999;
+  }
+
   verificarStockItem(item: any): boolean {
     if (!this.lojaSelecionada) return true;
+    const stock = this.obterStockItem(item, this.lojaSelecionada);
+    return item.quantidade <= stock;
+  }
 
-    // Se a loja escolhida for Lisboa e o artigo for o Casaco de Inverno -> Indisponível
-    if (this.lojaSelecionada === 'lisboa' && item.nome && item.nome.includes('Casaco de Inverno')) {
-      return false; 
-    }
-    return true; 
+  isItemDisponivel(item: any): boolean {
+    return this.verificarStockItem(item);
   }
 
   aoMudarLoja(event: any) {
@@ -91,29 +108,36 @@ export class CarrinhoPage implements OnInit {
     this.carrinhoService.setLojaLevantamento(loja ? loja : null);
   }
 
-  isItemDisponivel(item: ItemCarrinho): boolean {
-    // Na nossa simulação, se a loja for 'lisboa' (Lisboa Colombo), os artigos com id ímpar estão indisponíveis (como o casaco que tem ID 1)
-    if (this.lojaSelecionada === 'lisboa' && item.id % 2 !== 0) {
-      return false;
-    }
-    return true;
+  get nomeLojaCompleto(): string {
+    if (this.lojaSelecionada === 'braga') return 'Loja Braga Parque';
+    if (this.lojaSelecionada === 'lisboa') return 'Loja Lisboa Colombo (Loja mais próxima)';
+    if (this.lojaSelecionada === 'coimbra') return 'Loja Coimbra Dolce Vita';
+    return '';
   }
 
   async criarReserva() {
-    const semStock = this.itens.some(item => !this.verificarStockItem(item));
-    
-    if (semStock) {
+    if (this.itens.length === 0) {
       const toast = await this.toastController.create({
-        message: 'Atenção: Remova os artigos indisponíveis antes de reservar.',
-        duration: 2500,
-        color: 'danger',
-        icon: 'warning'
+        message: 'O seu carrinho está vazio.',
+        duration: 2000,
+        color: 'warning'
       });
       await toast.present();
       return;
     }
 
-<<<<<<< HEAD
+    if (!this.currentUser) {
+      const toast = await this.toastController.create({
+        message: 'Inicie a sua sessão para concluir a reserva.',
+        duration: 2500,
+        color: 'warning',
+        position: 'bottom'
+      });
+      await toast.present();
+      this.router.navigate(['/login'], { queryParams: { redirect: '/tabs/carrinho' } });
+      return;
+    }
+
     if (!this.lojaSelecionada) {
       const alert = await this.alertController.create({
         header: 'Selecionar Loja de Levantamento',
@@ -124,7 +148,8 @@ export class CarrinhoPage implements OnInit {
       return;
     }
 
-    if (this.itens.some(item => !this.isItemDisponivel(item))) {
+    const semStock = this.itens.some(item => !this.verificarStockItem(item));
+    if (semStock) {
       const alert = await this.alertController.create({
         header: 'Artigos Indisponíveis',
         message: 'O seu carrinho contém artigos indisponíveis na loja selecionada. Por favor, remova-os ou selecione outra loja antes de prosseguir.',
@@ -136,42 +161,13 @@ export class CarrinhoPage implements OnInit {
 
     const numeroReserva = Math.floor(Math.random() * 900000000) + 100000000;
     const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
-=======
-    if (this.itens.length === 0) {
-      const toast = await this.toastController.create({
-        message: 'O seu carrinho está vazio.',
-        duration: 2000,
-        color: 'warning'
-      });
-      await toast.present();
-      return;
-    }
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
 
-    if (!this.lojaSelecionada) {
-      const toast = await this.toastController.create({
-        message: 'Por favor, selecione uma loja para levantamento.',
-        duration: 2000,
-        color: 'warning'
-      });
-      await toast.present();
-      return;
-    }
-
-    // Sucesso na Reserva!
-    const toast = await this.toastController.create({
-      message: 'Reserva criada com sucesso!',
-      duration: 2000,
-      color: 'success',
-      icon: 'checkmark-circle'
-    });
-    await toast.present();
-    
-<<<<<<< HEAD
+    const dataAtual = new Date();
+    const dataCriacao = dataAtual.toLocaleDateString('pt-PT') + ' às ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
     const dataAmanha = new Date(dataAtual.getTime() + 24 * 60 * 60 * 1000);
     const dataValidade = dataAmanha.toLocaleDateString('pt-PT') + ' às ' + dataAmanha.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
-    this.reservasService.adicionarReserva({
+    await this.reservasService.adicionarReserva({
       numero: numeroReserva,
       dataCriacao: dataCriacao,
       dataValidade: dataValidade,
@@ -180,14 +176,6 @@ export class CarrinhoPage implements OnInit {
       loja: this.nomeLojaCompleto,
       itens: [...this.itens] 
     });
-
-    const mensagemSegura = new IonicSafeString(`
-      <div class="ion-text-center">
-        <p>A sua reserva <strong>#${numeroReserva}</strong> está confirmada.</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Reserva_QDK_${numeroReserva}" 
-             alt="QR Code" style="margin-top: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-      </div>
-    `);
 
     // Mostrar Notificação Push simulada com horários
     let fechoLoja = '23h00';
@@ -209,26 +197,11 @@ export class CarrinhoPage implements OnInit {
     });
     await toastNotif.present();
 
-    const alert = await this.alertController.create({
-      header: 'Reserva Criada!',
-      message: mensagemSegura,
-      buttons: [
-        {
-          text: 'Ver Minhas Reservas',
-          handler: () => {
-            this.carrinhoService.limparCarrinho();
-            this.router.navigate(['/reservas']);
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-=======
-    // Limpa o carrinho e redireciona (ajusta se necessário)
-    if(this.carrinhoService.limparCarrinho) this.carrinhoService.limparCarrinho();
+    // Limpar o carrinho imediatamente
+    this.carrinhoService.limparCarrinho();
     this.carregarCarrinho();
-    this.router.navigate(['/tabs/reservas']);
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
+
+    // Avançar diretamente para a finalização da compra (Encomendas)
+    this.router.navigate(['/reservas']);
   }
 }

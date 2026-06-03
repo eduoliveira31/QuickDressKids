@@ -1,18 +1,18 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar style="--background: #4e9a74; --color: #ffffff;">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/perfil" text="Voltar"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/perfil" text="" icon="arrow-back-outline" style="--color: #ffffff; color: #ffffff !important;"></ion-back-button>
     </ion-buttons>
-    <ion-title>Minha Conta</ion-title>
+    <ion-title style="color: #ffffff; font-weight: bold;">Encomendas</ion-title>
   </ion-toolbar>
   
-  <ion-toolbar color="light">
-    <ion-segment [(ngModel)]="abaAtiva">
-      <ion-segment-button value="ativas">
-        <ion-label>Reservas Ativas ({{ reservasAtivas.length }})</ion-label>
+  <ion-toolbar style="--background: #ffffff; padding: 4px 8px;">
+    <ion-segment [(ngModel)]="abaAtiva" style="--background: #e8f5ee; margin: 0;">
+      <ion-segment-button value="ativas" style="--color: #2d5a43; --color-checked: #ffffff; --background-checked: #4e9a74;">
+        <ion-label style="font-weight: bold;">Encomendas Ativas ({{ reservasAtivas.length }})</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="historico">
-        <ion-label>Histórico ({{ historico.length }})</ion-label>
+      <ion-segment-button value="historico" style="--color: #2d5a43; --color-checked: #ffffff; --background-checked: #4e9a74;">
+        <ion-label style="font-weight: bold;">Histórico ({{ historico.length }})</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
@@ -24,9 +24,9 @@
     
     <div *ngIf="reservasAtivas.length === 0" class="ion-text-center" style="margin-top: 60px;">
       <ion-icon name="ticket-outline" style="font-size: 80px; color: #ccc;"></ion-icon>
-      <h2 style="color: gray;">Não tens reservas ativas</h2>
-      <p style="color: #999;">Os teus artigos reservados aparecerão aqui.</p>
-      <ion-button routerLink="/tabs/catalogo" fill="clear">Ir para o Catálogo</ion-button>
+      <h2 style="color: gray;">Não tens encomendas ativas</h2>
+      <p style="color: #999;">Os teus artigos encomendados aparecerão aqui.</p>
+      <ion-button routerLink="/tabs/catalogo" fill="clear" style="--color: #4e9a74; font-weight: bold;">Ir para o Catálogo</ion-button>
     </div>
 
     <ion-card *ngFor="let reserva of reservasAtivas" class="ion-padding" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border: 1px solid #f2f2f2; margin-bottom: 25px; background: white;">
@@ -34,14 +34,17 @@
         <div style="display: flex; gap: 8px;">
           <ion-icon name="checkmark-circle-outline" color="success" style="font-size: 26px; margin-top: 2px;"></ion-icon>
           <div>
-            <h2 style="margin: 0; font-weight: bold; font-size: 1.1rem; color: #333;">Reserva</h2>
-            <h2 style="margin: 2px 0 0 0; font-weight: bold; font-size: 1.1rem; color: #333;">#R{{ reserva.numero }}</h2>
+            <h2 style="margin: 0; font-weight: bold; font-size: 1.1rem; color: #333;">Encomenda</h2>
+            <h2 style="margin: 2px 0 0 0; font-weight: bold; font-size: 1.1rem; color: #333;">#E{{ reserva.numero }}</h2>
           </div>
         </div>
         <ion-badge color="dark" style="border-radius: 12px; padding: 6px 12px; font-weight: normal; font-size: 0.8rem;">Confirmada</ion-badge>
       </div>
 
-      <p style="color: gray; margin-top: 15px; margin-bottom: 20px; font-size: 0.95rem;">{{ reserva.loja }}</p>
+      <p style="color: #2d5a43; margin-top: 15px; margin-bottom: 20px; font-size: 0.95rem; font-weight: 500;">
+        <ion-icon name="storefront-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon>
+        {{ reserva.loja }}
+      </p>
 
       <ion-row class="ion-no-padding">
         <ion-col size="6" class="ion-no-padding">
@@ -64,7 +67,7 @@
       </div>
 
       <div style="border-top: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; margin-bottom: 10px;">
-        <h3 style="margin: 0; font-weight: bold; color: #111; font-size: 1.1rem;">Total: {{ reserva.total | currency:'EUR' }}</h3>
+        <h3 style="margin: 0; font-weight: bold; color: #2d5a43; font-size: 1.1rem;">Total: {{ reserva.total | currency:'EUR' }}</h3>
       </div>
 
       <ion-button expand="block" fill="outline" style="margin-bottom: 10px; --border-radius: 8px; --border-color: #ddd; color: #333; text-transform: none; font-weight: normal;" (click)="abrirQR(reserva)">
@@ -86,7 +89,7 @@
     <div *ngIf="historico.length === 0" class="ion-text-center" style="margin-top: 60px;">
       <ion-icon name="time-outline" style="font-size: 80px; color: #ccc;"></ion-icon>
       <h2 style="color: gray;">Histórico vazio</h2>
-      <p style="color: #999;">As reservas levantadas na loja aparecerão aqui.</p>
+      <p style="color: #999;">As encomendas levantadas na loja aparecerão aqui.</p>
     </div>
 
     <ion-card *ngFor="let reserva of historico" class="ion-padding" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border: 1px solid #f2f2f2; margin-bottom: 25px; background: white; opacity: 0.85;">
@@ -94,8 +97,8 @@
         <div style="display: flex; gap: 8px;">
           <ion-icon name="checkmark-done-circle-outline" color="medium" style="font-size: 26px; margin-top: 2px;"></ion-icon>
           <div>
-            <h2 style="margin: 0; font-weight: bold; font-size: 1.1rem; color: #555;">Reserva</h2>
-            <h2 style="margin: 2px 0 0 0; font-weight: bold; font-size: 1.1rem; color: #555;">#R{{ reserva.numero }}</h2>
+            <h2 style="margin: 0; font-weight: bold; font-size: 1.1rem; color: #555;">Encomenda</h2>
+            <h2 style="margin: 2px 0 0 0; font-weight: bold; font-size: 1.1rem; color: #555;">#E{{ reserva.numero }}</h2>
           </div>
         </div>
         <ion-badge color="medium" style="border-radius: 12px; padding: 6px 12px; font-weight: normal; font-size: 0.8rem;">Concluída</ion-badge>
@@ -122,7 +125,7 @@
     <ng-template>
       <ion-content class="ion-padding ion-text-center" style="--background: #ffffff;" *ngIf="reservaSelecionada">
         <div style="margin-top: 15px;">
-          <h2 style="font-weight: bold; color: #111;">Reserva #R{{ reservaSelecionada.numero }}</h2>
+          <h2 style="font-weight: bold; color: #111;">Encomenda #E{{ reservaSelecionada.numero }}</h2>
           <p style="color: #555; font-size: 14px; margin-top: 5px;">Apresente este código no balcão da loja</p>
           <div style="background: white; padding: 15px; display: inline-block; border-radius: 12px; margin-top: 15px; border: 2px dashed #ccc;">
             <img [src]="'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Reserva_QDK_' + reservaSelecionada.numero" 

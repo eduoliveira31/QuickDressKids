@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { AuthService, Usuario } from '../services/auth.service';
 
@@ -30,6 +30,7 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private toastController: ToastController
   ) {}
 
@@ -48,7 +49,8 @@ export class LoginPage implements OnInit {
     const sucesso = this.authService.login(this.identifier, this.passwordLocal);
     if (sucesso) {
       this.mostrarToast('Sessão iniciada com sucesso!', 'success');
-      this.router.navigate(['/tabs/home']);
+      const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/tabs/home';
+      this.router.navigateByUrl(redirect);
     } else {
       this.mostrarToast('Credenciais incorretas. Tenta novamente.', 'danger');
     }
@@ -82,7 +84,8 @@ export class LoginPage implements OnInit {
     const sucesso = this.authService.register(novoUser);
     if (sucesso) {
       this.mostrarToast('Conta criada e sessão iniciada com sucesso!', 'success');
-      this.router.navigate(['/tabs/home']);
+      const redirect = this.route.snapshot.queryParamMap.get('redirect') || '/tabs/home';
+      this.router.navigateByUrl(redirect);
     } else {
       this.mostrarToast('O utilizador ou email já existe.', 'danger');
     }

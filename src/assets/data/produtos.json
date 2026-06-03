@@ -1,14 +1,21 @@
 [
   {
     "id": 1,
-    "nome": "Casaco para Menino",
+    "nome": "Casaco de Inverno",
     "categoria": "menino",
     "tipo": "casaco",
     "preco": 34.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Azul", "Cinzento"],
-    "imagem": "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Azul",
+      "Cinzento"
+    ],
+    "imagem": "assets/images/casaco_inverno.png",
     "descricao": "Casaco leve e confortável, ideal para os dias mais frescos.",
     "composicao": "60% Algodão, 40% Poliéster",
     "destaque": true
@@ -20,9 +27,16 @@
     "tipo": "tshirt",
     "preco": 14.99,
     "faixaEtaria": "6-8",
-    "tamanhos": ["S", "M", "L"],
-    "cores": ["Rosa", "Branco"],
-    "imagem": "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400&q=80",
+    "tamanhos": [
+      "S",
+      "M",
+      "L"
+    ],
+    "cores": [
+      "Rosa",
+      "Branco"
+    ],
+    "imagem": "assets/images/tshirt_flores.png",
     "descricao": "T-shirt com estampado floral, fresca e colorida.",
     "composicao": "100% Algodão",
     "destaque": true
@@ -34,9 +48,16 @@
     "tipo": "calcas",
     "preco": 24.99,
     "faixaEtaria": "9-12",
-    "tamanhos": ["M", "L", "XL"],
-    "cores": ["Azul", "Preto"],
-    "imagem": "https://images.unsplash.com/photo-1565084888279-aca607ecce0c?w=400&q=80",
+    "tamanhos": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "cores": [
+      "Azul",
+      "Preto"
+    ],
+    "imagem": "assets/images/calcas_ganga_menino.png",
     "descricao": "Calças de ganga resistentes para o dia a dia.",
     "composicao": "98% Algodão, 2% Elastano",
     "destaque": false
@@ -48,9 +69,17 @@
     "tipo": "vestido",
     "preco": 29.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Rosa", "Amarelo", "Verde"],
-    "imagem": "https://images.unsplash.com/photo-1476234251651-f353703a034d?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Rosa",
+      "Amarelo",
+      "Verde"
+    ],
+    "imagem": "assets/images/vestido_verao.png",
     "descricao": "Vestido leve e alegre para os dias quentes.",
     "composicao": "100% Algodão",
     "destaque": true
@@ -62,9 +91,16 @@
     "tipo": "body",
     "preco": 9.99,
     "faixaEtaria": "0-2",
-    "tamanhos": ["XS", "S"],
-    "cores": ["Branco", "Azul", "Rosa"],
-    "imagem": "https://images.unsplash.com/photo-1522771930-78848d9293e8?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S"
+    ],
+    "cores": [
+      "Branco",
+      "Azul",
+      "Rosa"
+    ],
+    "imagem": "assets/images/body_estrelas.png",
     "descricao": "Body macio com estampado de estrelas, perfeito para bebés.",
     "composicao": "100% Algodão Orgânico",
     "destaque": true
@@ -76,9 +112,17 @@
     "tipo": "calcado",
     "preco": 39.99,
     "faixaEtaria": "6-8",
-    "tamanhos": ["S", "M", "L"],
-    "cores": ["Vermelho", "Azul", "Verde"],
-    "imagem": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80",
+    "tamanhos": [
+      "S",
+      "M",
+      "L"
+    ],
+    "cores": [
+      "Vermelho",
+      "Azul",
+      "Verde"
+    ],
+    "imagem": "assets/images/sapatilhas_menino.png",
     "descricao": "Sapatilhas confortáveis para crianças ativas.",
     "composicao": "Exterior: Sintético. Interior: Têxtil",
     "destaque": false
@@ -90,9 +134,15 @@
     "tipo": "casaco",
     "preco": 22.99,
     "faixaEtaria": "0-2",
-    "tamanhos": ["XS", "S"],
-    "cores": ["Rosa", "Branco"],
-    "imagem": "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S"
+    ],
+    "cores": [
+      "Rosa",
+      "Branco"
+    ],
+    "imagem": "assets/images/casaco_bebe.png",
     "descricao": "Casaco quentinho e suave para os primeiros meses.",
     "composicao": "80% Algodão, 20% Poliéster",
     "destaque": false
@@ -104,9 +154,16 @@
     "tipo": "acessorio",
     "preco": 8.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S"],
-    "cores": ["Rosa", "Branco", "Azul"],
-    "imagem": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S"
+    ],
+    "cores": [
+      "Rosa",
+      "Branco",
+      "Azul"
+    ],
+    "imagem": "assets/images/gorro_listras_menina.png",
     "descricao": "Gorro quentinho com padrão de listras coloridas.",
     "composicao": "100% Acrílico",
     "destaque": false
@@ -118,9 +175,16 @@
     "tipo": "camisola",
     "preco": 19.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Verde", "Cinzento"],
-    "imagem": "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Verde",
+      "Cinzento"
+    ],
+    "imagem": "assets/images/camisola_dinossauros.png",
     "descricao": "Camisola com estampado de dinossauros, ideal para os mais aventureiros.",
     "composicao": "100% Algodão",
     "destaque": true
@@ -132,9 +196,17 @@
     "tipo": "saia",
     "preco": 18.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Rosa", "Lilás", "Branco"],
-    "imagem": "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Rosa",
+      "Lilás",
+      "Branco"
+    ],
+    "imagem": "assets/images/saia_tutu_menina.png",
     "descricao": "Saia tutu fofa e elegante para ocasiões especiais.",
     "composicao": "100% Poliéster",
     "destaque": true
@@ -146,9 +218,15 @@
     "tipo": "pijama",
     "preco": 16.99,
     "faixaEtaria": "0-2",
-    "tamanhos": ["XS", "S"],
-    "cores": ["Amarelo", "Branco"],
-    "imagem": "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S"
+    ],
+    "cores": [
+      "Amarelo",
+      "Branco"
+    ],
+    "imagem": "assets/images/pijama_ursinhos_bebe.png",
     "descricao": "Pijama macio com estampado de ursinhos para noites confortáveis.",
     "composicao": "100% Algodão Orgânico",
     "destaque": false
@@ -160,9 +238,17 @@
     "tipo": "calcoes",
     "preco": 12.99,
     "faixaEtaria": "6-8",
-    "tamanhos": ["S", "M", "L"],
-    "cores": ["Azul", "Laranja", "Verde"],
-    "imagem": "https://images.unsplash.com/photo-1591195853828-11db59a44f43?w=400&q=80",
+    "tamanhos": [
+      "S",
+      "M",
+      "L"
+    ],
+    "cores": [
+      "Azul",
+      "Laranja",
+      "Verde"
+    ],
+    "imagem": "assets/images/calcoes_praia_menino.png",
     "descricao": "Calções leves e rápidos a secar, perfeitos para a praia.",
     "composicao": "100% Poliéster",
     "destaque": false
@@ -174,9 +260,16 @@
     "tipo": "vestido",
     "preco": 44.99,
     "faixaEtaria": "9-12",
-    "tamanhos": ["M", "L", "XL"],
-    "cores": ["Vermelho", "Azul Marinho"],
-    "imagem": "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400&q=80",
+    "tamanhos": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "cores": [
+      "Vermelho",
+      "Azul Marinho"
+    ],
+    "imagem": "assets/images/vestido_festa_menina.png",
     "descricao": "Vestido elegante para festas e ocasiões especiais.",
     "composicao": "95% Poliéster, 5% Elastano",
     "destaque": true
@@ -188,9 +281,17 @@
     "tipo": "calcado",
     "preco": 27.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Rosa", "Amarelo", "Verde"],
-    "imagem": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Rosa",
+      "Amarelo",
+      "Verde"
+    ],
+    "imagem": "assets/images/botas_chuva_menina.png",
     "descricao": "Botas de chuva impermeáveis com padrão colorido.",
     "composicao": "PVC",
     "destaque": false
@@ -202,9 +303,15 @@
     "tipo": "conjunto",
     "preco": 19.99,
     "faixaEtaria": "0-2",
-    "tamanhos": ["XS"],
-    "cores": ["Branco", "Azul", "Rosa"],
-    "imagem": "https://images.unsplash.com/photo-1522771930-78848d9293e8?w=400&q=80",
+    "tamanhos": [
+      "XS"
+    ],
+    "cores": [
+      "Branco",
+      "Azul",
+      "Rosa"
+    ],
+    "imagem": "assets/images/conjunto_recem_nascido.png",
     "descricao": "Conjunto completo para recém-nascido, suave e hipoalergénico.",
     "composicao": "100% Algodão Orgânico",
     "destaque": true
@@ -216,9 +323,17 @@
     "tipo": "vestido",
     "preco": 49.99,
     "faixaEtaria": "6-8",
-    "tamanhos": ["S", "M", "L"],
-    "cores": ["Azul Marinho", "Branco", "Rosa"],
-    "imagem": "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400&q=80",
+    "tamanhos": [
+      "S",
+      "M",
+      "L"
+    ],
+    "cores": [
+      "Azul Marinho",
+      "Branco",
+      "Rosa"
+    ],
+    "imagem": "assets/images/vestido_cerimonia_classico.png",
     "descricao": "Vestido clássico de tule e renda, perfeito para comunhões, casamentos ou batizados.",
     "composicao": "80% Poliéster, 20% Algodão",
     "destaque": true
@@ -230,9 +345,16 @@
     "tipo": "conjunto",
     "preco": 29.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Azul", "Preto"],
-    "imagem": "https://images.unsplash.com/photo-1565084888279-aca607ecce0c?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Azul",
+      "Preto"
+    ],
+    "imagem": "assets/images/jardineiras_ganga_denim.png",
     "descricao": "Jardineiras de ganga clássicas, super resistentes e com suspensórios ajustáveis.",
     "composicao": "100% Algodão Denim",
     "destaque": true
@@ -244,9 +366,16 @@
     "tipo": "conjunto",
     "preco": 24.99,
     "faixaEtaria": "0-2",
-    "tamanhos": ["XS", "S"],
-    "cores": ["Cinzento", "Verde Água", "Rosa Velho"],
-    "imagem": "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S"
+    ],
+    "cores": [
+      "Cinzento",
+      "Verde Água",
+      "Rosa Velho"
+    ],
+    "imagem": "assets/images/fofo_malha_trancada.png",
     "descricao": "Fofo de malha tricotado com lã antialérgica para a pele sensível do bebé.",
     "composicao": "100% Acrílico Dralon",
     "destaque": true
@@ -258,9 +387,16 @@
     "tipo": "camisa",
     "preco": 21.99,
     "faixaEtaria": "6-8",
-    "tamanhos": ["S", "M", "L"],
-    "cores": ["Branco", "Bege"],
-    "imagem": "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=400&q=80",
+    "tamanhos": [
+      "S",
+      "M",
+      "L"
+    ],
+    "cores": [
+      "Branco",
+      "Bege"
+    ],
+    "imagem": "assets/images/camisa_linho_cerimonia.png",
     "descricao": "Camisa de linho leve com gola padre, ideal para looks elegantes e dias mais quentes.",
     "composicao": "55% Linho, 45% Algodão",
     "destaque": true
@@ -272,9 +408,17 @@
     "tipo": "casaco",
     "preco": 54.99,
     "faixaEtaria": "9-12",
-    "tamanhos": ["M", "L", "XL"],
-    "cores": ["Vermelho", "Azul Marinho", "Camel"],
-    "imagem": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&q=80",
+    "tamanhos": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "cores": [
+      "Vermelho",
+      "Azul Marinho",
+      "Camel"
+    ],
+    "imagem": "assets/images/sobretudo_la_elegante.png",
     "descricao": "Sobretudo clássico de lã com abotoamento duplo, forrado e extremamente quentinho.",
     "composicao": "60% Lã, 40% Poliéster",
     "destaque": true
@@ -286,8 +430,13 @@
     "tipo": "acessório",
     "preco": 22.99,
     "faixaEtaria": "0-2",
-    "tamanhos": ["XS", "S"],
-    "cores": ["Branco"],
+    "tamanhos": [
+      "XS",
+      "S"
+    ],
+    "cores": [
+      "Branco"
+    ],
     "imagem": "assets/images/rob_bebe.png",
     "descricao": "Roupão de banho fofinho com capuz e pequenas orelhas de ursinho. Fabricado em algodão biológico ultra suave.",
     "composicao": "100% Algodão Orgânico",
@@ -300,8 +449,14 @@
     "tipo": "acessório",
     "preco": 18.99,
     "faixaEtaria": "0-2",
-    "tamanhos": ["S", "M"],
-    "cores": ["Azul", "Branco"],
+    "tamanhos": [
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Azul",
+      "Branco"
+    ],
     "imagem": "assets/images/pijama_estrelas.png",
     "descricao": "Conjunto de pijama de flanela super aconchegante com um querido padrão de estrelas brancas.",
     "composicao": "100% Algodão Flanelado",
@@ -314,8 +469,16 @@
     "tipo": "sapatilhas",
     "preco": 34.99,
     "faixaEtaria": "6-8",
-    "tamanhos": ["S", "M", "L"],
-    "cores": ["Branco", "Azul", "Amarelo"],
+    "tamanhos": [
+      "S",
+      "M",
+      "L"
+    ],
+    "cores": [
+      "Branco",
+      "Azul",
+      "Amarelo"
+    ],
     "imagem": "assets/images/sapatilhas_kids.png",
     "descricao": "Sapatilhas clássicas de estilo retro para criança, feitas em pele sintética resistente e flexível com apontamentos em tons pastel.",
     "composicao": "Exterior: Couro sintético premium. Sola: Borracha antiderrapante",
@@ -326,11 +489,18 @@
     "nome": "Jardineiras de Veludo Cotelê",
     "categoria": "bebé",
     "tipo": "conjunto",
-    "preco": 27.99,
+    "preco": 32.51,
     "faixaEtaria": "0-2",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Camel", "Verde Água"],
-    "imagem": "https://images.unsplash.com/photo-1522771930-78848d9293e8?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Camel",
+      "Verde Água"
+    ],
+    "imagem": "assets/images/jardineiras_veludo_cotele.png",
     "descricao": "Jardineiras de veludo cotelê clássicas e quentes, ideais para combinar com camisolas nos dias mais frios.",
     "composicao": "98% Algodão, 2% Elastano",
     "destaque": false
@@ -342,9 +512,16 @@
     "tipo": "t-shirt",
     "preco": 16.99,
     "faixaEtaria": "3-5",
-    "tamanhos": ["XS", "S", "M"],
-    "cores": ["Rosa", "Branco"],
-    "imagem": "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=400&q=80",
+    "tamanhos": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "cores": [
+      "Rosa",
+      "Branco"
+    ],
+    "imagem": "assets/images/blusa_floral_romantica.png",
     "descricao": "Blusa de mangas balão com estampado floral delicado, ideal para passeios e dias ensolarados.",
     "composicao": "100% Algodão Egípcio",
     "destaque": false

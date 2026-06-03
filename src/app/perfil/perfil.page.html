@@ -1,9 +1,13 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar class="navbar">
-    <ion-title slot="start" class="logo-title">QuickDressKids</ion-title>
-    <div slot="end" class="navbar-end" style="padding-right: 16px;">
-      <span class="nav-link">Conta</span>
-    </div>
+    <ion-title slot="start" class="logo-title" style="cursor: pointer;" routerLink="/tabs/tab1">QuickDressKids</ion-title>
+    <ion-buttons slot="end" class="navbar-end">
+      <ion-button fill="clear" class="nav-carrinho" routerLink="/tabs/carrinho">
+        <ion-icon name="cart-outline" style="font-size: 24px;"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!currentUser" class="btn-entrar" fill="clear" routerLink="/login">Entrar</ion-button>
+      <ion-button *ngIf="currentUser" class="btn-entrar" fill="clear" routerLink="/tabs/perfil">Olá, {{ currentUser.primeiroNome || currentUser.username }}</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -12,57 +16,52 @@
   <!-- CASO 1: UTILIZADOR LOGADO -->
   <div *ngIf="currentUser">
     <!-- Cabeçalho do Perfil -->
-    <div class="ion-text-center ion-margin-top">
+    <div class="ion-text-center ion-margin-top" style="margin-bottom: 24px;">
       <ion-avatar style="width: 100px; height: 100px; margin: 0 auto; border: 4px solid white; box-shadow: 0px 4px 12px rgba(0,0,0,0.08);">
         <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Foto de perfil" />
       </ion-avatar>
       
-      <h2 class="ion-margin-top" style="font-weight: 800; color: #0f172a; font-size: 1.4rem;">
+      <h2 class="ion-margin-top" style="font-weight: 800; color: #2d5a43; font-size: 1.4rem; margin-bottom: 4px;">
         {{ currentUser.primeiroNome }} {{ currentUser.ultimoNome }}
       </h2>
-      <p style="color: #6b7280; margin-top: -4px; font-size: 0.95rem; font-weight: 600;">
+      <p style="color: #6b7280; margin-top: 0px; font-size: 0.95rem; font-weight: 600; margin-bottom: 12px;">
         @{{ currentUser.username }} | {{ currentUser.email }}
       </p>
-      
-      <ion-button fill="outline" shape="round" size="small" class="ion-margin-top" (click)="abrirOpcao('Editar Perfil')" style="--border-radius: 12px;">
-        <ion-icon name="create-outline" slot="start"></ion-icon>
-        Editar Perfil
-      </ion-button>
     </div>
 
     <!-- Lista de Ações e Segurança -->
-    <ion-list class="ion-margin-top" inset="true" style="--border-radius: 16px;">
-      <ion-item button detail="true" (click)="abrirOpcao('Reservas Ativas')">
-        <ion-icon name="ticket-outline" slot="start" color="primary"></ion-icon>
-        <ion-label style="font-weight: 600;">Reservas Ativas</ion-label>
+    <ion-list class="ion-margin-top" inset="true" style="--background: #4e9a74; background: #4e9a74; border: 1px solid #3d7e5d; --border-radius: 12px; border-radius: 12px; padding: 0; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(78, 154, 116, 0.15);">
+      <ion-item button detail="true" (click)="abrirOpcao('Encomendas')" style="--background: #4e9a74; --color: #ffffff; color: #ffffff; --detail-color: #ffffff;">
+        <ion-icon name="ticket-outline" slot="start" style="color: #ffffff !important;"></ion-icon>
+        <ion-label style="font-weight: 600; color: #ffffff !important;">Encomendas</ion-label>
       </ion-item>
       
-      <ion-item button detail="true" lines="none" (click)="abrirModalPassword()">
-        <ion-icon name="lock-closed-outline" slot="start" color="danger"></ion-icon>
-        <ion-label style="font-weight: 600;">Alterar Palavra-passe</ion-label>
+      <ion-item button detail="true" lines="none" (click)="abrirModalPassword()" style="--background: #4e9a74; --color: #ffffff; color: #ffffff; --detail-color: #ffffff;">
+        <ion-icon name="lock-closed-outline" slot="start" style="color: #ffffff !important;"></ion-icon>
+        <ion-label style="font-weight: 600; color: #ffffff !important;">Alterar Palavra-passe</ion-label>
       </ion-item>
     </ion-list>
 
     <!-- Preferências com Swipe Toggle (Notificações e Localização) -->
-    <ion-list class="ion-margin-top" inset="true" style="--border-radius: 16px;">
-      <ion-item lines="full">
-        <ion-icon name="notifications-outline" slot="start" color="warning"></ion-icon>
-        <ion-label style="font-weight: 600;">Notificações Ativas</ion-label>
-        <ion-toggle slot="end" [(ngModel)]="notificacoesAtivas" color="primary"></ion-toggle>
+    <ion-list class="ion-margin-top" inset="true" style="--background: #4e9a74; background: #4e9a74; border: 1px solid #3d7e5d; --border-radius: 12px; border-radius: 12px; padding: 0; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(78, 154, 116, 0.15);">
+      <ion-item lines="full" style="--background: #4e9a74; --color: #ffffff; color: #ffffff;">
+        <ion-icon name="notifications-outline" slot="start" style="color: #ffffff !important;"></ion-icon>
+        <ion-label style="font-weight: 600; color: #ffffff !important;">Notificações Ativas</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="notificacoesAtivas" style="--handle-background: #ffffff; --handle-background-checked: #2d5a43; --background: rgba(255,255,255,0.3); --background-checked: rgba(255,255,255,0.7);"></ion-toggle>
       </ion-item>
 
-      <ion-item lines="none">
-        <ion-icon name="location-outline" slot="start" color="tertiary"></ion-icon>
-        <ion-label style="font-weight: 600;">Permitir Localização</ion-label>
-        <ion-toggle slot="end" [(ngModel)]="localizacaoAtiva" (ionChange)="aoMudarLocalizacao($event)" color="primary"></ion-toggle>
+      <ion-item lines="none" style="--background: #4e9a74; --color: #ffffff; color: #ffffff;">
+        <ion-icon name="location-outline" slot="start" style="color: #ffffff !important;"></ion-icon>
+        <ion-label style="font-weight: 600; color: #ffffff !important;">Permitir Localização</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="localizacaoAtiva" (ionChange)="aoMudarLocalizacao($event)" style="--handle-background: #ffffff; --handle-background-checked: #2d5a43; --background: rgba(255,255,255,0.3); --background-checked: rgba(255,255,255,0.7);"></ion-toggle>
       </ion-item>
     </ion-list>
 
     <!-- Área de Ajuda -->
-    <ion-list class="ion-margin-top" inset="true" style="--border-radius: 16px;">
-      <ion-item button detail="true" lines="none" (click)="abrirModalAjuda()">
-        <ion-icon name="help-circle-outline" slot="start" color="success"></ion-icon>
-        <ion-label style="font-weight: 600;">Centro de Ajuda</ion-label>
+    <ion-list class="ion-margin-top" inset="true" style="--background: #4e9a74; background: #4e9a74; border: 1px solid #3d7e5d; --border-radius: 12px; border-radius: 12px; padding: 0; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(78, 154, 116, 0.15);">
+      <ion-item button detail="true" lines="none" (click)="abrirModalAjuda()" style="--background: #4e9a74; --color: #ffffff; color: #ffffff; --detail-color: #ffffff;">
+        <ion-icon name="help-circle-outline" slot="start" style="color: #ffffff !important;"></ion-icon>
+        <ion-label style="font-weight: 600; color: #ffffff !important;">Centro de Ajuda</ion-label>
       </ion-item>
     </ion-list>
 
@@ -107,9 +106,9 @@
     <ng-template>
       <ion-header>
         <ion-toolbar class="navbar">
-          <ion-title style="font-weight: 800; color: #ffffff;">Centro de Ajuda</ion-title>
+          <ion-title style="font-weight: 800; color: #2d5a43;">Centro de Ajuda</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="fecharModalAjuda()" style="font-weight: 700; --color: #ffffff;">Fechar</ion-button>
+            <ion-button (click)="fecharModalAjuda()" style="font-weight: 700; --color: #2d5a43;">Fechar</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -158,9 +157,9 @@
     <ng-template>
       <ion-header>
         <ion-toolbar class="navbar">
-          <ion-title style="font-weight: 800; color: #ffffff;">Alterar Palavra-passe</ion-title>
+          <ion-title style="font-weight: 800; color: #2d5a43;">Alterar Palavra-passe</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="fecharModalPassword()" style="font-weight: 700; --color: #ffffff;">Cancelar</ion-button>
+            <ion-button (click)="fecharModalPassword()" style="font-weight: 700; --color: #2d5a43;">Cancelar</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>

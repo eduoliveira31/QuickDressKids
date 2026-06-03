@@ -1,69 +1,68 @@
-<ion-header [translucent]="true">
-  <ion-toolbar class="navbar">
+<ion-header class="ion-no-border">
+  <ion-toolbar style="--background: #4e9a74; --color: #ffffff;">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/catalogo" text="" icon="arrow-back-outline"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/catalogo" text="" icon="arrow-back-outline" style="--color: #ffffff; color: #ffffff !important;"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ produto?.nome || 'A carregar...' }}</ion-title>
-    
+    <ion-title style="color: #ffffff; font-weight: bold;">{{ produto?.nome || 'Detalhe' }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/tabs/carrinho">
-        <ion-icon name="cart-outline"></ion-icon>
+      <ion-button routerLink="/tabs/carrinho" style="--color: #ffffff; color: #ffffff !important;">
+        <ion-icon name="cart-outline" style="font-size: 24px;"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding" color="light">
+<ion-content [fullscreen]="true" class="ion-padding" style="--background: #f7f9f8; background-color: #f7f9f8;">
   
   <div *ngIf="produto; else carregando">
     
-    <ion-card class="ion-no-margin" style="border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <ion-card class="ion-no-margin" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; overflow: hidden; background: white;">
       <img [src]="produto.imagem || ''" [alt]="produto.nome" style="width: 100%; height: 320px; object-fit: cover;" />
       
       <ion-card-content>
-        <h1 style="font-weight: bold; color: #333; font-size: 1.4rem; margin-bottom: 5px;">{{ produto.nome }}</h1>
-        <h2 color="primary" style="font-size: 1.6rem; font-weight: bold; margin-top: 0;">{{ produto.preco | currency:'EUR' }}</h2>
-        <p style="color: #666; margin-top: 10px; font-size: 0.95rem;">
+        <h1 style="font-weight: bold; color: #2d5a43; font-size: 1.35rem; margin-bottom: 5px; margin-top: 0;">{{ produto.nome }}</h1>
+        <h2 style="font-size: 1.5rem; font-weight: bold; margin-top: 0; color: #2d5a43; margin-bottom: 10px;">{{ produto.preco | currency:'EUR' }}</h2>
+        <p style="color: #666; margin-top: 10px; font-size: 0.95rem; line-height: 1.45;">
           {{ produto.descricao }}
         </p>
       </ion-card-content>
     </ion-card>
 
-    <ion-list inset="true" class="ion-margin-top" style="border-radius: 12px;">
+    <ion-list inset="true" class="ion-margin-top" style="border-radius: 12px; margin-left: 0; margin-right: 0; background: white; border: 1px solid #e2e8f0; padding: 0;">
       
-      <ion-item lines="full">
+      <ion-item lines="full" style="--background: #ffffff;">
         <ion-icon name="color-palette-outline" slot="start" color="medium"></ion-icon>
-        <ion-select [(ngModel)]="corSelecionada" label="Cor" label-placement="floating" interface="action-sheet" style="width: 100%;">
+        <ion-select [(ngModel)]="corSelecionada" label="Cor" label-placement="floating" interface="action-sheet" style="width: 100%; color: #333;">
           <ion-select-option *ngFor="let cor of produto.cores" [value]="cor">{{ cor }}</ion-select-option>
         </ion-select>
       </ion-item>
 
-      <ion-item lines="full">
+      <ion-item lines="full" style="--background: #ffffff;">
         <ion-icon name="resize-outline" slot="start" color="medium"></ion-icon>
-        <ion-select [(ngModel)]="tamanhoSelecionado" label="Tamanho" label-placement="floating" interface="action-sheet" style="width: 100%;">
+        <ion-select [(ngModel)]="tamanhoSelecionado" label="Tamanho" label-placement="floating" interface="action-sheet" style="width: 100%; color: #333;">
           <ion-select-option *ngFor="let tamanho of produto.tamanhos" [value]="tamanho">{{ tamanho }}</ion-select-option>
         </ion-select>
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" style="--background: #ffffff;">
         <ion-icon name="layers-outline" slot="start" color="medium"></ion-icon>
-        <ion-label>Quantidade</ion-label>
-        <div slot="end" style="display: flex; align-items: center; background: #f0f0f0; border-radius: 20px; padding: 2px;">
-          <ion-button fill="clear" color="dark" (click)="diminuirQuantidade()">
+        <ion-label style="color: #4b5563; font-weight: 500;">Quantidade</ion-label>
+        <div slot="end" style="display: flex; align-items: center; background: #f0f2f1; border-radius: 20px; padding: 2px 6px; gap: 6px;">
+          <ion-button fill="clear" color="dark" style="margin: 0; --padding-start: 2px; --padding-end: 2px; height: 28px; width: 28px; color: #2d5a43;" (click)="diminuirQuantidade()">
             <ion-icon name="remove"></ion-icon>
           </ion-button>
           
-          <span style="font-weight: bold; margin: 0 10px; font-size: 1.2rem; color: #111;">{{ quantidade }}</span>
+          <span style="font-weight: bold; margin: 0 4px; font-size: 1rem; color: #333; min-width: 14px; text-align: center;">{{ quantidade }}</span>
           
-          <ion-button fill="clear" color="dark" (click)="aumentarQuantidade()">
+          <ion-button fill="clear" color="dark" style="margin: 0; --padding-start: 2px; --padding-end: 2px; height: 28px; width: 28px; color: #2d5a43;" (click)="aumentarQuantidade()">
             <ion-icon name="add"></ion-icon>
           </ion-button>
         </div>
       </ion-item>
     </ion-list>
 
-    <ion-button expand="block" color="success" size="large" class="ion-margin-top" style="margin-top: 25px; margin-bottom: 25px;" (click)="adicionarAoCarrinho()">
-      <ion-icon name="cart" slot="start"></ion-icon>
+    <ion-button expand="block" size="large" class="ion-margin-top" style="--background: #78909c; --color: #ffffff; --border-radius: 12px; margin-top: 25px; margin-bottom: 25px; font-weight: bold; height: 50px;" (click)="adicionarAoCarrinho()">
+      <ion-icon name="cart" slot="start" style="color: #ffffff !important;"></ion-icon>
       Adicionar ao Carrinho
     </ion-button>
 
@@ -76,44 +75,48 @@
       </ion-segment-button>
     </ion-segment>
 
-    <div *ngIf="abaAtiva === 'composicao'" class="ion-padding" style="background: #ffffff; border-radius: 0 0 12px 12px; color: #555; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-      <p style="margin: 0;"><strong>Material:</strong> 85% Algodão, 15% Poliéster. 5% Elastano.</p>
-      <p style="margin-top: 5px; margin-bottom: 0;">Lavar à máquina a 30°C. Não usar lixívia.</p>
+    <div *ngIf="abaAtiva === 'composicao'" class="ion-padding" style="background: #ffffff; border-radius: 0 0 12px 12px; color: #4b5563; font-size: 0.9rem; border: 1px solid #c3d9cc; border-top: none; box-shadow: 0 4px 10px rgba(78, 154, 116, 0.05);">
+      <p style="margin: 0; color: #2d5a43;"><strong>Material:</strong> 85% Algodão, 15% Poliéster, 5% Elastano.</p>
+      <p style="margin-top: 5px; margin-bottom: 0; color: #666;">Lavar à máquina a 30°C. Não usar lixívia.</p>
     </div>
 
-    <div *ngIf="abaAtiva === 'medidas'" class="ion-padding" style="background: #ffffff; border-radius: 0 0 12px 12px; color: #555; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-      <p style="margin: 0;"><strong>Tamanho S:</strong> 40cm comprimento x 30cm largura</p>
-      <p style="margin-top: 5px; margin-bottom: 0;"><strong>Tamanho M:</strong> 45cm comprimento x 32cm largura</p>
-      <p style="margin-top: 5px; margin-bottom: 0;"><strong>Tamanho L:</strong> 50cm comprimento x 35cm largura</p>
+    <div *ngIf="abaAtiva === 'medidas'" class="ion-padding" style="background: #ffffff; border-radius: 0 0 12px 12px; color: #4b5563; font-size: 0.9rem; border: 1px solid #c3d9cc; border-top: none; box-shadow: 0 4px 10px rgba(78, 154, 116, 0.05);">
+      <p style="margin: 0; color: #2d5a43;"><strong>Tamanho S:</strong> 40cm comprimento x 30cm largura</p>
+      <p style="margin-top: 5px; margin-bottom: 0; color: #666;"><strong>Tamanho M:</strong> 45cm comprimento x 32cm largura</p>
+      <p style="margin-top: 5px; margin-bottom: 0; color: #666;"><strong>Tamanho L:</strong> 50cm comprimento x 35cm largura</p>
     </div>
 
-    <h3 style="font-weight: bold; margin-top: 35px; margin-bottom: 10px; color: #333; margin-left: 5px;">Disponibilidade em Lojas</h3>
+    <h3 style="font-weight: bold; margin-top: 35px; margin-bottom: 12px; color: #2d5a43; margin-left: 5px;">Disponibilidade em Lojas</h3>
     
     <!-- Geolocalização dinâmica e sugestão de loja -->
-    <ion-item color="success" lines="none" style="border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);" *ngIf="lojaSugerida">
-      <ion-icon name="location" slot="start" color="light"></ion-icon>
-      <ion-label class="ion-text-wrap" style="font-size: 0.85rem; color: #ffffff;">
-        Loja mais próxima: <strong>{{ nomeLojaSugerida }}</strong> (a {{ distanciaSugerida }} km de distância).
-      </ion-label>
-      <ion-button slot="end" fill="clear" color="light" style="font-weight: bold; --color: #ffffff;" (click)="selecionarLojaSugerida()">
+    <div *ngIf="lojaSugerida" style="background: #e8f5ee; border: 1px solid #c3d9cc; border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(78, 154, 116, 0.05);">
+      <div style="display: flex; align-items: center; gap: 10px; flex-grow: 1;">
+        <ion-icon name="location" style="color: #2d5a43; font-size: 24px; flex-shrink: 0;"></ion-icon>
+        <span style="font-size: 0.85rem; color: #2d5a43; line-height: 1.4;">
+          Loja mais próxima: <strong>{{ nomeLojaSugerida }}</strong> (a {{ distanciaSugerida }} km).
+        </span>
+      </div>
+      <ion-button fill="solid" style="--background: #4e9a74; --color: #ffffff; font-weight: bold; --border-radius: 8px; margin: 0; font-size: 0.8rem; height: 32px; flex-shrink: 0;" (click)="selecionarLojaSugerida()">
         Selecionar
       </ion-button>
-    </ion-item>
+    </div>
 
-    <ion-item color="warning" lines="none" style="border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);" *ngIf="!lojaSugerida">
-      <ion-icon name="location-outline" slot="start"></ion-icon>
-      <ion-label class="ion-text-wrap" style="font-size: 0.85rem;">
-        Permissão de localização não ativada.
-      </ion-label>
-      <ion-button slot="end" fill="outline" color="dark" size="small" style="font-weight: bold;" (click)="pedirLocalizacao()">
+    <div *ngIf="!lojaSugerida" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.05);">
+      <div style="display: flex; align-items: center; gap: 10px; flex-grow: 1;">
+        <ion-icon name="location-outline" style="color: #d97706; font-size: 24px; flex-shrink: 0;"></ion-icon>
+        <span style="font-size: 0.85rem; color: #d97706; line-height: 1.4;">
+          Permissão de localização não ativada.
+        </span>
+      </div>
+      <ion-button fill="outline" style="--color: #d97706; --border-color: #d97706; font-weight: bold; --border-radius: 8px; margin: 0; font-size: 0.8rem; height: 32px; flex-shrink: 0;" (click)="pedirLocalizacao()">
         Ativar
       </ion-button>
-    </ion-item>
+    </div>
 
-    <ion-list inset="true" class="ion-no-margin" style="border-radius: 12px; margin-bottom: 10px;">
-      <ion-item lines="none">
+    <ion-list inset="true" class="ion-no-margin" style="border-radius: 12px; margin-bottom: 16px; border: 1px solid #e2e8f0; background: white; padding: 0;">
+      <ion-item lines="none" style="--background: #ffffff;">
         <ion-icon name="storefront-outline" slot="start" color="medium"></ion-icon>
-        <ion-select [(ngModel)]="lojaSelecionada" (ionChange)="verificarStock($event)" label="Verificar stock na Loja" label-placement="floating" interface="action-sheet" style="width: 100%;">
+        <ion-select [(ngModel)]="lojaSelecionada" (ionChange)="verificarStock($event)" label="Verificar stock na Loja" label-placement="floating" interface="action-sheet" style="width: 100%; color: #333;">
           <ion-select-option value="braga">Loja Braga Parque</ion-select-option>
           <ion-select-option value="lisboa">Loja Lisboa Colombo</ion-select-option>
           <ion-select-option value="coimbra">Loja Coimbra Dolce Vita</ion-select-option>
@@ -121,23 +124,26 @@
       </ion-item>
     </ion-list>
 
-    <ion-card *ngIf="lojaSelecionada" style="border-radius: 12px; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-left: 0; margin-right: 0;" [color]="corStock === 'success' ? 'light' : 'danger'">
-      <ion-card-content style="display: flex; flex-direction: column; gap: 8px; padding: 12px;">
+    <!-- Card de Stock Modo Claro -->
+    <div *ngIf="lojaSelecionada" 
+         [style.background]="corStock === 'success' ? '#e8f5ee' : '#fff5f5'"
+         [style.border]="corStock === 'success' ? '1px solid #c3d9cc' : '1px solid #fecaca'"
+         style="border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 16px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <ion-icon [name]="corStock === 'success' ? 'checkmark-circle' : 'close-circle'" [color]="corStock === 'success' ? 'success' : 'light'" style="font-size: 20px;"></ion-icon>
-          <span [style.color]="corStock === 'success' ? '#2dd36f' : 'white'" style="font-weight: bold; font-size: 0.95rem;">
+          <ion-icon [name]="corStock === 'success' ? 'checkmark-circle' : 'close-circle'" [color]="corStock === 'success' ? 'success' : 'danger'" style="font-size: 22px;"></ion-icon>
+          <span [style.color]="corStock === 'success' ? '#2d5a43' : '#dc2626'" style="font-weight: bold; font-size: 1rem;">
             {{ corStock === 'success' ? 'Disponível para Reserva' : 'Artigo Indisponível nesta Loja' }}
           </span>
         </div>
-        <p [style.color]="corStock === 'success' ? '#444' : '#fff'" style="margin: 0; font-size: 0.85rem; padding-left: 28px;">
+        <p style="margin: 0; font-size: 0.88rem; color: #4b5563; padding-left: 30px;">
           <strong>Quantidade:</strong> {{ mensagemQtdStock }}
         </p>
-        <p [style.color]="corStock === 'success' ? '#444' : '#fff'" style="margin: 0; font-size: 0.85rem; padding-left: 28px;">
+        <p style="margin: 0; font-size: 0.88rem; color: #4b5563; padding-left: 30px;">
           <strong>Horário:</strong> {{ mensagemHorarioLoja }}
         </p>
-      </ion-card-content>
-    </ion-card>
-
+      </div>
+    </div>
   </div>
 
   <ng-template #carregando>

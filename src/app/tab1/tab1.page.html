@@ -1,14 +1,13 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar class="navbar">
-    <ion-title slot="start" class="logo-title">QuickDressKids</ion-title>
-    <div slot="end" class="navbar-end">
-      <span class="nav-link">Home</span>
+    <ion-title slot="start" class="logo-title" style="cursor: pointer;" routerLink="/tabs/tab1">QuickDressKids</ion-title>
+    <ion-buttons slot="end" class="navbar-end">
       <ion-button fill="clear" class="nav-carrinho" routerLink="/tabs/carrinho">
-        <ion-icon name="cart-outline" size="large"></ion-icon>
+        <ion-icon name="cart-outline" style="font-size: 24px;"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="!currentUser" class="btn-entrar" shape="round" routerLink="/login">Entrar</ion-button>
-      <ion-button *ngIf="currentUser" class="btn-entrar" shape="round" routerLink="/tabs/perfil">Olá, {{ currentUser.primeiroNome || currentUser.username }}</ion-button>
-    </div>
+      <ion-button *ngIf="!currentUser" class="btn-entrar" fill="clear" routerLink="/login">Entrar</ion-button>
+      <ion-button *ngIf="currentUser" class="btn-entrar" fill="clear" routerLink="/tabs/perfil">Olá, {{ currentUser.primeiroNome || currentUser.username }}</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Catalogo } from '../services/catalogo';
+import { AuthService, Usuario } from '../services/auth.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -12,22 +13,14 @@ export class CatalogoPage implements OnInit {
 
   produtosOriginais: any[] = [];
   produtosFiltrados: any[] = [];
+  currentUser: Usuario | null = null;
 
-<<<<<<< HEAD
-  /** Filtros selecionados */
-  categoriaSelecionada: string = '';
-  tipoSelecionado: string = '';
-  faixaEtariaSelecionada: string = '';
-  corSelecionada: string = '';
-  lojaSelecionada: string = '';
-  termoPesquisa: string = '';
-
-=======
   pesquisa: string = '';
   categoriaSelecionada: string = '';
   faixaEtariaSelecionada: string = '';
   tipoSelecionado: string = '';
   corSelecionada: string = '';
+  lojaSelecionada: string = '';
 
   readonly categorias = [
     { valor: 'menino', label: 'Menino' },
@@ -62,44 +55,45 @@ export class CatalogoPage implements OnInit {
     { valor: 'Cinzento', label: 'Cinzento' }
   ];
 
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
+  readonly lojas = [
+    { valor: 'braga', label: 'Loja Braga Parque' },
+    { valor: 'coimbra', label: 'Loja Coimbra Dolce Vita' },
+    { valor: 'lisboa', label: 'Loja Lisboa Colombo' }
+  ];
+
   constructor(
     private catalogoService: Catalogo,
+    private authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit() {
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
+
     this.catalogoService.getProdutos().subscribe((data: any[]) => {
       this.produtosOriginais = data;
       this.produtosFiltrados = data;
+      this.aplicarFiltros();
     });
   }
 
-<<<<<<< HEAD
-  /**
-   * Aplica todos os filtros ativos e atualiza produtosFiltrados.
-   */
-=======
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   aplicarFiltros() {
     this.produtosFiltrados = this.produtosOriginais.filter((produto: any) => {
-      
       const matchPesquisa = !this.pesquisa || 
         (produto.nome && produto.nome.toLowerCase().includes(this.pesquisa.toLowerCase()));
       
       let matchCategoria = !this.categoriaSelecionada;
       if (!matchCategoria) {
         matchCategoria = (produto.categoria === this.categoriaSelecionada || 
-                         (this.categoriaSelecionada === 'bebé' && produto.categoria === 'bebe'));
+                         (this.categoriaSelecionada === 'bebé' && produto.categoria === 'bebe') ||
+                         (this.categoriaSelecionada === 'bebe' && produto.categoria === 'bebé'));
       }
       
       const matchTipo = !this.tipoSelecionado || produto.tipo === this.tipoSelecionado;
       const matchFaixa = !this.faixaEtariaSelecionada || produto.faixaEtaria === this.faixaEtariaSelecionada;
 
-<<<<<<< HEAD
-      // 5. Filtro de Cor
-=======
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
       let matchCor = !this.corSelecionada;
       if (!matchCor && produto.cores && Array.isArray(produto.cores)) {
         matchCor = produto.cores.includes(this.corSelecionada);
@@ -107,8 +101,6 @@ export class CatalogoPage implements OnInit {
         matchCor = produto.cor === this.corSelecionada;
       }
 
-<<<<<<< HEAD
-      // 6. Filtro de Loja Disponível (Braga/Coimbra = tudo em stock, Lisboa = apenas IDs pares em stock na simulação)
       let matchLoja = !this.lojaSelecionada;
       if (!matchLoja) {
         if (this.lojaSelecionada === 'braga' || this.lojaSelecionada === 'coimbra') {
@@ -122,17 +114,6 @@ export class CatalogoPage implements OnInit {
     });
   }
 
-  /**
-   * Atualiza o termo de pesquisa e filtra.
-   */
-  pesquisar(event: any) {
-    this.termoPesquisa = event.detail.value ?? '';
-    this.aplicarFiltros();
-  }
-
-  /**
-   * Seleciona um filtro e reaplica.
-   */
   selecionarFiltro(tipo: string, valor: string) {
     if (tipo === 'categoria') this.categoriaSelecionada = valor;
     if (tipo === 'tipoProduto') this.tipoSelecionado = valor;
@@ -142,9 +123,6 @@ export class CatalogoPage implements OnInit {
     this.aplicarFiltros();
   }
 
-  /**
-   * Remove um filtro selecionado.
-   */
   removerFiltro(tipo: string) {
     if (tipo === 'categoria') this.categoriaSelecionada = '';
     if (tipo === 'tipoProduto') this.tipoSelecionado = '';
@@ -152,76 +130,6 @@ export class CatalogoPage implements OnInit {
     if (tipo === 'cor') this.corSelecionada = '';
     if (tipo === 'loja') this.lojaSelecionada = '';
     this.aplicarFiltros();
-  }
-
-  /**
-   * Nome legível da categoria selecionada.
-   */
-  getNomeCategoria(): string {
-    if (this.categoriaSelecionada === 'bebe') return 'Bebé';
-    if (this.categoriaSelecionada === 'menina') return 'Menina';
-    if (this.categoriaSelecionada === 'menino') return 'Menino';
-    return '';
-  }
-
-  /**
-   * Nome legível do tipo selecionado.
-   */
-  getNomeTipo(): string {
-    const tiposMap: any = {
-      tshirt: 'T-Shirt',
-      casaco: 'Casaco',
-      calcas: 'Calças',
-      vestido: 'Vestido',
-      body: 'Body',
-      conjunto: 'Conjunto',
-      calcado: 'Calçado',
-      acessorio: 'Acessório'
-    };
-    return tiposMap[this.tipoSelecionado] || this.tipoSelecionado;
-  }
-
-  /**
-   * Nome legível da loja selecionada.
-   */
-  getNomeLoja(): string {
-    if (this.lojaSelecionada === 'braga') return 'Braga Parque';
-    if (this.lojaSelecionada === 'coimbra') return 'Coimbra';
-    if (this.lojaSelecionada === 'lisboa') return 'Lisboa Colombo';
-    return '';
-  }
-
-  /**
-   * Limpa todos os filtros ativos.
-   */
-  limparTodosFiltros() {
-    this.categoriaSelecionada = '';
-    this.tipoSelecionado = '';
-    this.faixaEtariaSelecionada = '';
-    this.corSelecionada = '';
-    this.lojaSelecionada = '';
-    this.termoPesquisa = '';
-    this.aplicarFiltros();
-  }
-
-  /**
-   * Navega para o detalhe do produto.
-   */
-=======
-      return matchPesquisa && matchCategoria && matchTipo && matchFaixa && matchCor;
-    });
-  }
-
-  selecionarFiltro(tipo: string, valor: string) {
-    if (tipo === 'categoria') this.categoriaSelecionada = valor;
-    if (tipo === 'tipoProduto') this.tipoSelecionado = valor;
-    if (tipo === 'faixaEtaria') this.faixaEtariaSelecionada = valor;
-    if (tipo === 'cor') this.corSelecionada = valor;
-    this.aplicarFiltros();
-  }
-
-  removerFiltro(tipo: string) {
-    this.selecionarFiltro(tipo, '');
   }
 
   onPesquisaChange(event: any) {
@@ -235,15 +143,16 @@ export class CatalogoPage implements OnInit {
     this.faixaEtariaSelecionada = '';
     this.tipoSelecionado = '';
     this.corSelecionada = '';
+    this.lojaSelecionada = '';
     this.produtosFiltrados = this.produtosOriginais;
   }
 
->>>>>>> 0b54999dc983e3a979a248298f372d2f71276ddb
   verDetalhe(id: number) {
     this.router.navigate(['/produto-detalhe', id]);
   }
 
   getNomeCategoria(): string {
+    if (this.categoriaSelecionada === 'bebe' || this.categoriaSelecionada === 'bebé') return 'Bebé';
     const found = this.categorias.find(c => c.valor === this.categoriaSelecionada);
     return found ? found.label : this.categoriaSelecionada;
   }
@@ -251,5 +160,12 @@ export class CatalogoPage implements OnInit {
   getNomeTipo(): string {
     const found = this.tipos.find(t => t.valor === this.tipoSelecionado);
     return found ? found.label : this.tipoSelecionado;
+  }
+
+  getNomeLoja(): string {
+    if (this.lojaSelecionada === 'braga') return 'Braga Parque';
+    if (this.lojaSelecionada === 'coimbra') return 'Coimbra';
+    if (this.lojaSelecionada === 'lisboa') return 'Lisboa Colombo';
+    return '';
   }
 }

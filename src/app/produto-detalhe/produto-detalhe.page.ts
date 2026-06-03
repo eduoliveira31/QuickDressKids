@@ -17,18 +17,17 @@ export class ProdutoDetalhePage implements OnInit {
   tamanhoSelecionado: string = '';
   quantidade: number = 1;
 
-  // NOVAS VARIÁVEIS PARA AS ABAS E LOJAS
-  abaAtiva: string = 'composicao'; // Define a aba de Composição como padrão
+  abaAtiva: string = 'composicao'; 
   lojaSelecionada: string = '';
   mensagemStock: string = '';
   corStock: string = 'medium';
   mensagemQtdStock: string = '';
   mensagemHorarioLoja: string = '';
 
-  // Geolocalização e sugestões de loja
   lojaSugerida: string = '';
   nomeLojaSugerida: string = '';
   distanciaSugerida: number = 0;
+
 
   readonly LOJAS_GPS = [
     { id: 'braga', nome: 'Loja Braga Parque', lat: 41.5503, lng: -8.4200 },
@@ -57,7 +56,6 @@ export class ProdutoDetalhePage implements OnInit {
       }
     }
 
-    // Verificar se já tem permissão para calcular a loja mais próxima automaticamente
     if (typeof window !== 'undefined') {
       const locationPermitted = localStorage.getItem('quickdresskids_location_permitted');
       if (locationPermitted === 'true' && navigator.geolocation) {
@@ -93,8 +91,37 @@ export class ProdutoDetalhePage implements OnInit {
     }
   }
 
+  obterStockLoja(loja: string): number {
+    if (!loja || !this.produto) return 999;
+    
+    const id = this.produto.id;
+    if (loja === 'lisboa') {
+      if (id === 1) return 0;
+      return (id * 3) % 5 + 2;
+    } else if (loja === 'braga') {
+      return (id * 4) % 7 + 3;
+    } else if (loja === 'coimbra') {
+      return (id * 2) % 4 + 1;
+    }
+    return 999;
+  }
+
   async adicionarAoCarrinho() {
     if (!this.produto) return;
+
+    if (this.lojaSelecionada) {
+      const stock = this.obterStockLoja(this.lojaSelecionada);
+      if (this.quantidade > stock) {
+        const alert = await this.alertController.create({
+          header: 'Stock Insuficiente',
+          message: `Só existem ${stock} unidades em stock na loja selecionada. Por favor, ajuste a quantidade ou selecione outra loja.`,
+          buttons: ['OK']
+        });
+        await alert.present();
+        return;
+      }
+    }
+
     this.executarAdicao();
   }
 
@@ -113,10 +140,9 @@ export class ProdutoDetalhePage implements OnInit {
       imagem: this.produto.imagem,
       cor: this.corSelecionada,
       tamanho: this.tamanhoSelecionado,
-      categoria: this.produto.categoria // Muito importante para a campanha "Leve 3, Pague 2"!
+      categoria: this.produto.categoria 
     };
 
-    // Bloquear a loja no carrinho se for o primeiro item e tiver uma loja selecionada
     if (!this.carrinhoService.getLojaLevantamento() && this.lojaSelecionada) {
       this.carrinhoService.setLojaLevantamento(this.lojaSelecionada);
     }
@@ -141,7 +167,6 @@ export class ProdutoDetalhePage implements OnInit {
     await toast.present();
   }
 
-  // NOVA FUNÇÃO: VERIFICAR STOCK
   verificarStock(event: any) {
     const loja = event.detail.value;
     if (!loja) {
@@ -150,22 +175,14 @@ export class ProdutoDetalhePage implements OnInit {
       return;
     }
     
-    let qtdStock = 0;
+    const qtdStock = this.obterStockLoja(loja);
     let horario = '';
     
     if (loja === 'lisboa') {
-      // Simulação: artigos de ID ímpar não têm stock na loja de Lisboa (Colombo)
-      if (this.produto && this.produto.id % 2 !== 0) {
-        qtdStock = 0;
-      } else {
-        qtdStock = (this.produto.id * 3) % 5 + 2;
-      }
       horario = 'Todos os dias das 10h00 às 00h00';
     } else if (loja === 'braga') {
-      qtdStock = (this.produto.id * 4) % 7 + 3;
       horario = 'Todos os dias das 10h00 às 23h00';
     } else if (loja === 'coimbra') {
-      qtdStock = (this.produto.id * 2) % 4 + 1;
       horario = 'Todos os dias das 10h00 às 22h00';
     }
 
@@ -179,7 +196,6 @@ export class ProdutoDetalhePage implements OnInit {
     this.mensagemHorarioLoja = horario;
   }
 
-  // ─── GEOLOCALIZAÇÃO E SUGESTÃO DE LOJA ─────────────────────────────────────
   pedirLocalizacao() {
     if (typeof window !== 'undefined' && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -213,11 +229,11 @@ export class ProdutoDetalhePage implements OnInit {
 
     this.lojaSugerida = lojaMaisProxima;
     this.nomeLojaSugerida = nomeLoja;
-    this.distanciaSugerida = Math.round(menorDistancia * 10) / 10; // Arredondar a 1 casa decimal
+    this.distanciaSugerida = Math.round(menorDistancia * 10) / 10; 
   }
 
   calcularDistanciaHaversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371; // Raio da Terra em km
+    const R = 6371; 
     const dLat = this.deg2rad(lat2 - lat1);
     const dLon = this.deg2rad(lon2 - lon1);
     const a = 

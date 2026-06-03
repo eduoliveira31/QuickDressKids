@@ -60,7 +60,7 @@ export class PerfilPage implements OnInit {
       return;
     }
 
-    if (nomeOpcao === 'Reservas Ativas') {
+    if (nomeOpcao === 'Reservas Ativas' || nomeOpcao === 'Encomendas') {
       this.router.navigate(['/reservas']);
     } else {
       this.mostrarToast(`A abrir ${nomeOpcao}... (Página em construção)`, 'dark');
