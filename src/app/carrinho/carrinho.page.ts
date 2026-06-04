@@ -6,6 +6,11 @@ import { CustosService } from '../services/custos';
 import { ReservasService } from '../services/reservas';
 import { AuthService, Usuario } from '../services/auth.service';
 
+/**
+ * Componente responsável pela gestão do Carrinho de Compras.
+ * Permite ao utilizador visualizar itens selecionados, alterar quantidades, 
+ * simular a verificação de stock local e concluir/agendar uma reserva.
+ */
 @Component({
   selector: 'app-carrinho',
   templateUrl: './carrinho.page.html',
@@ -13,11 +18,27 @@ import { AuthService, Usuario } from '../services/auth.service';
   standalone: false
 })
 export class CarrinhoPage implements OnInit {
+  
+  // ==========================================
+  //      VARIÁVEIS DE ESTADO E DADOS
+  // ==========================================
+
+  /** Array dinâmico que armazena os produtos adicionados ao carrinho. */
   itens: any[] = [];
+  
+  /** Valor monetário total a pagar, atualizado em tempo real. */
   total: number = 0;
+  
+  /** String identificadora da loja física selecionada para levantamento (ex: 'lisboa'). */
   lojaSelecionada: string = '';
+  
+  /** Registo do utilizador atualmente autenticado. Necessário para concluir a reserva. */
   currentUser: Usuario | null = null;
 
+  /**
+   * Construtor da classe CarrinhoPage.
+   * Injeta os serviços necessários para a gestão de estado e comunicação de interface (UI).
+   */
   constructor(
     private carrinhoService: CarrinhoService,
     private custosService: CustosService,
@@ -28,28 +49,48 @@ export class CarrinhoPage implements OnInit {
     private toastController: ToastController
   ) {}
 
+  /**
+   * Método do ciclo de vida (Angular). Executado ao inicializar a página.
+   * Garante a sincronização reativa (via Observables) dos dados do utilizador, 
+   * itens no carrinho e loja de levantamento previamente escolhida.
+   */
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
     this.carrinhoService.itens$.subscribe(itens => {
       this.itens = itens;
-      this.calcularTotal();
+      this.calcularTotal(); // Recalcula sempre que há uma emissão de novos dados
     });
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
       this.lojaSelecionada = loja || '';
     });
   }
 
+  /**
+   * Método do ciclo de vida (Ionic). Executado sempre que a view entra em foco.
+   * Força uma leitura atualizada dos itens para prevenir dados em cache.
+   */
   ionViewWillEnter() {
     this.carregarCarrinho();
   }
 
+  // ==========================================
+  //         MÉTODOS DO CARRINHO
+  // ==========================================
+
+  /**
+   * Lê sincronamente a lista de itens do serviço e atualiza o valor total.
+   */
   carregarCarrinho() {
     this.itens = this.carrinhoService.getItens();
     this.calcularTotal();
   }
 
+  /**
+   * Navegação manual. Volta à página anterior se houver histórico, 
+   * ou regressa à Home (catálogo) como fallback seguro.
+   */
   voltar() {
     if (window.history.length > 2) {
       window.history.back();
@@ -58,28 +99,55 @@ export class CarrinhoPage implements OnInit {
     }
   }
 
+  /**
+   * Delega ao `CustosService` o cálculo matemático do valor total do carrinho.
+   */
   calcularTotal() {
     this.total = this.custosService.getTotal();
   }
 
+  /**
+   * Aumenta ou diminui a quantidade de um produto específico no carrinho.
+   * @param index Posição do artigo no array do carrinho.
+   * @param delta Valor a somar/subtrair (+1 ou -1).
+   */
   alterarQuantidade(index: number, delta: number) {
     const item = this.itens[index];
     const novaQtd = item.quantidade + delta;
+    
+    // Evita quantidades nulas ou negativas via interface
     if (novaQtd >= 1) {
       this.carrinhoService.alterarQuantidade(index, novaQtd);
       this.calcularTotal();
     }
   }
 
+  /**
+   * Elimina completamente um produto do array do carrinho.
+   * @param index Posição do artigo a ser removido.
+   */
   removerItem(index: number) {
     this.carrinhoService.removerItem(index);
     this.carregarCarrinho();
   }
 
+  // ==========================================
+  //        MÉTODOS DE STOCK E LOJA
+  // ==========================================
+
+  /**
+   * Simula a quantidade de stock disponível de um produto em tempo real, 
+   * com base num algoritmo matemático dependente do ID e da loja.
+   * @param item Objeto do produto.
+   * @param loja String identificadora da loja.
+   * @returns Inteiro representando o stock virtual.
+   */
   obterStockItem(item: any, loja: string): number {
-    if (!loja) return 999;
+    if (!loja) return 999; // Se não há loja escolhida, assume-se stock infinito por defeito
+    
     const id = item.id;
     if (loja === 'lisboa') {
+      // Regra de negócio: Casaco de Inverno (ID=1) está esgotado em Lisboa
       if (id === 1 || (item.nome && item.nome.toLowerCase().includes('casaco de inverno'))) {
         return 0;
       }
@@ -92,22 +160,38 @@ export class CarrinhoPage implements OnInit {
     return 999;
   }
 
+  /**
+   * Compara a quantidade desejada pelo utilizador com o stock virtual da loja selecionada.
+   * @param item Objeto do produto no carrinho.
+   * @returns Booleano indicando se há stock suficiente (`true`) ou rutura (`false`).
+   */
   verificarStockItem(item: any): boolean {
     if (!this.lojaSelecionada) return true;
     const stock = this.obterStockItem(item, this.lojaSelecionada);
     return item.quantidade <= stock;
   }
 
+  /**
+   * Wrapper público utilizado pelo HTML (`*ngIf`) para exibir avisos de rutura de stock.
+   */
   isItemDisponivel(item: any): boolean {
     return this.verificarStockItem(item);
   }
 
+  /**
+   * Acionado pelo dropdown `<ion-select>` quando o utilizador muda de loja.
+   * @param event O evento de mudança do Ionic.
+   */
   aoMudarLoja(event: any) {
     const loja = event.detail.value;
     this.lojaSelecionada = loja;
     this.carrinhoService.setLojaLevantamento(loja ? loja : null);
   }
 
+  /**
+   * Getter processado (Computed Property). 
+   * Traduz a chave técnica da loja para a sua designação comercial completa.
+   */
   get nomeLojaCompleto(): string {
     if (this.lojaSelecionada === 'braga') return 'Loja Braga Parque';
     if (this.lojaSelecionada === 'lisboa') return 'Loja Lisboa Colombo (Loja mais próxima)';
@@ -115,7 +199,18 @@ export class CarrinhoPage implements OnInit {
     return '';
   }
 
+  // ==========================================
+  //             FLUXO DE RESERVA
+  // ==========================================
+
+  /**
+   * Fluxo central de "Checkout". Efetua todas as validações de negócio e segurança 
+   * (Carrinho vazio, Login, Loja Selecionada, Quebras de Stock) antes de despachar 
+   * a encomenda para o serviço de `ReservasService`.
+   */
   async criarReserva() {
+    
+    // Validação 1: O utilizador não pode reservar nada ("Ar livre")
     if (this.itens.length === 0) {
       const toast = await this.toastController.create({
         message: 'O seu carrinho está vazio.',
@@ -126,6 +221,7 @@ export class CarrinhoPage implements OnInit {
       return;
     }
 
+    // Validação 2: Requisito de Login para Checkout
     if (!this.currentUser) {
       const toast = await this.toastController.create({
         message: 'Inicie a sua sessão para concluir a reserva.',
@@ -134,10 +230,12 @@ export class CarrinhoPage implements OnInit {
         position: 'bottom'
       });
       await toast.present();
+      // Envia o utilizador para o Login, com uma variável na rota para o forçar a voltar para aqui
       this.router.navigate(['/login'], { queryParams: { redirect: '/tabs/carrinho' } });
       return;
     }
 
+    // Validação 3: Escolha obrigatória do ponto de recolha
     if (!this.lojaSelecionada) {
       const alert = await this.alertController.create({
         header: 'Selecionar Loja de Levantamento',
@@ -148,6 +246,7 @@ export class CarrinhoPage implements OnInit {
       return;
     }
 
+    // Validação 4: Garantir que não há produtos sem stock na loja escolhida
     const semStock = this.itens.some(item => !this.verificarStockItem(item));
     if (semStock) {
       const alert = await this.alertController.create({
@@ -159,14 +258,18 @@ export class CarrinhoPage implements OnInit {
       return;
     }
 
+    // Geração de metadados da reserva (Nº Encomenda aleatório e Datas)
     const numeroReserva = Math.floor(Math.random() * 900000000) + 100000000;
     const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
 
     const dataAtual = new Date();
     const dataCriacao = dataAtual.toLocaleDateString('pt-PT') + ' às ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+    
+    // Regra de Negócio: Reserva expira em 24h
     const dataAmanha = new Date(dataAtual.getTime() + 24 * 60 * 60 * 1000);
     const dataValidade = dataAmanha.toLocaleDateString('pt-PT') + ' às ' + dataAmanha.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
+    // Envio dos dados estruturados para a Persistent Storage
     await this.reservasService.adicionarReserva({
       numero: numeroReserva,
       dataCriacao: dataCriacao,
@@ -177,7 +280,7 @@ export class CarrinhoPage implements OnInit {
       itens: [...this.itens] 
     });
 
-    // Mostrar Notificação Push simulada com horários
+    // Construção da Notificação Final ("Push Notification" emulada pelo Toast)
     let fechoLoja = '23h00';
     if (this.lojaSelecionada === 'lisboa') fechoLoja = '00h00';
     if (this.lojaSelecionada === 'coimbra') fechoLoja = '22h00';
@@ -197,11 +300,9 @@ export class CarrinhoPage implements OnInit {
     });
     await toastNotif.present();
 
-    // Limpar o carrinho imediatamente
+    // Esvazia a UI após sucesso e redireciona para as faturas/histórico
     this.carrinhoService.limparCarrinho();
     this.carregarCarrinho();
-
-    // Avançar diretamente para a finalização da compra (Encomendas)
     this.router.navigate(['/reservas']);
   }
 }
