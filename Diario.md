@@ -301,3 +301,33 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 **Decisões:**
 - Permitir que o utilizador simule a recolha e valide o stock a qualquer momento na própria página do carrinho.
 - Disparar a notificação push simulada logo após a confirmação da reserva como reforço visual e de contexto das condições da loja.
+
+## Sessão 12 – 04 de junho de 2026
+**Responsável:** Rodrigo Fernandes Malheiro  
+**Objetivo:** Sincronização do repositório, refatorização do Catálogo para o uso exclusivo de `[(ngModel)]`, correção do serviço de dados, documentação de código e ajustes estéticos na página principal.
+
+### Atividades realizadas:
+* **Sincronização e Limpeza de Conflitos:** Resolução de conflitos de merge críticos no ficheiro `catalogo.page.ts` provocados por marcadores do Git (`<<<<<<< HEAD`, `=======`) que quebravam a compilação do Angular. Limpeza física de diretórias duplicadas no espaço de trabalho do Windows para garantir uma única fonte de verdade no VS Code.
+* **Refatorização com ngModel:** Adaptação total do template HTML e do controlador do Catálogo (`catalogo.page.html` e `catalogo.page.ts`) para cumprir os requisitos técnicos de utilização exclusiva da diretiva `[(ngModel)]`. Centralização da lógica de cruzamento de filtros (pesquisa, categoria, idade, tipo e cor) no método `filtrarProdutos()`.
+* **Injeção de Dependências e Correção do Serviço:** Resolução do erro global `NullInjectorError: No provider for Catalogo!` através da introdução do decorator `@Injectable({ providedIn: 'root' })` no ficheiro `src/app/services/catalogo.ts`, garantindo a correta injeção do serviço na aplicação. Adição de uma proteção contra dados nulos (`if (!this.produtosOriginais)`) para corrigir a quebra da propriedade `filter` causada pela latência de carregamento do JSON.
+* **Documentação do Código (Requisito 17):** Escrita e estruturação de documentação profissional no padrão JSDoc (`/** ... */`) para todas as variáveis, métodos e parâmetros dos controladores do Catálogo (`catalogo.page.ts`) e do Carrinho (`carrinho.page.ts`). Inserção de comentários semânticos (``) nas secções do template do Carrinho (`carrinho.page.html`).
+* **Ajustes Estéticos na Home (Tab1):** Modificação do estilo do botão "Começar" para forçar as letras a branco (`--color: #ffffff`). Centralização vertical e horizontal absoluta do elemento de destaque utilizando Flexbox no contentor `.hero-card`. Substituição da forma geométrica rosa de fundo por um quadrado verde pastel suave (`#d1e5d8`), mantendo a mesma claridade e harmonizando a página com a identidade visual da marca.
+* **Criação do Ficheiro de Co-Criação:** Redação e inclusão do ficheiro obrigatório `IA_Uso.md` na raiz do projeto, enumerando de forma sucinta e clara as tarefas desenvolvidas por autoria humana (regras de negócio, design e fluxos) e as suportadas por modelos de Inteligência Artificial (debugging, refatorização e comentários).
+
+### Problemas Encontrados:
+1. O Git inseriu marcadores de conflito no código do catálogo após um *hard reset*, impedindo o arranque da aplicação.
+2. Existência de pastas duplicadas do projeto no disco do utilizador, fazendo com que o Angular lesse ficheiros desatualizados em cache.
+3. Erro de runtime `NullInjectorError` no browser devido à falta de declaração do provider do serviço do catálogo.
+4. Erro `Cannot read properties of undefined (reading 'filter')` com o ecrã a ficar em branco por causa do tempo de resposta na leitura do ficheiro JSON.
+5. O botão "Começar" apresentava texto a preto com baixo contraste, e a imagem da menina na secção Hero encontrava-se desalinhada e com um fundo rosa fora da paleta de cores principal.
+
+### Soluções Aplicadas:
+* Limpeza manual do ficheiro TypeScript do catálogo, substituição pelas variáveis corretas mapeadas para o `ngModel` e reinicialização do processo `ionic serve` após a remoção da pasta duplicada.
+* Configuração do metadado `providedIn: 'root'` no serviço `Catalogo` para o tornar disponível globalmente.
+* Implementação de um escudo protetor (validação nula) no motor de filtragem do catálogo para aguardar a chegada dos dados.
+* Ajuste das propriedades CSS/SCSS no ficheiro `tab1.page.scss` com `display: flex`, `align-items: center`, `justify-content: center` e alteração da variável `--background` para tons pastéis esverdeados.
+
+### Decisões de Design:
+* Unificar a interface de filtragem em torno de um modelo de dados bidirecional líquido (`ngModel`) para simplificar o código do template e evitar funções redundantes de input.
+* Centralizar o foco visual do ecrã de entrada nos tons da marca (verde pastel) para garantir uma experiência imersiva e consistente desde o primeiro segundo de utilização da app.
+* Manter o repositório do GitHub estritamente limpo e documentado nas horas que antecedem a entrega final da Etapa 3.

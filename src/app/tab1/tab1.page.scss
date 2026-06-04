@@ -51,6 +51,9 @@
 .hero-cta {
   --border-radius: 16px;
   --background: #4e9a74;
+  --color: #ffffff; /* Força o texto a branco */
+  color: #ffffff;
+  font-weight: bold;
   --box-shadow: 0 18px 28px rgba(78, 154, 116, 0.18);
 }
 
@@ -65,7 +68,7 @@
   width: 100%;
   min-height: 320px;
   border-radius: 32px;
-  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+  background: linear-gradient(135deg, #d1e5d8 0%, #e8f5ee 100%); /* Substitui o azul por verde clarinho */
   overflow: hidden;
   box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.35), 0 22px 58px rgba(15, 23, 42, 0.14);
 }
@@ -83,7 +86,7 @@
   height: 220px;
   top: -40px;
   right: -70px;
-  background: rgba(37, 99, 235, 0.18);
+  background: rgba(78, 154, 116, 0.18); /* Reflexo verde suave */
 }
 
 .hero-card::after {
@@ -91,7 +94,7 @@
   height: 180px;
   bottom: -40px;
   left: -40px;
-  background: rgba(14, 165, 233, 0.12);
+  background: rgba(78, 154, 116, 0.12); /* Reflexo verde suave */
 }
 
 .hero-portrait {
@@ -100,7 +103,7 @@
   aspect-ratio: 1 / 1;
   margin: auto;
   border-radius: 28px;
-  background: #e8f5ee;
+  background: #cce0d5; /* Verde pastel central */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,9 +114,10 @@
 .hero-img-full {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Preenche a área sem distorcer */
+  object-position: center; /* Prende o foco da foto perfeitamente ao meio */
   border-radius: 28px;
-  transform: translateY(15px) scale(1.1);
+  transform: scale(1.15); /* Aumenta a foto 15% para a menina preencher melhor o quadrado */
 }
 
 // ─── Navbar Customizada Figma ──────────────────────────────────────────────────
@@ -367,9 +371,6 @@
   .explore-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-
-.featured-section {
 }
 
 .products-grid {
