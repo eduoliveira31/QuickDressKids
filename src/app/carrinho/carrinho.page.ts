@@ -6,6 +6,11 @@ import { CustosService } from '../services/custos';
 import { ReservasService } from '../services/reservas';
 import { AuthService, Usuario } from '../services/auth.service';
 
+/**
+ * Componente responsável pela gestão do Carrinho de Compras.
+ * Permite ao utilizador visualizar itens selecionados, alterar quantidades, 
+ * validação de stock local por dados fixos e concluir/agendar uma reserva.
+ */
 @Component({
   selector: 'app-carrinho',
   templateUrl: './carrinho.page.html',
@@ -14,10 +19,23 @@ import { AuthService, Usuario } from '../services/auth.service';
 })
 export class CarrinhoPage implements OnInit {
   
+  // ==========================================
+  //      VARIÁVEIS DE ESTADO E DADOS
+  // ==========================================
+
+  /** Array dinâmico que armazena os produtos adicionados ao carrinho. */
   itens: any[] = [];
+  
+  /** Valor monetário total a pagar, atualizado em tempo real. */
   total: number = 0;
+  
+  /** Registo do utilizador atualmente autenticado. Necessário para concluir a reserva. */
   currentUser: Usuario | null = null;
 
+  /**
+   * Construtor da classe CarrinhoPage.
+   * Injeta os serviços necessários para a gestão de estado e comunicação de interface (UI).
+   */
   constructor(
     private carrinhoService: CarrinhoService,
     private custosService: CustosService,
@@ -28,21 +46,33 @@ export class CarrinhoPage implements OnInit {
     private toastController: ToastController
   ) {}
 
+  /**
+   * Método do ciclo de vida (Angular). Executado ao inicializar a página.
+   * Garante a sincronização reativa (via Observables) dos dados do utilizador e itens no carrinho.
+   */
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
     this.carrinhoService.itens$.subscribe(itens => {
       this.itens = itens;
-      this.calcularTotal();
+      this.calcularTotal(); 
     });
   }
 
+  /**
+   * Método do ciclo de vida (Ionic). Executado sempre que a view entra em foco.
+   * Força uma leitura atualizada dos itens para prevenir dados em cache.
+   */
   ionViewWillEnter() {
     this.carregarCarrinho();
   }
 
-  // 1. Controla a seleção da loja (Resolve o erro do null)
+  // ==========================================
+  //         MÉTODOS DO CARRINHO
+  // ==========================================
+
+  /** Controla a seleção da loja com tratamento de nulos */
   get lojaSelecionada(): string {
     return this.carrinhoService.getLojaLevantamento() || '';
   }
@@ -50,11 +80,18 @@ export class CarrinhoPage implements OnInit {
     this.carrinhoService.setLojaLevantamento(valor);
   }
 
+  /**
+   * Lê sincronamente a lista de itens do serviço e atualiza o valor total.
+   */
   carregarCarrinho() {
     this.itens = this.carrinhoService.getItens();
     this.calcularTotal();
   }
 
+  /**
+   * Navegação manual. Volta à página anterior se houver histórico, 
+   * ou regressa à Home (catálogo) como fallback seguro.
+   */
   voltar() {
     if (window.history.length > 2) {
       window.history.back();
@@ -63,15 +100,24 @@ export class CarrinhoPage implements OnInit {
     }
   }
 
+  /**
+   * Delega ao `CustosService` o cálculo matemático do valor total do carrinho.
+   */
   calcularTotal() {
     this.total = this.custosService.getTotal();
   }
 
-  // AQUI ADICIONÁMOS A VERIFICAÇÃO PARA NÃO ULTRAPASSAR O STOCK
+  /**
+   * Aumenta ou diminui a quantidade de um produto específico no carrinho.
+   * Aplica a limitação de stock baseada nos dados fixos da loja selecionada.
+   * @param index Posição do artigo no array do carrinho.
+   * @param delta Valor a somar/subtrair (+1 ou -1).
+   */
   async alterarQuantidade(index: number, delta: number) {
     const item = this.itens[index];
     const novaQtd = item.quantidade + delta;
     
+    // Verificação de Limite de Stock ao tentar adicionar unidades (+)
     if (delta > 0) {
       const stockMaximo = this.obterStockItem(item, this.lojaSelecionada);
       if (item.quantidade >= stockMaximo) {
@@ -94,43 +140,99 @@ export class CarrinhoPage implements OnInit {
     }
   }
 
+  /**
+   * Elimina completamente um produto do array do carrinho.
+   * @param index Posição do artigo a ser removido.
+   */
   removerItem(index: number) {
     this.carrinhoService.removerItem(index);
     this.carregarCarrinho();
   }
 
+  // ==========================================
+  //        MÉTODOS DE STOCK E LOJA
+  // ==========================================
+
+  /**
+   * Obtém a quantidade de stock disponível a partir de dados FIXOS mapeados por ID e Loja,
+   * eliminando qualquer tipo de cálculo ou fórmula matemática arbitrária.
+   * @param item Objeto do produto.
+   * @param loja String identificadora da loja.
+   * @returns Inteiro representando o stock fixo.
+   */
   obterStockItem(item: any, loja: string): number {
     if (!loja) return 999; 
     
     const id = item.id;
-    if (loja === 'lisboa') {
-      if (id === 1 || (item.nome && item.nome.toLowerCase().includes('casaco de inverno'))) {
-        return 0;
+
+    // Base de dados de Stock Fixo mapeada de forma determinística
+    const tabelaStockFixa: { [key: string]: { [key: number]: number } } = {
+      lisboa: {
+        1: 0,  // Casaco de Inverno (ID=1) -> Esgotado em Lisboa (Cenário do João)
+        2: 5,  // T-Shirt com Flores
+        3: 3,  // Calças de Ganga
+        4: 8,  // Vestido de Verão
+        5: 12  // Body com Estrelas
+      },
+      braga: {
+        1: 4,
+        2: 3,
+        3: 6,
+        4: 2,
+        5: 5
+      },
+      coimbra: {
+        1: 2,
+        2: 1,
+        3: 4,
+        4: 5,
+        5: 3
       }
-      return (id * 3) % 5 + 2;
-    } else if (loja === 'braga') {
-      return (id * 4) % 7 + 3;
-    } else if (loja === 'coimbra') {
-      return (id * 2) % 4 + 1;
+    };
+
+    // Tenta encontrar o stock fixo definido na tabela, senão devolve um valor padrão seguro (ex: 5)
+    if (tabelaStockFixa[loja] && tabelaStockFixa[loja][id] !== undefined) {
+      return tabelaStockFixa[loja][id];
     }
-    return 999;
+
+    // Fallback para IDs adicionais que não estejam explicitamente na tabela
+    if (loja === 'lisboa' && item.nome && item.nome.toLowerCase().includes('casaco de inverno')) {
+      return 0;
+    }
+    return 5; 
   }
 
+  /**
+   * Compara a quantidade desejada pelo utilizador com o stock real fixo da loja selecionada.
+   * @param item Objeto do produto no carrinho.
+   * @returns Booleano indicando se há stock suficiente (`true`) ou rutura (`false`).
+   */
   verificarStockItem(item: any): boolean {
     if (!this.lojaSelecionada) return true;
     const stock = this.obterStockItem(item, this.lojaSelecionada);
     return item.quantidade <= stock;
   }
 
+  /**
+   * Wrapper público utilizado pelo HTML (`*ngIf`) para exibir avisos de rutura de stock.
+   */
   isItemDisponivel(item: any): boolean {
     return this.verificarStockItem(item);
   }
 
+  /**
+   * Acionado pelo dropdown `<ion-select>` quando o utilizador muda de loja.
+   * @param event O evento de mudança do Ionic.
+   */
   aoMudarLoja(event: any) {
     const loja = event.detail.value;
     this.lojaSelecionada = loja;
   }
 
+  /**
+   * Getter processado (Computed Property). 
+   * Traduz a chave técnica da loja para a sua designação comercial completa.
+   */
   get nomeLojaCompleto(): string {
     if (this.lojaSelecionada === 'braga') return 'Loja Braga Parque';
     if (this.lojaSelecionada === 'lisboa') return 'Loja Lisboa Colombo';
@@ -138,6 +240,13 @@ export class CarrinhoPage implements OnInit {
     return '';
   }
 
+  // ==========================================
+  //             FLUXO DE RESERVA
+  // ==========================================
+
+  /**
+   * Fluxo de Checkout com redirecionamento correto para '/tabs/perfil'.
+   */
   async criarReserva() {
     if (this.itens.length === 0) return;
 
