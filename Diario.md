@@ -366,3 +366,32 @@ Garantir que a filtragem por preço seja intuitiva, utilizando um componente sli
 Priorizar a utilização de tons de verde (#4e9a74) em todos os botões de ação principal para fortalecer o reconhecimento da marca QuickDressKids.
 
 Manter a estrutura do código modular, permitindo a escalabilidade de novos filtros futuros sem necessidade de reestruturação do serviço de catálogo.
+
+# Sessão 14 – 08 de junho de 2026
+Responsável: Rodrigo Fernandes Malheiro 33103
+
+Objetivo: Implementação do fluxo de recuperação de credenciais, refatorização estética e centralização da interface de autenticação, uniformização terminológica do sistema de reservas e gestão de ramificações do repositório.
+
+## Atividades realizadas:
+* **Fluxo de Recuperação de Palavra-passe:** Inclusão de um link interativo no formulário de login acoplado ao método `recuperarPalavraPasse()` no controlador. Configuração de uma janela nativa via `AlertController` para recolha de e-mail e validação de campo com feedback imediato por `ToastController`.
+* **Otimização e Centralização da UI de Autenticação:** Ajuste estético na folha de estilos (`login.page.scss`) reduzindo proporcionalmente o tamanho das fontes (`rem`) e centralizando as etiquetas (*labels*) e caixas de texto (`--text-align: center`) para maximizar a ergonomia mobile.
+* **Uniformização Terminológica ("Reservas Ativas"):** Substituição global do termo "Encomendas" para "Reservas Ativas" no ecrã de Perfil e no cabeçalho fixo da página de listagem (`reservas.page.html`), alinhando o vocabulário ao modelo de negócio da plataforma.
+* **Refatorização de Componentes de Modais:** Substituição de classes de estilo genéricas por classes específicas (`btn-ajuda-submit` e `btn-password-submit`) nos modais de suporte e segurança, aplicando o tom verde corporativo escuro da marca.
+* **Sincronização e Gestão de Ramos:** Execução de rotinas locais do Git para integração dos commits na branch principal (`main`) e posterior atualização e resolução de conflitos na branch de desenvolvimento local (`rodrigo-malheiro`).
+
+## Problemas Encontrados:
+* **Erros de Tags Órfãs na Compilação:** Interrupção temporária do build do Angular devido a uma incorreção de fecho sintático no cabeçalho do template (`</Toolbar>` em vez de `</ion-toolbar>`).
+* **Falha de Escopo em Variáveis de Notificação:** Erro de compilação detetado no método utilitário `mostrarToast` do perfil devido ao mapeamento de uma variável inexistente (`message` em vez de `mensagem`).
+* **Quebra na Consistência de Elementos da Lista:** Desalinhamento estético e variação tonal cromática ao tentar isolar as opções de topo em cartões independentes, divergindo do padrão de blocos unificados das secções inferiores do Perfil.
+* **Erro Crítico de Conexão com Host Remoto:** Falha do Git no comando de push (`Could not resolve host: github.com`) originada por instabilidade na rede local ou resolução de DNS do terminal.
+
+## Soluções Aplicadas:
+* Correção ortográfica e sintática imediata das tags do Ionic no cabeçalho, restabelecendo a compilação do módulo.
+* Refatorização do método `mostrarToast` para consumir corretamente o argumento tipado `mensagem: string`.
+* Reversão do HTML do Perfil para a estrutura de lista em bloco nativa (`inset="true"`), preservando as cores e raios de curvatura de borda originais para uniformizar a interface.
+* Diagnóstico de rede e execução de rotinas de sincronização sequencial pós-restabelecimento da ligação de rede.
+
+## Decisões de Design:
+* Priorizar uma experiência de login minimalista, compactando títulos e centralizando dados para guiar o foco visual do utilizador em ecrãs de menores dimensões.
+* Abandonar o termo comercial "Encomendas" em prol de "Reservas Ativas" para consolidar a aplicação como uma plataforma focada no catálogo rotativo e sustentável de vestuário infantil.
+* Centralizar o comportamento e a paleta cromática dos botões de ação principal dos modais, aplicando o verde corporativo (#2d5a43) para fixar a identidade visual.
