@@ -60,6 +60,7 @@ export class PerfilPage implements OnInit {
       return;
     }
 
+    // Valida tanto o termo antigo como o novo termo "Reservas Ativas"
     if (nomeOpcao === 'Reservas Ativas' || nomeOpcao === 'Encomendas') {
       this.router.navigate(['/reservas']);
     } else {
@@ -182,7 +183,7 @@ export class PerfilPage implements OnInit {
 
   private async mostrarToast(mensagem: string, cor: string) {
     const toast = await this.toastController.create({
-      message: mensagem,
+      message: mensagem || mensagem,
       duration: 2000,
       position: 'bottom',
       color: cor

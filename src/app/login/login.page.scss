@@ -19,11 +19,12 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
 
   .auth-header {
+    text-align: center; /* CENTRALIZADO */
     margin-bottom: 24px;
     
     h2 {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.35rem; /* MAIS PEQUENO (Era 1.6rem) */
       font-weight: 800;
       color: #2d5a43;
       margin: 0 0 6px;
@@ -31,7 +32,7 @@
 
     p {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.8rem; /* MAIS PEQUENO (Era 0.9rem) */
       color: #6b7280;
       margin: 0;
       line-height: 1.4;
@@ -57,8 +58,10 @@
   gap: 6px;
 
   label {
+    display: block;
+    text-align: center; /* LEGENDAS CENTRALIZADAS */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.75rem; /* MAIS PEQUENO (Era 0.8rem) */
     font-weight: 700;
     color: #374151;
   }
@@ -72,8 +75,9 @@
     --padding-start: 14px;
     --padding-end: 14px;
     --color: #0f172a;
+    --text-align: center; /* TEXTO E PLACEHOLDER CENTRALIZADOS DE FORMA NATIVA */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* MAIS PEQUENO (Era 0.9rem) */
     min-height: 44px;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
 
@@ -89,8 +93,9 @@
   --border-radius: 14px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-weight: 700;
-  height: 46px;
-  margin-top: 24px;
+  font-size: 0.9rem;
+  height: 44px; /* LIGEIRAMENTE MAIS COMPACTO (Era 46px) */
+  margin-top: 20px;
   box-shadow: 0 10px 20px rgba(78, 154, 116, 0.15);
 
   &::part(native) {
@@ -102,7 +107,7 @@
   text-align: center;
   margin-top: 16px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.78rem; /* MAIS PEQUENO (Era 0.85rem) */
   color: #4b5563;
 
   p {
@@ -121,7 +126,7 @@
   }
 }
 
-// ─── Logged Box ───────────────────────────────────────────────────────────────
+// ─── Logged Box (Ajustado para manter harmonia se já estiver logado) ──────────
 .logged-box {
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -139,7 +144,7 @@
 
   h2 {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.35rem; /* IGUALADO AO TÍTULO DO LOGIN */
     font-weight: 800;
     color: #0f172a;
     margin: 0 0 4px;
@@ -147,7 +152,7 @@
 
   .email-sub {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #6b7280;
     margin: 0;
   }
@@ -161,7 +166,7 @@
 
     p {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #4b5563;
       margin: 0;
       line-height: 1.5;
