@@ -3,13 +3,13 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/perfil" text="" icon="arrow-back-outline" style="--color: #ffffff; color: #ffffff !important;"></ion-back-button>
     </ion-buttons>
-    <ion-title style="color: #ffffff; font-weight: bold;">Encomendas</ion-title>
+    <ion-title style="color: #ffffff; font-weight: bold;">Reservas Ativas</ion-title>
   </ion-toolbar>
   
   <ion-toolbar style="--background: #ffffff; padding: 4px 8px;">
     <ion-segment [(ngModel)]="abaAtiva" style="--background: #e8f5ee; margin: 0;">
       <ion-segment-button value="ativas" style="--color: #2d5a43; --color-checked: #ffffff; --background-checked: #4e9a74;">
-        <ion-label style="font-weight: bold;">Encomendas Ativas ({{ reservasAtivas.length }})</ion-label>
+        <ion-label style="font-weight: bold;">Reservas Ativas ({{ reservasAtivas.length }})</ion-label>
       </ion-segment-button>
       <ion-segment-button value="historico" style="--color: #2d5a43; --color-checked: #ffffff; --background-checked: #4e9a74;">
         <ion-label style="font-weight: bold;">Histórico ({{ historico.length }})</ion-label>
