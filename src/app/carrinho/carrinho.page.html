@@ -11,10 +11,9 @@
 
 <ion-content style="--background: #f7f9f8; background-color: #f7f9f8; min-height: 100%;" class="ion-padding">
 
-  <!-- AVISO DE SESSÃO NÃO INICIADA -->
   <div *ngIf="!currentUser && itens.length > 0" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.03);">
     <div style="display: flex; align-items: center; gap: 10px; flex-grow: 1;">
-      <ion-icon name="information-circle-outline" style="color: #d97706; font-size: 24px; flex-shrink: 0;"></ion-icon>
+      <ion-icon name="information-circle-outline" style="color: #d97706; font-size: 24px; flex-shrink: 0"></ion-icon>
       <span style="font-size: 0.85rem; color: #d97706; line-height: 1.4;">
         Para finalizar a sua reserva, por favor <strong>inicie sessão</strong>.
       </span>
@@ -24,7 +23,6 @@
     </ion-button>
   </div>
 
-  <!-- SELETOR DE LOJA -->
   <div class="loja-selector-container" style="background: white; border-radius: 12px; padding: 12px; margin-bottom: 20px; border: 1px solid #f1f5f9; box-shadow: 0 4px 12px rgba(78, 154, 116, 0.05);">
     <h3 style="margin: 0 0 10px 0; font-size: 1rem; font-weight: bold; color: #2d5a43; display: flex; align-items: center; gap: 8px;">
       <ion-icon name="storefront-outline"></ion-icon> Local de Levantamento
@@ -40,7 +38,6 @@
 
   <h3 style="margin: 20px 0 10px 4px; font-size: 1.05rem; font-weight: bold; color: #2d5a43;">Artigos na Reserva</h3>
 
-  <!-- LISTA DE ARTIGOS NO CARRINHO -->
   <div *ngIf="itens.length > 0; else carrinhoVazio">
     
     <ion-card *ngFor="let item of itens; let i = index" 
@@ -48,12 +45,10 @@
               [style.background]="!verificarStockItem(item) ? '#fff5f5' : '#ffffff'"
               style="margin: 10px 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); overflow: hidden;">
       <div style="display: flex; padding: 12px; align-items: center; gap: 12px; position: relative;">
-        <!-- Imagem -->
         <div style="width: 70px; height: 70px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #f7f7f7;">
           <img [src]="item.imagem" [alt]="item.nome" style="width: 100%; height: 100%; object-fit: cover;" />
         </div>
         
-        <!-- Detalhes -->
         <div style="flex-grow: 1;">
           <h2 style="margin: 0; font-size: 0.95rem; font-weight: bold; color: #333;">{{ item.nome }}</h2>
           <p style="margin: 4px 0; font-size: 0.8rem; color: #666;">
@@ -63,7 +58,6 @@
             <span style="font-size: 1rem; font-weight: bold; color: #2d5a43;">{{ item.preco | currency:'EUR' }}</span>
           </div>
 
-          <!-- Alerta de Indisponibilidade -->
           <div *ngIf="!verificarStockItem(item)" style="color: #eb445a; font-weight: bold; margin-top: 6px; display: flex; align-items: center; gap: 4px; font-size: 0.8rem;">
             <ion-icon name="alert-circle-outline" style="font-size: 16px;"></ion-icon>
             <span *ngIf="obterStockItem(item, lojaSelecionada) === 0">Artigo indisponível nesta loja</span>
@@ -71,20 +65,18 @@
           </div>
         </div>
 
-        <!-- Controlos de Quantidade e Exclusão -->
         <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; justify-content: space-between; height: 70px;">
-          <!-- Botão Lixo Independente -->
           <ion-button fill="clear" color="danger" size="small" style="margin: 0; --padding-start: 0; --padding-end: 0;" (click)="removerItem(i)">
             <ion-icon name="trash-outline" style="font-size: 20px;"></ion-icon>
           </ion-button>
 
-          <!-- Seletor de Qtd -->
           <div style="display: flex; align-items: center; background: #f0f2f1; border-radius: 20px; padding: 2px 6px; gap: 6px;">
             <ion-button fill="clear" size="small" style="margin: 0; --padding-start: 2px; --padding-end: 2px; height: 24px; width: 24px; color: #2d5a43;" [disabled]="item.quantidade <= 1" (click)="alterarQuantidade(i, -1)">
               <ion-icon name="remove-outline" style="font-size: 14px;"></ion-icon>
             </ion-button>
             <span style="font-size: 0.85rem; font-weight: bold; color: #333; min-width: 14px; text-align: center;">{{ item.quantidade }}</span>
-            <ion-button fill="clear" size="small" style="margin: 0; --padding-start: 2px; --padding-end: 2px; height: 24px; width: 24px; color: #2d5a43;" (click)="alterarQuantidade(i, 1)">
+            
+            <ion-button fill="clear" size="small" style="margin: 0; --padding-start: 2px; --padding-end: 2px; height: 24px; width: 24px; color: #2d5a43;" [disabled]="item.quantidade >= obterStockItem(item, lojaSelecionada)" (click)="alterarQuantidade(i, 1)">
               <ion-icon name="add-outline" style="font-size: 14px;"></ion-icon>
             </ion-button>
           </div>
@@ -92,7 +84,6 @@
       </div>
     </ion-card>
 
-    <!-- SEÇÃO DE RESUMO DO TOTAL E BOTÃO DE CHECKOUT (Colocado dentro do ion-content para não ser coberto pelas abas) -->
     <div style="background: white; border-radius: 12px; padding: 16px; margin: 20px 0 80px 0; border: 1px solid #f1f5f9; box-shadow: 0 4px 12px rgba(78, 154, 116, 0.05);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <span style="font-weight: bold; color: #666; font-size: 0.95rem;">Total da Reserva:</span>
@@ -106,7 +97,6 @@
 
   </div>
 
-  <!-- MENSAGEM SE CARRINHO ESTIVER VAZIO -->
   <ng-template #carrinhoVazio>
     <div class="ion-text-center" style="margin-top: 80px; padding: 0 20px;">
       <ion-icon name="cart-outline" style="font-size: 70px; color: #c3d9cc;"></ion-icon>
