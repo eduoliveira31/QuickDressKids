@@ -331,3 +331,38 @@ O Service foi implementado no ficheiro já existente catalogo.ts, mantendo a con
 * Unificar a interface de filtragem em torno de um modelo de dados bidirecional líquido (`ngModel`) para simplificar o código do template e evitar funções redundantes de input.
 * Centralizar o foco visual do ecrã de entrada nos tons da marca (verde pastel) para garantir uma experiência imersiva e consistente desde o primeiro segundo de utilização da app.
 * Manter o repositório do GitHub estritamente limpo e documentado nas horas que antecedem a entrega final da Etapa 3.
+
+Sessão 13 – 08 de junho de 2026
+Responsável: Eduardo Oliveira 33137
+
+Objetivo: Implementação de funcionalidades de filtragem avançada (preço), correção de identidade visual em componentes críticos e sincronização de estado do repositório.
+
+Atividades realizadas:
+Filtro de Preço por Slider: Implementação de um componente ion-range no modal de filtros da página de catálogo. Refatorização da lógica de filtragem em catalogo.page.ts para incluir a comparação dinâmica produto.preco <= this.precoMaximo e atualização do contador de filtros ativos (filtrosAtivosCount).
+
+Correção de Identidade Visual (UI): Ajuste estético no botão "Adicionar ao Carrinho" dentro da página de detalhe do produto. Alteração do atributo --background do componente ion-button para a cor verde corporativa #4e9a74, garantindo consistência com a paleta de cores definida nas sessões anteriores.
+
+Manutenção do Código e UX: Atualização da interface de utilizador do modal de filtros para permitir a visualização em tempo real do preço máximo selecionado através de data binding ({{ precoMaximo | currency:'EUR' }}).
+
+Gestão de Repositório: Documentação das alterações no diário de bordo e preparação das instruções de commit relativas às novas funcionalidades de filtragem e ajustes de estilo.
+
+Problemas Encontrados:
+Necessidade de filtrar produtos por uma gama de preços variável sem comprometer a performance da lista de produtos original.
+
+Inconsistência na cor do botão principal de ação ("Adicionar ao Carrinho") na página de detalhe, que utilizava uma cor cinzenta (#78909c) divergente da identidade visual da aplicação.
+
+Necessidade de atualizar o contador de filtros ativos para refletir corretamente a seleção do preço máximo.
+
+Soluções Aplicadas:
+Inclusão da variável precoMaximo no controlador do catálogo e adição do filtro correspondente no pipe de filtragem de dados.
+
+Aplicação de estilos CSS (--background: #4e9a74) diretamente no template produto-detalhe.page.html para unificar o design.
+
+Atualização do método limparTodosFiltros() para incluir o reset do valor do slider de preço para o valor inicial de 500€.
+
+Decisões de Design:
+Garantir que a filtragem por preço seja intuitiva, utilizando um componente slider nativo do Ionic com feedback visual imediato do valor.
+
+Priorizar a utilização de tons de verde (#4e9a74) em todos os botões de ação principal para fortalecer o reconhecimento da marca QuickDressKids.
+
+Manter a estrutura do código modular, permitindo a escalabilidade de novos filtros futuros sem necessidade de reestruturação do serviço de catálogo.
