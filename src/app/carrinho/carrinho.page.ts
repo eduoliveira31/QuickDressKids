@@ -56,19 +56,15 @@ export class CarrinhoPage implements OnInit {
     });
     this.carrinhoService.itens$.subscribe(itens => {
       this.itens = itens;
-<<<<<<< HEAD
       this.calcularTotal(); // Recalcula sempre que há uma emissão de novos dados
     });
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
       this.lojaSelecionada = loja || '';
-      // Pré-selecionar a loja mais próxima (Braga) se nenhuma estiver selecionada
+      // Pré-selecionar a loja Braga Parque se nenhuma estiver selecionada
       if (!this.lojaSelecionada) {
-        this.lojaSelecionada = 'BragaParque';
-        this.carrinhoService.setLojaLevantamento('BragaParque');
+        this.lojaSelecionada = 'braga';
+        this.carrinhoService.setLojaLevantamento('braga');
       }
-=======
-      this.calcularTotal(); 
->>>>>>> c92acbdf72aa00293ee8dcbb809730d6dd0db539
     });
   }
 
@@ -305,8 +301,6 @@ export class CarrinhoPage implements OnInit {
       loja: this.nomeLojaCompleto,
       itens: [...this.itens] 
     });
-
-<<<<<<< HEAD
     // Construção do Modal de Confirmação Persistente
     let fechoLoja = '23h00';
     if (this.lojaSelecionada === 'lisboa') fechoLoja = '00h00';
@@ -330,19 +324,5 @@ export class CarrinhoPage implements OnInit {
       ]
     });
     await alertNotif.present();
-=======
-    const toastNotif = await this.toastController.create({
-      header: 'Reserva Confirmada',
-      message: `A sua reserva #${numeroReserva} está agendada!`,
-      position: 'top',
-      color: 'success',
-      duration: 3000,
-    });
-    await toastNotif.present();
-
-    this.carrinhoService.limparCarrinho();
-    this.carregarCarrinho();
-    this.router.navigate(['/tabs/perfil']);
->>>>>>> c92acbdf72aa00293ee8dcbb809730d6dd0db539
   }
 }
