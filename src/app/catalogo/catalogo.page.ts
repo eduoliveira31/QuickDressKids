@@ -21,6 +21,7 @@ export class CatalogoPage implements OnInit {
   tipoSelecionado: string = '';
   corSelecionada: string = '';
   lojaSelecionada: string = '';
+  precoMaximo: number = 500; // Valor inicial do slider
 
   readonly categorias = [
     { valor: 'menino', label: 'Menino' },
@@ -79,7 +80,6 @@ export class CatalogoPage implements OnInit {
     });
   }
 
-  // Novo método para contar filtros ativos
   get filtrosAtivosCount(): number {
     let count = 0;
     if (this.categoriaSelecionada) count++;
@@ -87,6 +87,7 @@ export class CatalogoPage implements OnInit {
     if (this.tipoSelecionado) count++;
     if (this.corSelecionada) count++;
     if (this.lojaSelecionada) count++;
+    if (this.precoMaximo < 500) count++; // Considera o filtro de preço ativo se for < máximo
     return count;
   }
 
@@ -104,6 +105,7 @@ export class CatalogoPage implements OnInit {
       
       const matchTipo = !this.tipoSelecionado || produto.tipo === this.tipoSelecionado;
       const matchFaixa = !this.faixaEtariaSelecionada || produto.faixaEtaria === this.faixaEtariaSelecionada;
+      const matchPreco = produto.preco <= this.precoMaximo;
 
       let matchCor = !this.corSelecionada;
       if (!matchCor && produto.cores && Array.isArray(produto.cores)) {
@@ -121,7 +123,7 @@ export class CatalogoPage implements OnInit {
         }
       }
 
-      return matchPesquisa && matchCategoria && matchTipo && matchFaixa && matchCor && matchLoja;
+      return matchPesquisa && matchCategoria && matchTipo && matchFaixa && matchCor && matchLoja && matchPreco;
     });
   }
 
@@ -141,6 +143,7 @@ export class CatalogoPage implements OnInit {
     this.tipoSelecionado = '';
     this.corSelecionada = '';
     this.lojaSelecionada = '';
+    this.precoMaximo = 500;
     this.aplicarFiltros();
   }
 

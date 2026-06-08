@@ -77,6 +77,14 @@
 
       <ion-content class="ion-padding" color="light">
         <div class="bloco-filtro-container">
+          <h3>Preço Máximo: {{ precoMaximo | currency:'EUR' }}</h3>
+          <ion-range [(ngModel)]="precoMaximo" [min]="0" [max]="500" [pin]="true" (ionChange)="aplicarFiltros()">
+            <ion-label slot="start">0€</ion-label>
+            <ion-label slot="end">500€</ion-label>
+          </ion-range>
+        </div>
+
+        <div class="bloco-filtro-container">
           <h3>Categoria</h3>
           <div class="grupo-chips-filtros">
             <ion-chip [class.chip-filtro-ativo]="categoriaSelecionada === ''" (click)="selecionarFiltro('categoria', '')">Todas</ion-chip>
