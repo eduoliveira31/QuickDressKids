@@ -64,6 +64,11 @@ export class CarrinhoPage implements OnInit {
     });
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
       this.lojaSelecionada = loja || '';
+      // Pré-selecionar a loja mais próxima (Braga) se nenhuma estiver selecionada
+      if (!this.lojaSelecionada) {
+        this.lojaSelecionada = 'BragaParque';
+        this.carrinhoService.setLojaLevantamento('BragaParque');
+      }
     });
   }
 
@@ -280,29 +285,28 @@ export class CarrinhoPage implements OnInit {
       itens: [...this.itens] 
     });
 
-    // Construção da Notificação Final ("Push Notification" emulada pelo Toast)
+    // Construção do Modal de Confirmação Persistente
     let fechoLoja = '23h00';
     if (this.lojaSelecionada === 'lisboa') fechoLoja = '00h00';
     if (this.lojaSelecionada === 'coimbra') fechoLoja = '22h00';
 
-    const toastNotif = await this.toastController.create({
-      header: 'QuickDressKids • Notificação de Reserva',
-      message: `A sua reserva #${numeroReserva} está agendada! Levante na ${this.nomeLojaCompleto} das 10h00 às ${fechoLoja} nas próximas 24 horas.`,
-      position: 'top',
-      color: 'success',
-      duration: 6000,
+    const alertNotif = await this.alertController.create({
+      header: 'Reserva Confirmada!',
+      subHeader: `Reserva #${numeroReserva}`,
+      message: `A sua reserva foi agendada com sucesso! Levante os artigos na ${this.nomeLojaCompleto} das 10h00 às ${fechoLoja} nas próximas 24 horas.`,
+      backdropDismiss: false,
       buttons: [
         {
-          text: 'OK',
-          role: 'cancel'
+          text: 'Ver Minhas Reservas',
+          handler: () => {
+            // Esvazia a UI após sucesso e redireciona para as faturas/histórico
+            this.carrinhoService.limparCarrinho();
+            this.carregarCarrinho();
+            this.router.navigate(['/reservas']);
+          }
         }
       ]
     });
-    await toastNotif.present();
-
-    // Esvazia a UI após sucesso e redireciona para as faturas/histórico
-    this.carrinhoService.limparCarrinho();
-    this.carregarCarrinho();
-    this.router.navigate(['/reservas']);
+    await alertNotif.present();
   }
 }
