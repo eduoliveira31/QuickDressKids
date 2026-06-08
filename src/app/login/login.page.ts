@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, AlertController } from '@ionic/angular'; // Adicionado AlertController aqui
 import { AuthService, Usuario } from '../services/auth.service';
 
 @Component({
@@ -31,13 +31,48 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertController: AlertController // Injetado aqui o controlador de alertas!
   ) {}
 
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
+  }
+
+  // NOVA FUNÇÃO: Recuperar Palavra-passe
+  async recuperarPalavraPasse() {
+    const alert = await this.alertController.create({
+      header: 'Recuperar Palavra-passe',
+      message: 'Por favor, insere o teu email para enviarmos um link de recuperação.',
+      inputs: [
+        {
+          name: 'email',
+          type: 'email',
+          placeholder: 'ex: carla@email.com'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Enviar',
+          handler: (data) => {
+            if (data.email) {
+              this.mostrarToast('Email enviado com sucesso para: ' + data.email, 'success');
+            } else {
+              this.mostrarToast('Por favor, insere um email válido.', 'warning');
+              return false; // Impede que o popup feche se o campo estiver vazio
+            }
+            return true;
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async efetuarLogin() {

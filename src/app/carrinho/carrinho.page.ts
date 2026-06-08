@@ -9,7 +9,7 @@ import { AuthService, Usuario } from '../services/auth.service';
 /**
  * Componente responsável pela gestão do Carrinho de Compras.
  * Permite ao utilizador visualizar itens selecionados, alterar quantidades, 
- * simular a verificação de stock local e concluir/agendar uma reserva.
+ * validação de stock local por dados fixos e concluir/agendar uma reserva.
  */
 @Component({
   selector: 'app-carrinho',
@@ -29,9 +29,6 @@ export class CarrinhoPage implements OnInit {
   /** Valor monetário total a pagar, atualizado em tempo real. */
   total: number = 0;
   
-  /** String identificadora da loja física selecionada para levantamento (ex: 'lisboa'). */
-  lojaSelecionada: string = '';
-  
   /** Registo do utilizador atualmente autenticado. Necessário para concluir a reserva. */
   currentUser: Usuario | null = null;
 
@@ -45,14 +42,13 @@ export class CarrinhoPage implements OnInit {
     private alertController: AlertController,
     private router: Router,                      
     private reservasService: ReservasService,
-    private authService: AuthService,
+    public authService: AuthService,
     private toastController: ToastController
   ) {}
 
   /**
    * Método do ciclo de vida (Angular). Executado ao inicializar a página.
-   * Garante a sincronização reativa (via Observables) dos dados do utilizador, 
-   * itens no carrinho e loja de levantamento previamente escolhida.
+   * Garante a sincronização reativa (via Observables) dos dados do utilizador e itens no carrinho.
    */
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
@@ -60,6 +56,7 @@ export class CarrinhoPage implements OnInit {
     });
     this.carrinhoService.itens$.subscribe(itens => {
       this.itens = itens;
+<<<<<<< HEAD
       this.calcularTotal(); // Recalcula sempre que há uma emissão de novos dados
     });
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
@@ -69,6 +66,9 @@ export class CarrinhoPage implements OnInit {
         this.lojaSelecionada = 'BragaParque';
         this.carrinhoService.setLojaLevantamento('BragaParque');
       }
+=======
+      this.calcularTotal(); 
+>>>>>>> c92acbdf72aa00293ee8dcbb809730d6dd0db539
     });
   }
 
@@ -83,6 +83,14 @@ export class CarrinhoPage implements OnInit {
   // ==========================================
   //         MÉTODOS DO CARRINHO
   // ==========================================
+
+  /** Controla a seleção da loja com tratamento de nulos */
+  get lojaSelecionada(): string {
+    return this.carrinhoService.getLojaLevantamento() || '';
+  }
+  set lojaSelecionada(valor: string) {
+    this.carrinhoService.setLojaLevantamento(valor);
+  }
 
   /**
    * Lê sincronamente a lista de itens do serviço e atualiza o valor total.
@@ -113,17 +121,34 @@ export class CarrinhoPage implements OnInit {
 
   /**
    * Aumenta ou diminui a quantidade de um produto específico no carrinho.
+   * Aplica a limitação de stock baseada nos dados fixos da loja selecionada.
    * @param index Posição do artigo no array do carrinho.
    * @param delta Valor a somar/subtrair (+1 ou -1).
    */
-  alterarQuantidade(index: number, delta: number) {
+  async alterarQuantidade(index: number, delta: number) {
     const item = this.itens[index];
     const novaQtd = item.quantidade + delta;
     
-    // Evita quantidades nulas ou negativas via interface
+    // Verificação de Limite de Stock ao tentar adicionar unidades (+)
+    if (delta > 0) {
+      const stockMaximo = this.obterStockItem(item, this.lojaSelecionada);
+      if (item.quantidade >= stockMaximo) {
+        const toast = await this.toastController.create({
+          message: `Stock limite atingido. Apenas ${stockMaximo} disponíveis nesta loja.`,
+          duration: 2000,
+          color: 'warning',
+          position: 'bottom'
+        });
+        await toast.present();
+        return; 
+      }
+    }
+
     if (novaQtd >= 1) {
       this.carrinhoService.alterarQuantidade(index, novaQtd);
       this.calcularTotal();
+    } else {
+      this.removerItem(index);
     }
   }
 
@@ -141,32 +166,56 @@ export class CarrinhoPage implements OnInit {
   // ==========================================
 
   /**
-   * Simula a quantidade de stock disponível de um produto em tempo real, 
-   * com base num algoritmo matemático dependente do ID e da loja.
+   * Obtém a quantidade de stock disponível a partir de dados FIXOS mapeados por ID e Loja,
+   * eliminando qualquer tipo de cálculo ou fórmula matemática arbitrária.
    * @param item Objeto do produto.
    * @param loja String identificadora da loja.
-   * @returns Inteiro representando o stock virtual.
+   * @returns Inteiro representando o stock fixo.
    */
   obterStockItem(item: any, loja: string): number {
-    if (!loja) return 999; // Se não há loja escolhida, assume-se stock infinito por defeito
+    if (!loja) return 999; 
     
     const id = item.id;
-    if (loja === 'lisboa') {
-      // Regra de negócio: Casaco de Inverno (ID=1) está esgotado em Lisboa
-      if (id === 1 || (item.nome && item.nome.toLowerCase().includes('casaco de inverno'))) {
-        return 0;
+
+    // Base de dados de Stock Fixo mapeada de forma determinística
+    const tabelaStockFixa: { [key: string]: { [key: number]: number } } = {
+      lisboa: {
+        1: 0,  // Casaco de Inverno (ID=1) -> Esgotado em Lisboa (Cenário do João)
+        2: 5,  // T-Shirt com Flores
+        3: 3,  // Calças de Ganga
+        4: 8,  // Vestido de Verão
+        5: 12  // Body com Estrelas
+      },
+      braga: {
+        1: 4,
+        2: 3,
+        3: 6,
+        4: 2,
+        5: 5
+      },
+      coimbra: {
+        1: 2,
+        2: 1,
+        3: 4,
+        4: 5,
+        5: 3
       }
-      return (id * 3) % 5 + 2;
-    } else if (loja === 'braga') {
-      return (id * 4) % 7 + 3;
-    } else if (loja === 'coimbra') {
-      return (id * 2) % 4 + 1;
+    };
+
+    // Tenta encontrar o stock fixo definido na tabela, senão devolve um valor padrão seguro (ex: 5)
+    if (tabelaStockFixa[loja] && tabelaStockFixa[loja][id] !== undefined) {
+      return tabelaStockFixa[loja][id];
     }
-    return 999;
+
+    // Fallback para IDs adicionais que não estejam explicitamente na tabela
+    if (loja === 'lisboa' && item.nome && item.nome.toLowerCase().includes('casaco de inverno')) {
+      return 0;
+    }
+    return 5; 
   }
 
   /**
-   * Compara a quantidade desejada pelo utilizador com o stock virtual da loja selecionada.
+   * Compara a quantidade desejada pelo utilizador com o stock real fixo da loja selecionada.
    * @param item Objeto do produto no carrinho.
    * @returns Booleano indicando se há stock suficiente (`true`) ou rutura (`false`).
    */
@@ -190,7 +239,6 @@ export class CarrinhoPage implements OnInit {
   aoMudarLoja(event: any) {
     const loja = event.detail.value;
     this.lojaSelecionada = loja;
-    this.carrinhoService.setLojaLevantamento(loja ? loja : null);
   }
 
   /**
@@ -199,7 +247,7 @@ export class CarrinhoPage implements OnInit {
    */
   get nomeLojaCompleto(): string {
     if (this.lojaSelecionada === 'braga') return 'Loja Braga Parque';
-    if (this.lojaSelecionada === 'lisboa') return 'Loja Lisboa Colombo (Loja mais próxima)';
+    if (this.lojaSelecionada === 'lisboa') return 'Loja Lisboa Colombo';
     if (this.lojaSelecionada === 'coimbra') return 'Loja Coimbra Dolce Vita';
     return '';
   }
@@ -209,72 +257,45 @@ export class CarrinhoPage implements OnInit {
   // ==========================================
 
   /**
-   * Fluxo central de "Checkout". Efetua todas as validações de negócio e segurança 
-   * (Carrinho vazio, Login, Loja Selecionada, Quebras de Stock) antes de despachar 
-   * a encomenda para o serviço de `ReservasService`.
+   * Fluxo de Checkout com redirecionamento correto para '/tabs/perfil'.
    */
   async criarReserva() {
-    
-    // Validação 1: O utilizador não pode reservar nada ("Ar livre")
-    if (this.itens.length === 0) {
-      const toast = await this.toastController.create({
-        message: 'O seu carrinho está vazio.',
-        duration: 2000,
-        color: 'warning'
-      });
-      await toast.present();
-      return;
-    }
+    if (this.itens.length === 0) return;
 
-    // Validação 2: Requisito de Login para Checkout
     if (!this.currentUser) {
-      const toast = await this.toastController.create({
-        message: 'Inicie a sua sessão para concluir a reserva.',
-        duration: 2500,
-        color: 'warning',
-        position: 'bottom'
-      });
-      await toast.present();
-      // Envia o utilizador para o Login, com uma variável na rota para o forçar a voltar para aqui
       this.router.navigate(['/login'], { queryParams: { redirect: '/tabs/carrinho' } });
       return;
     }
 
-    // Validação 3: Escolha obrigatória do ponto de recolha
     if (!this.lojaSelecionada) {
       const alert = await this.alertController.create({
-        header: 'Selecionar Loja de Levantamento',
-        message: 'Por favor, selecione uma loja no seletor do carrinho para efetuar o levantamento antes de criar a sua reserva.',
+        header: 'Selecionar Loja',
+        message: 'Por favor, selecione uma loja para efetuar o levantamento.',
         buttons: ['OK']
       });
       await alert.present();
       return;
     }
 
-    // Validação 4: Garantir que não há produtos sem stock na loja escolhida
     const semStock = this.itens.some(item => !this.verificarStockItem(item));
     if (semStock) {
       const alert = await this.alertController.create({
         header: 'Artigos Indisponíveis',
-        message: 'O seu carrinho contém artigos indisponíveis na loja selecionada. Por favor, remova-os ou selecione outra loja antes de prosseguir.',
+        message: 'O seu carrinho contém artigos indisponíveis na loja selecionada.',
         buttons: ['OK']
       });
       await alert.present();
       return;
     }
 
-    // Geração de metadados da reserva (Nº Encomenda aleatório e Datas)
     const numeroReserva = Math.floor(Math.random() * 900000000) + 100000000;
     const qtdTotal = this.itens.reduce((acc, item) => acc + item.quantidade, 0);
 
     const dataAtual = new Date();
     const dataCriacao = dataAtual.toLocaleDateString('pt-PT') + ' às ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
-    
-    // Regra de Negócio: Reserva expira em 24h
     const dataAmanha = new Date(dataAtual.getTime() + 24 * 60 * 60 * 1000);
     const dataValidade = dataAmanha.toLocaleDateString('pt-PT') + ' às ' + dataAmanha.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
-    // Envio dos dados estruturados para a Persistent Storage
     await this.reservasService.adicionarReserva({
       numero: numeroReserva,
       dataCriacao: dataCriacao,
@@ -285,6 +306,7 @@ export class CarrinhoPage implements OnInit {
       itens: [...this.itens] 
     });
 
+<<<<<<< HEAD
     // Construção do Modal de Confirmação Persistente
     let fechoLoja = '23h00';
     if (this.lojaSelecionada === 'lisboa') fechoLoja = '00h00';
@@ -308,5 +330,19 @@ export class CarrinhoPage implements OnInit {
       ]
     });
     await alertNotif.present();
+=======
+    const toastNotif = await this.toastController.create({
+      header: 'Reserva Confirmada',
+      message: `A sua reserva #${numeroReserva} está agendada!`,
+      position: 'top',
+      color: 'success',
+      duration: 3000,
+    });
+    await toastNotif.present();
+
+    this.carrinhoService.limparCarrinho();
+    this.carregarCarrinho();
+    this.router.navigate(['/tabs/perfil']);
+>>>>>>> c92acbdf72aa00293ee8dcbb809730d6dd0db539
   }
 }

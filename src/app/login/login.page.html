@@ -4,20 +4,17 @@
       <ion-back-button defaultHref="/tabs/home" text="Voltar"></ion-back-button>
     </ion-buttons>
     <ion-title class="logo-title">QuickDressKids</ion-title>
-  </ion-toolbar>
-</ion-header>
+  </ion-toolbar> </ion-header>
 
 <ion-content [fullscreen]="true" class="login-content ion-padding">
   <div class="login-container">
     
-    <!-- Caso NÃO esteja logado -->
     <div *ngIf="!currentUser" class="auth-box">
       <div class="auth-header">
         <h2>{{ modo === 'login' ? 'Iniciar Sessão' : 'Criar Conta' }}</h2>
         <p>{{ modo === 'login' ? 'Insere os teus dados para aceder à tua conta.' : 'Regista-te para guardar as tuas reservas.' }}</p>
       </div>
 
-      <!-- MODO: LOGIN -->
       <div *ngIf="modo === 'login'" class="form-container">
         <div class="input-group">
           <label>Email ou Nome de Utilizador</label>
@@ -29,6 +26,12 @@
           <ion-input type="password" [(ngModel)]="passwordLocal" placeholder="••••••••" class="custom-input"></ion-input>
         </div>
 
+        <div class="ion-text-center" style="margin-top: 12px;">
+          <ion-button fill="clear" size="small" style="--color: #4e9a74; font-size: 0.8rem; font-weight: 600; margin: 0; text-transform: none;" (click)="recuperarPalavraPasse()">
+            Esqueceste-te da palavra-passe?
+          </ion-button>
+        </div>
+
         <ion-button expand="block" shape="round" class="btn-primary-auth ion-margin-top" (click)="efetuarLogin()">
           Entrar
         </ion-button>
@@ -38,7 +41,6 @@
         </div>
       </div>
 
-      <!-- MODO: REGISTO -->
       <div *ngIf="modo === 'registo'" class="form-container">
         <div class="input-row">
           <div class="input-group">
@@ -76,7 +78,6 @@
       </div>
     </div>
 
-    <!-- Caso JÁ esteja logado -->
     <div *ngIf="currentUser" class="logged-box ion-text-center">
       <ion-avatar class="user-avatar ion-margin-bottom">
         <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Avatar" />
@@ -86,7 +87,7 @@
       <p class="email-sub">{{ currentUser.email }}</p>
       
       <div class="card-logged-info ion-margin-top">
-        <p>A tua conta está ativa e podes efetuar reservas no catálogo de forma dinâmica.</p>
+        <p>A tua conta está activa e podes efetuar reservas no catálogo de forma dinâmica.</p>
       </div>
 
       <ion-button expand="block" fill="outline" color="danger" shape="round" class="ion-margin-top" (click)="logout()">
