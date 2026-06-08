@@ -20,20 +20,23 @@
         style="padding: 0; --box-shadow: none; --background: #f4f5f8; --color: #000000 !important; --placeholder-color: #444444; --icon-color: #000000; color: #000000 !important;">
       </ion-searchbar>
       
-      <ion-button id="btn-abrir-filtros" fill="clear" color="dark" style="margin: 0; padding-left: 4px;">
+      <ion-button id="btn-abrir-filtros" fill="clear" color="dark" style="margin: 0; padding-left: 4px; position: relative;">
         <ion-icon slot="icon-only" name="options-outline" style="font-size: 26px; color: #000000;"></ion-icon>
+        
+        <ion-badge *ngIf="filtrosAtivosCount > 0" 
+                   color="danger" 
+                   style="position: absolute; top: 0px; right: 0px; font-size: 10px; border-radius: 50%; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;">
+          {{ filtrosAtivosCount }}
+        </ion-badge>
       </ion-button>
     </div>
   </ion-toolbar>
-
-
 </ion-header>
 
 <ion-content [fullscreen]="true" style="--background: #f7f8fa;">
   
   <ion-grid style="padding: 6px;">
     <ion-row>
-      
       <ion-col size="6" size-md="4" size-lg="3" *ngFor="let produto of produtosFiltrados" class="coluna-produto">
         
         <ion-card class="cartao-produto" (click)="verDetalhe(produto.id)">
@@ -52,7 +55,6 @@
         </ion-card>
 
       </ion-col>
-      
     </ion-row>
 
     <div *ngIf="produtosFiltrados.length === 0" class="ion-text-center" style="margin-top: 60px; width: 100%;">
@@ -120,10 +122,8 @@
             Repor Filtros
           </ion-button>
         </div>
-        
         <div style="height: 50px;"></div>
       </ion-content>
     </ng-template>
   </ion-modal>
-
 </ion-content>
