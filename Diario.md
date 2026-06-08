@@ -395,3 +395,31 @@ Objetivo: Implementação do fluxo de recuperação de credenciais, refatorizaç
 * Priorizar uma experiência de login minimalista, compactando títulos e centralizando dados para guiar o foco visual do utilizador em ecrãs de menores dimensões.
 * Abandonar o termo comercial "Encomendas" em prol de "Reservas Ativas" para consolidar a aplicação como uma plataforma focada no catálogo rotativo e sustentável de vestuário infantil.
 * Centralizar o comportamento e a paleta cromática dos botões de ação principal dos modais, aplicando o verde corporativo (#2d5a43) para fixar a identidade visual.
+
+## Sessão 15 – 08 de junho de 2026
+**Responsável:** Luís Martinho Oliveira Lopes
+
+**Objetivo:** Transição para imagens locais offline no catálogo, melhorias de usabilidade (UX) no carrinho de compras, contador de resultados ativo e compilação do APK nativo atualizado.
+
+### Atividades realizadas:
+- **Imagens Locais e Offline:** Substituição de todos os links externos (Unsplash) por imagens locais de alta qualidade na diretoria `src/assets/images/`, atualizando as propriedades no ficheiro `produtos.json` para que a aplicação funcione 100% sem ligação à rede.
+- **Limpeza de Assets Desnecessários:** Remoção de ficheiros de design não utilizados (como o `shapes.svg`) para reduzir o tamanho final da aplicação.
+- **Loja Pré-selecionada no Carrinho:** Lógica adicionada para predefinir automaticamente a **Loja Braga Parque** no seletor de recolha no carrinho se nenhuma estiver selecionada.
+- **Modal de Confirmação Persistente:** Substituição do toast temporário após finalizar a reserva por um alerta de confirmação persistente (`AlertController`) que exige clique no botão "Ver Minhas Reservas" para esvaziar o carrinho e navegar de forma clara.
+- **Contador de Artigos Filtrados:** Reintrodução da mensagem reativa `"X itens encontrados"` no catálogo de produtos, refletindo a contagem correta mesmo com filtros avançados e buscas ativas.
+- **Compilação e Android Sync:** Geração do build de produção (`npm run build`), sincronização via Capacitor (`npx cap sync android`) e compilação final do APK de testes (`app-debug.apk`) recorrendo ao JDK 21 do Android Studio.
+- **Gestão de Versões:** Submissão das alterações locais e commits (`feat: add_carrinho_predefinido` e `itens_encontrados`) para o ramo principal (`main`) no GitHub.
+
+### Problemas Encontrados:
+- Limitações de quota no gerador de imagens por IA durante o processo de criação de assets.
+- Presença de conflitos de merge residuais no ficheiro do carrinho (`carrinho.page.ts`) que causavam falhas no compilador do Angular.
+- Falha na compilação do Android por incompatibilidade de versão do JDK com o Gradle (exigência do Java 21 pelo Capacitor v8).
+
+### Soluções Aplicadas:
+- Download direto e armazenamento local das imagens residuais a partir do Unsplash para garantir que todos os produtos têm fotografia local.
+- Resolução e limpeza manual dos marcadores de merge (`<<<<<<< HEAD`, `=======`, `>>>>>>>`) no código do carrinho.
+- Apontamento manual da variável `$env:JAVA_HOME` para o runtime do Java 21 embutido na pasta do Android Studio antes de lançar o Gradle Wrapper.
+
+### Decisões de Design:
+- Assegurar a total operabilidade offline do catálogo de produtos através da localidade de todos os assets de multimédia.
+- Evitar que o utilizador feche acidentalmente o ecrã de checkout sem ter a certeza de que a reserva foi registada com sucesso (utilização do modal de alerta persistente).
