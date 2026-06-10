@@ -423,3 +423,24 @@ Objetivo: Implementação do fluxo de recuperação de credenciais, refatorizaç
 ### Decisões de Design:
 - Assegurar a total operabilidade offline do catálogo de produtos através da localidade de todos os assets de multimédia.
 - Evitar que o utilizador feche acidentalmente o ecrã de checkout sem ter a certeza de que a reserva foi registada com sucesso (utilização do modal de alerta persistente).
+
+## Sessão 16 – 10 de junho de 2026
+**Responsável:** Rodrigo Fernandes Malheiro
+
+**Objetivo:** Resolução de bug crítico de concorrência e loop infinito no Carrinho de Compras, estabilização da interface mobile e eliminação de bloqueios/congelamentos (*crashes*) na aplicação.
+
+### Atividades realizadas:
+- **Depuração de Bug Crítico (Call Stack Exceeded):** Identificação e correção de um loop infinito de reatividade entre o `carrinho.page.ts` e o `carrinho.ts`. O ciclo ocorria porque a atribuição no método `subscribe` da página acionava recursivamente o `setLojaLevantamento` do serviço, estourando a pilha de chamadas (*call stack*) do TypeScript.
+- **Otimização do Ciclo de Vida do Carrinho:** Ajuste na lógica do `ngOnInit` no ficheiro `carrinho.page.ts` para evitar mutações de estado desnecessárias e repetitivas. A subscrição do `lojaLevantamento$` foi simplificada para apenas injetar o valor padrão por defeito (`'braga'`) caso o estado inicial seja nulo, aproveitando o *getter* dinâmico já existente para atualizar a interface de forma limpa.
+- **Testes de Fluidez e UI Mobile:** Validação da navegação no carrinho após a quebra do ciclo infinito, confirmando que a interface mobile já não encrava ou congela (eliminação completa dos bloqueios de processamento e CPU causados pelo loop).
+
+### Problemas Encontrados:
+- Congelamento completo da aplicação e perda de resposta aos controlos de toque (*UI freezes*) ao entrar no ecrã do carrinho de compras.
+- Erro no terminal/consola do navegador indicando `RangeError: Maximum call stack size exceeded` apontando ciclicamente para a linha 79 do ficheiro `carrinho.ts` e linha 88 do `carrinho.page.ts`.
+
+### Soluções Aplicadas:
+- Remoção da atribuição direta `this.lojaSelecionada = loja || '';` de dentro do bloco `.subscribe()`, impedindo que a página envie um comando de escrita de volta para o serviço no momento exato da leitura inicial.
+- Manutenção do *getter* processado `get lojaSelecionada()` como a única fonte de verdade síncrona para o *binding* com o componente `<ion-select>` no template HTML.
+
+### Decisões de Design / Arquitetura:
+- Preservar o padrão de fluxo de dados unidirecional no Angular/Ionic: os componentes devem consumir os estados emitidos pelos serviços (*Observables*) sem gerar efeitos secundários (*side-effects*) circulares imediatos que comprometam a estabilidade do *runtime* do dispositivo.

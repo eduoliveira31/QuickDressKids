@@ -59,13 +59,12 @@ export class CarrinhoPage implements OnInit {
       this.calcularTotal(); // Recalcula sempre que há uma emissão de novos dados
     });
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
-      this.lojaSelecionada = loja || '';
-      // Pré-selecionar a loja Braga Parque se nenhuma estiver selecionada
-      if (!this.lojaSelecionada) {
-        this.lojaSelecionada = 'braga';
-        this.carrinhoService.setLojaLevantamento('braga');
-      }
-    });
+  // Apenas definimos um valor por defeito diretamente no serviço se este for null.
+  // O "get lojaSelecionada()" já fará a leitura correta automaticamente para o HTML!
+  if (!loja) {
+    this.carrinhoService.setLojaLevantamento('braga');
+  }
+});
   }
 
   /**
