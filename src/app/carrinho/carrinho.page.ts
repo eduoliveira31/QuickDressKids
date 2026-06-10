@@ -59,12 +59,12 @@ export class CarrinhoPage implements OnInit {
       this.calcularTotal(); // Recalcula sempre que há uma emissão de novos dados
     });
     this.carrinhoService.lojaLevantamento$.subscribe(loja => {
-  // Apenas definimos um valor por defeito diretamente no serviço se este for null.
-  // O "get lojaSelecionada()" já fará a leitura correta automaticamente para o HTML!
-  if (!loja) {
-    this.carrinhoService.setLojaLevantamento('braga');
-  }
-});
+      // Apenas definimos um valor por defeito diretamente no serviço se este for null.
+      // O "get lojaSelecionada()" já fará a leitura correta automaticamente para o HTML!
+      if (!loja) {
+        this.carrinhoService.setLojaLevantamento('braga');
+      }
+    });
   }
 
   /**
@@ -148,12 +148,43 @@ export class CarrinhoPage implements OnInit {
   }
 
   /**
-   * Elimina completamente um produto do array do carrinho.
+   * Pede confirmação antes de eliminar um produto do array do carrinho.
+   * Exibe uma notificação de sucesso se a ação for confirmada.
    * @param index Posição do artigo a ser removido.
    */
-  removerItem(index: number) {
-    this.carrinhoService.removerItem(index);
-    this.carregarCarrinho();
+  async removerItem(index: number) {
+    const alert = await this.alertController.create({
+      header: 'Remover Artigo',
+      message: 'Tens a certeza que pretendes remover este artigo das tuas reservas?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Sim, remover',
+          role: 'destructive',
+          handler: async () => {
+            // Se o utilizador clicar em "Sim", executamos a eliminação
+            this.carrinhoService.removerItem(index);
+            this.carregarCarrinho();
+
+            // Mostramos a notificação de sucesso
+            const toast = await this.toastController.create({
+              message: 'Artigo removido com sucesso.',
+              duration: 2000,
+              position: 'bottom',
+              color: 'dark',
+              icon: 'trash-outline'
+            });
+            await toast.present();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   // ==========================================
